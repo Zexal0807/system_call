@@ -3,3 +3,15 @@
 ///         e funzioni specifiche del progetto.
 
 #pragma once
+
+/*
+	Struttura di un processo target
+	 - type : Tipo del processo [S: Sender, R: Reciver]
+	 - number : Numero del processo
+	
+	Target Z0 : ALL
+*/
+typedef struct {
+	char type;
+	int number;
+} target;
