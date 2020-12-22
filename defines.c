@@ -17,3 +17,28 @@ const process ALL_PROCESS = {'Z', 0};
 const int MESSAGE_QUEUE = 1;
 const int SHARED_MEMORY = 2;
 const int FIFO = 3;
+
+message *createMessage(
+	int id, 
+	char* content, 
+	process sender, 
+	process reciver, 
+	int delay1, 
+	int delay2, 
+	int delay3, 
+    int comunication
+){
+
+    message *m = (message*) malloc(sizeof(message));
+
+    m->id = id;
+    m->content = strdup(content);
+    m->sender = sender;
+    m->reciver = reciver;
+    m->delay1 = delay1;
+    m->delay2 = delay2;
+    m->delay3 = delay3;
+    m->comunication = comunication;
+
+    return m;
+}

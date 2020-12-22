@@ -19,7 +19,7 @@ typedef struct {
 /*
 	Struttura del messaggio
 	 - id : Identificativo del messaggio
-	 - message : Stringa del messsaggio
+	 - content : Stringa del messsaggio
 	 - sender : Processo che deve spedire il messaggio
 	 - reciver : Pocesso che deve riceve il messsaggio
 	 - delay1 : Tempo di attessa in S1 e R1
@@ -29,7 +29,7 @@ typedef struct {
 */
 typedef struct {
 	int id;
-	char *message;
+	char *content;
 	process sender;
 	process reciver;
 	int delay1;
@@ -37,3 +37,13 @@ typedef struct {
 	int delay3;
 	int comunication;
 } message;
+
+message *createMessage(
+	int id, 
+	char* message, 
+	process sender, 
+	process reciver, 
+	int delay1, 
+	int delay2, 
+	int delay3, 
+	int comunication);
