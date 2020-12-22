@@ -5,7 +5,7 @@
 #pragma once
 
 /*
-	Struttura di un processo target
+	Struttura di un processo
 	 - type : Tipo del processo [S: Sender, R: Reciver]
 	 - number : Numero del processo
 	
@@ -14,4 +14,4 @@
 typedef struct {
 	char type;
 	int number;
-} target;
+} process;

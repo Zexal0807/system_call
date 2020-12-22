@@ -4,12 +4,12 @@
 
 #include "defines.h"
 
-const target SENDER_1 = {'S', 1};
-const target SENDER_2 = {'S', 2};
-const target SENDER_3 = {'S', 3};
+const process SENDER_1 = {'S', 1};
+const process SENDER_2 = {'S', 2};
+const process SENDER_3 = {'S', 3};
 
-const target RECIVER_1 = {'R', 1};
-const target RECIVER_2 = {'R', 2};
-const target RECIVER_2 = {'R', 3};
+const process RECIVER_1 = {'R', 1};
+const process RECIVER_2 = {'R', 2};
+const process RECIVER_2 = {'R', 3};
 
-const target ALL_PROCESS = {'Z', 0};
+const process ALL_PROCESS = {'Z', 0};
