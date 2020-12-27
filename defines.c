@@ -43,7 +43,6 @@ message *createMessage(
     return m;
 }
 
-
 hackletAction *createHackletAction(
 	int id,
 	int delay,
@@ -59,4 +58,11 @@ hackletAction *createHackletAction(
     a->target = target;
 
     return a;
+}
+
+
+char *t_time2string(t_time time){
+    char *s = (char*) malloc(sizeof(char) * 8);
+    strftime(s, 8, "%H:%M:%S", time);
+    return s;
 }

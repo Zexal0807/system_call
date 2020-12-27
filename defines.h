@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <time.h>;
+
 /*
 	Struttura di un processo
 	 - type : Tipo del processo [S: Sender, R: Reciver]
@@ -48,6 +50,19 @@ message *createMessage(
 	int delay3, 
 	int comunication);
 
+/*
+Struttura del traffico
+	 - message : Messaggio
+	 - arrival : Tempo di arrivo
+	 - departure : Tempo di partenza
+*/
+typedef struct {
+	message message;
+	time_t arrival;
+	time_t departure;
+} trafficInfo;
+
+char *t_time2string(t_time time);
 
 /*-----------------Hacklet-----------------*/
 typedef struct {
