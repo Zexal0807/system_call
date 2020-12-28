@@ -28,7 +28,6 @@ int main(int argc, char * argv[]) {
         return 1;
     }else if(pid == 0){
         R1();
-        exit(0);
     }
     R1 = createProcess('R', 1, pid);
     
@@ -36,7 +35,6 @@ int main(int argc, char * argv[]) {
     if(pid == -1){  return 0;
     }else if(pid == 0){
         R2();
-        exit(0);
     }
     R2 = createProcess('R', 2, pid);
 
@@ -44,21 +42,31 @@ int main(int argc, char * argv[]) {
     if(pid == -1){  return 0;
     }else if(pid == 0){
         R3();
-        exit(0);
     }
     R3 = createProcess('R', 3, pid);
+
+    printProcessList("F8.csv", R1, R2, R3);
 
     return 0;
 }
 
 void R1(){
-    printf("Call Reciver 1");
+    printf("Start R1");
+
+    printf("End R1");
+    exit(0);
 }
 
 void R2(){
-    printf("Call Reciver 2");
+    printf("Start R2");
+
+    printf("End R2");
+    exit(0);
 }
 
 void R3(){
-    printf("Call Reciver 3");
+    printf("Start R3");
+
+    printf("End R3");
+    exit(0);
 }
