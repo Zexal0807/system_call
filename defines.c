@@ -14,6 +14,20 @@ const process RECIVER_2 = {'R', 3};
 
 const process ALL_PROCESS = {'Z', 0};
 
+process *createProcess(
+	char type,
+	int number,
+	int pid){
+
+    process *p = (process*) malloc(sizeof(process));
+
+    p->type = type;
+    p->number = number;
+    p->pid = pid;
+    
+    return p;
+}
+
 const int MESSAGE_QUEUE = 1;
 const int SHARED_MEMORY = 2;
 const int FIFO = 3;

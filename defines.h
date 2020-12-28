@@ -16,7 +16,13 @@
 typedef struct {
 	char type;
 	int number;
+	int pid;
 } process;
+
+process *createProcess(
+	char type,
+	int number,
+	int pid);
 
 /*
 	Struttura del messaggio
@@ -90,3 +96,5 @@ const char* ACTION_SEND_MSG = "SendMsg";
 
 const int SHUT_DOWN = 3;
 const char* ACTION_SHUT_DOWN = "ShutDown";
+
+char* readFile(char* filename);
