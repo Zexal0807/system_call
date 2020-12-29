@@ -79,6 +79,6 @@ hackletAction *createHackletAction(
 
 char *time_t2string(time_t time){
     char *s = (char*) malloc(sizeof(char) * 8);
-    strftime(s, 8, "%H:%M:%S", localtime(time));
+    strftime(s, 8, "%H:%M:%S", localtime(&time));
     return s;
 }
