@@ -4,6 +4,7 @@
 
 #include "defines.h"
 #include <stdlib.h>
+#include <string.h>
 
 const process SENDER_1 = {'S', 1, 0};
 const process SENDER_2 = {'S', 2, 0};
@@ -47,7 +48,7 @@ message *createMessage(
     message *m = (message*) malloc(sizeof(message));
 
     m->id = id;
-    m->content = strdup(&content);
+    m->content = strdup(content);
     m->sender = sender;
     m->reciver = reciver;
     m->delay1 = delay1;
