@@ -14,7 +14,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-void functionS1(){
+void functionS1(char* fileSource){
     printLog("S1", "Process start");
     
     printLog("S1", "Process End");
@@ -53,16 +53,16 @@ int main(int argc, char * argv[]) {
     // Try to create a child, in each child functione must me an exit
     int pid = fork();
     if(pid == -1){  
-        printf("Error invocation of Sender Manager");
         return 1;
     }else if(pid == 0){
-        functionS1();
+        functionS1(argv[1]);
     }
     S1 = createProcess('S', 1, pid);
 
     // Try to create a child, in each child functione must me an exit
     pid = fork();
-    if(pid == -1){  return 0;
+    if(pid == -1){  
+        return 1;
     }else if(pid == 0){
         functionS2();
     }
@@ -70,7 +70,8 @@ int main(int argc, char * argv[]) {
 
     // Try to create a child, in each child functione must me an exit
     pid = fork();
-    if(pid == -1){  return 0;
+    if(pid == -1){  
+        return 1;
     }else if(pid == 0){
         functionS3();
     }

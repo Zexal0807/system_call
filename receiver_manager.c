@@ -53,7 +53,6 @@ int main(int argc, char * argv[]) {
     // Try to create a child, in each child functione must me an exit
     int pid = fork();
     if(pid == -1){  
-        printf("Error invocation of Receiver Manager");
         return 1;
     }else if(pid == 0){
         functionR1();
@@ -62,7 +61,8 @@ int main(int argc, char * argv[]) {
 
     // Try to create a child, in each child functione must me an exit
     pid = fork();
-    if(pid == -1){  return 0;
+    if(pid == -1){ 
+         return 1;
     }else if(pid == 0){
         functionR2();
     }
@@ -70,7 +70,8 @@ int main(int argc, char * argv[]) {
 
     // Try to create a child, in each child functione must me an exit
     pid = fork();
-    if(pid == -1){  return 0;
+    if(pid == -1){ 
+        return 1;
     }else if(pid == 0){
         functionR3();
     }
