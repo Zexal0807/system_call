@@ -76,9 +76,11 @@ hackletAction *createHackletAction(
     return a;
 }
 
-
 char *time_t2string(time_t time){
     char *s = (char*) malloc(sizeof(char) * 8);
     strftime(s, 8, "%H:%M:%S", localtime(&time));
     return s;
+}
+
+void printProcessList(char *filename, process *p1, process *p2, process *p3){
 }

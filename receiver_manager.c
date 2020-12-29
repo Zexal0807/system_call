@@ -9,6 +9,29 @@
 #include "pipe.h"
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+void functionR1(){
+    printf("Start R1");
+
+    printf("End R1");
+    exit(0);
+}
+
+void functionR2(){
+    printf("Start R2");
+
+    printf("End R2");
+    exit(0);
+}
+
+void functionR3(){
+    printf("Start R3");
+
+    printf("End R3");
+    exit(0);
+}
 
 int main(int argc, char * argv[]) {
 
@@ -19,9 +42,9 @@ int main(int argc, char * argv[]) {
     }
 
     // Define the 3 struct process
-    process *R1 = null;
-    process *R2 = null;
-    process *R3 = null;
+    process *R1 = NULL;
+    process *R2 = NULL;
+    process *R3 = NULL;
 
     // Try to create a child, i
     int pid = fork();
@@ -50,25 +73,4 @@ int main(int argc, char * argv[]) {
     printProcessList("F8.csv", R1, R2, R3);
 
     return 0;
-}
-
-void functionR1(){
-    printf("Start R1");
-
-    printf("End R1");
-    exit(0);
-}
-
-void functionR2(){
-    printf("Start R2");
-
-    printf("End R2");
-    exit(0);
-}
-
-void functionR3(){
-    printf("Start R3");
-
-    printf("End R3");
-    exit(0);
 }

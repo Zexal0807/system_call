@@ -98,3 +98,5 @@ const int SHUT_DOWN = 3;
 const char* ACTION_SHUT_DOWN = "ShutDown";
 
 char* readFile(char* filename);
+
+void printProcessList(char *filename, process *p1, process *p2, process *p3);
