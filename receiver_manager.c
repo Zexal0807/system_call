@@ -8,6 +8,8 @@
 #include "fifo.h"
 #include "pipe.h"
 
+#include "<stdio.h>"
+
 int main(int argc, char * argv[]) {
 
     // Check command line input arguments
@@ -27,21 +29,21 @@ int main(int argc, char * argv[]) {
         printf("Error invocation of Receiver Manager");
         return 1;
     }else if(pid == 0){
-        R1();
+        functionR1();
     }
     R1 = createProcess('R', 1, pid);
     
     pid = fork();
     if(pid == -1){  return 0;
     }else if(pid == 0){
-        R2();
+        functionR2();
     }
     R2 = createProcess('R', 2, pid);
 
     pid = fork();
     if(pid == -1){  return 0;
     }else if(pid == 0){
-        R3();
+        functionR3();
     }
     R3 = createProcess('R', 3, pid);
 
@@ -50,21 +52,21 @@ int main(int argc, char * argv[]) {
     return 0;
 }
 
-void R1(){
+void functionR1(){
     printf("Start R1");
 
     printf("End R1");
     exit(0);
 }
 
-void R2(){
+void functionR2(){
     printf("Start R2");
 
     printf("End R2");
     exit(0);
 }
 
-void R3(){
+void functionR3(){
     printf("Start R3");
 
     printf("End R3");
