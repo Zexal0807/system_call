@@ -11,7 +11,7 @@ const process SENDER_3 = {'S', 3, 0};
 
 const process RECIVER_1 = {'R', 1, 0};
 const process RECIVER_2 = {'R', 2, 0};
-const process RECIVER_2 = {'R', 3, 0};
+const process RECIVER_3 = {'R', 3, 0};
 
 const process ALL_PROCESS = {'Z', 0, 0};
 
@@ -47,7 +47,7 @@ message *createMessage(
     message *m = (message*) malloc(sizeof(message));
 
     m->id = id;
-    m->content = strdup(content);
+    m->content = strdup(&content);
     m->sender = sender;
     m->reciver = reciver;
     m->delay1 = delay1;
