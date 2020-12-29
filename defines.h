@@ -84,19 +84,6 @@ hackletAction *createHackletAction(
 	process target,
 	int action);
 
-
-const int INCREASE_DELAY = 0;
-const char* ACTION_INCREASE_DELAY = "IncreaseDealy";
-
-const int REMOVE_MSG = 1;
-const char* ACTION_REMOVE_MSG = "RemoveMsg";
-
-const int SEND_MSG = 2;
-const char* ACTION_SEND_MSG = "SendMsg";
-
-const int SHUT_DOWN = 3;
-const char* ACTION_SHUT_DOWN = "ShutDown";
-
 char* readFile(char* filename);
 
 void printProcessList(char *filename, process *p1, process *p2, process *p3);

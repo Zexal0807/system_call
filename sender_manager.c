@@ -36,7 +36,7 @@ void functionS3(){
 int main(int argc, char * argv[]) {
 
     // Check command line input arguments
-    if (argc != 1){
+    if (argc != 2){
         printf("Error invocation of Sender Manager, you must pass the input file");
         return 1;
     }

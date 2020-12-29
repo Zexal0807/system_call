@@ -36,7 +36,7 @@ void functionR3(){
 int main(int argc, char * argv[]) {
 
     // Check command line input arguments
-    if (argc != 0){
+    if (argc != 1){
         printf("Error invocation of Receiver Manager");
         return 1;
     }
