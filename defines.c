@@ -5,6 +5,11 @@
 #include "defines.h"
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
+
+void printLog(char *p, char *text){
+    printf("%s\t:%s\n", p, text);
+}
 
 const process SENDER_1 = {'S', 1, 0};
 const process SENDER_2 = {'S', 2, 0};
@@ -95,4 +100,5 @@ char *time_t2string(time_t time){
 }
 
 void printProcessList(char *filename, process *p1, process *p2, process *p3){
+    printf("PID P : %d", p1->pid);
 }

@@ -6,6 +6,8 @@
 
 #include <time.h>
 
+void printLog(char *p, char *text);
+
 /*
 	Struttura di un processo
 	 - type : Tipo del processo [S: Sender, R: Reciver]

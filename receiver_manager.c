@@ -13,23 +13,23 @@
 #include <unistd.h>
 
 void functionR1(){
-    printf("Start R1");
-
-    printf("End R1");
+    printLog("R1", "Process start");
+    
+    printLog("R1", "Process End");
     exit(0);
 }
 
 void functionR2(){
-    printf("Start R2");
-
-    printf("End R2");
+    printLog("R2", "Process start");
+    
+    printLog("R2", "Process End");
     exit(0);
 }
 
 void functionR3(){
-    printf("Start R3");
-
-    printf("End R3");
+    printLog("R3", "Process start");
+    
+    printLog("R3", "Process End");
     exit(0);
 }
 
@@ -41,12 +41,14 @@ int main(int argc, char * argv[]) {
         return 1;
     }
 
+    printLog("RM", "Process start");
+
     // Define the 3 struct process
     process *R1 = NULL;
     process *R2 = NULL;
     process *R3 = NULL;
 
-    // Try to create a child, i
+    // Try to create a child, in each child functione must me an exit
     int pid = fork();
     if(pid == -1){  
         printf("Error invocation of Receiver Manager");
@@ -55,7 +57,8 @@ int main(int argc, char * argv[]) {
         functionR1();
     }
     R1 = createProcess('R', 1, pid);
-    
+
+    // Try to create a child, in each child functione must me an exit
     pid = fork();
     if(pid == -1){  return 0;
     }else if(pid == 0){
@@ -63,6 +66,7 @@ int main(int argc, char * argv[]) {
     }
     R2 = createProcess('R', 2, pid);
 
+    // Try to create a child, in each child functione must me an exit
     pid = fork();
     if(pid == -1){  return 0;
     }else if(pid == 0){
@@ -70,7 +74,12 @@ int main(int argc, char * argv[]) {
     }
     R3 = createProcess('R', 3, pid);
 
-    printProcessList("F8.csv", R1, R2, R3);
+    //Save process pid in file
+    printProcessList("output/F9.csv", R1, R2, R3);
 
+    // Wait the end of all child
+    while(wait() != -1);
+
+    printLog("RM", "Process End");
     return 0;
 }
