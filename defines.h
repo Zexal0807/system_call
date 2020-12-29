@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <time.h>;
+#include <time.h>
 
 /*
 	Struttura di un processo
