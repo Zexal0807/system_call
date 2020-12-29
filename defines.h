@@ -68,7 +68,7 @@ typedef struct {
 	time_t departure;
 } trafficInfo;
 
-char *t_time2string(t_time time);
+char *t_time2string(time_t time);
 
 /*-----------------Hacklet-----------------*/
 typedef struct {

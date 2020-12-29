@@ -77,7 +77,7 @@ hackletAction *createHackletAction(
 }
 
 
-char *t_time2string(t_time time){
+char *time_t2string(time_t time){
     char *s = (char*) malloc(sizeof(char) * 8);
     strftime(s, 8, "%H:%M:%S", time);
     return s;
