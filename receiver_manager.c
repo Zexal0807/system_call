@@ -10,7 +10,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/types.h>
 #include <unistd.h>
+#include <sys/wait.h>
 
 void functionR1(){
     printLog("R1", "Process start");
@@ -78,7 +80,11 @@ int main(int argc, char * argv[]) {
     printProcessList("output/F9.csv", R1, R2, R3);
 
     // Wait the end of all child
-    while(wait() != -1);
+    pid_t child;
+    int status;
+    while ((child = wait(&status)) != -1){
+        printf("returned child %d with status %d\n", child, status);
+    }
 
     printLog("RM", "Process End");
     return 0;
