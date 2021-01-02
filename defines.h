@@ -88,4 +88,4 @@ hackletAction *createHackletAction(
 
 char* readFile(char* filename);
 
-void printProcessList(char *filename, process *p1, process *p2, process *p3);
+void printProcessList(char *filename, char type, process *p1, process *p2, process *p3);

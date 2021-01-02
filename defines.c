@@ -6,6 +6,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
 void printLog(char *p, char *text){
     printf("%s\t:%s\n", p, text);
@@ -99,6 +104,14 @@ char *time_t2string(time_t time){
     return s;
 }
 
-void printProcessList(char *filename, process *p1, process *p2, process *p3){
-    printf("PID P : %d", p1->pid);
+void printProcessList(char *filename, char type, process *p1, process *p2, process *p3){
+    
+    int file=open(filename, O_WRONLY | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
+    char buffer[50];
+
+    sprintf(buffer, "%s ID;PID\n%c1;%i\n%c2;%i\n%c3;%i", (type=='S' ? "SENDER" : "RECEIVER"), type, p1->pid,type,p2->pid,type,p3->pid);
+
+    write(file,buffer,strlen(buffer));
+
+    close(file);
 }

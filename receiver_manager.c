@@ -78,13 +78,13 @@ int main(int argc, char * argv[]) {
     R3 = createProcess('R', 3, pid);
 
     //Save process pid in file
-    printProcessList("output/F9.csv", R1, R2, R3);
+    printProcessList("output/F9.csv", 'R', R1, R2, R3);
 
     // Wait the end of all child
     pid_t child;
     int status;
     while ((child = wait(&status)) != -1){
-        printf("returned child %d with status %d\n", child, status);
+        //printf("returned child %d with status %d\n", child, status);
     }
 
     printLog("RM", "Process End");

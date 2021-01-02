@@ -15,8 +15,8 @@
 #include <sys/wait.h>
 
 void functionS1(char* fileSource){
-    printLog("S1", "Process start");
-    
+    printLog("S1", "Process start"); 
+
     printLog("S1", "Process End");
     exit(0);
 }
@@ -78,13 +78,13 @@ int main(int argc, char * argv[]) {
     S3 = createProcess('S', 3, pid);
 
     //Save process pid in file
-    printProcessList("output/F8.csv", S1, S2, S3);
+    printProcessList("output/F8.csv", 'S', S1, S2, S3);
 
     // Wait the end of all child
     pid_t child;
     int status;
     while ((child = wait(&status)) != -1){
-        printf("returned child %d with status %d\n", child, status);
+        // printf("returned child %d with status %d\n", child, status);
     }
     
     printLog("SM", "Process End");
