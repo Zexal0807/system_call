@@ -3,6 +3,7 @@
 ///         specifiche del progetto.
 
 #include "defines.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -104,14 +105,20 @@ char *time_t2string(time_t time){
     return s;
 }
 
+char *process2string(process p){
+    char *s = (char*) malloc(sizeof(char) * 2);
+    sprintf(s, "%c%d", p->type, p->number);
+    return s;
+}
+
 void printProcessList(char *filename, char type, process *p1, process *p2, process *p3){
     
-    int file=open(filename, O_WRONLY | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
+    int file = open(filename, O_WRONLY | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
     char buffer[50];
 
-    sprintf(buffer, "%s ID;PID\n%c1;%i\n%c2;%i\n%c3;%i", (type=='S' ? "SENDER" : "RECEIVER"), type, p1->pid,type,p2->pid,type,p3->pid);
+    sprintf(buffer, "%s ID;PID\n%c1;%i\n%c2;%i\n%c3;%i\n", (type=='S' ? "SENDER" : "RECEIVER"), type, p1->pid, type, p2->pid, type, p3->pid);
 
-    write(file,buffer,strlen(buffer));
+    write(file, buffer, strlen(buffer));
 
     close(file);
 }

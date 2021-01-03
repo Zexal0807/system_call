@@ -70,7 +70,9 @@ typedef struct {
 	time_t departure;
 } trafficInfo;
 
-char *t_time2string(time_t time);
+char *time_t2string(time_t time);
+
+char *process2string(process p);
 
 /*-----------------Hacklet-----------------*/
 typedef struct {
