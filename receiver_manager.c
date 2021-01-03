@@ -16,7 +16,7 @@
 
 void functionR1(){
     printLog("R1", "Process start");
-    
+    execvp("R1", (char*) NULL);
     printLog("R1", "Process End");
     exit(0);
 }
