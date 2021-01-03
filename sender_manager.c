@@ -14,31 +14,10 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-void functionS1(char* fileSource){
-    printLog("S1", "Process start"); 
-
-    printLog("S1", "Process End");
-    exit(0);
-}
-
-void functionS2(){
-    printLog("S2", "Process start");
-    
-    printLog("S2", "Process End");
-    exit(0);
-}
-
-void functionS3(){
-    printLog("S3", "Process start");
-    
-    printLog("S3", "Process End");
-    exit(0);
-}
-
 int main(int argc, char * argv[]) {
 
     // Check command line input arguments
-    if (argc != 2){
+    if (argc != 2) {
         printf("Error invocation of Sender Manager, you must pass the input file");
         return 1;
     }
@@ -46,34 +25,43 @@ int main(int argc, char * argv[]) {
     printLog("SM", "Process start");
 
     // Define the 3 struct process
-    process *S1 = NULL;
-    process *S2 = NULL;
-    process *S3 = NULL;
+    process * S1 = NULL;
+    process * S2 = NULL;
+    process * S3 = NULL;
 
     // Try to create a child, in each child functione must me an exit
     int pid = fork();
-    if(pid == -1){  
-        return 1;
-    }else if(pid == 0){
-        functionS1(argv[1]);
+    if (pid == -1) {
+        ErrExit("Receiver Manager not fork S1");
+    } else if (pid == 0) {
+        execvp("./S1", & argv[1]);
+        ErrExit("S1 not start");
     }
     S1 = createProcess('S', 1, pid);
 
     // Try to create a child, in each child functione must me an exit
     pid = fork();
-    if(pid == -1){  
-        return 1;
-    }else if(pid == 0){
-        functionS2();
+    if (pid == -1) {
+        ErrExit("Receiver Manager not fork S2");
+    } else if (pid == 0) {
+        char * argv[] = {
+            NULL
+        };
+        execvp("./S2", argv);
+        ErrExit("S2 not start");
     }
     S2 = createProcess('S', 2, pid);
 
     // Try to create a child, in each child functione must me an exit
     pid = fork();
-    if(pid == -1){  
-        return 1;
-    }else if(pid == 0){
-        functionS3();
+    if (pid == -1) {
+        ErrExit("Receiver Manager not fork S3");
+    } else if (pid == 0) {
+        char * argv[] = {
+            NULL
+        };
+        execvp("./S3", argv);
+        ErrExit("S3 not start");
     }
     S3 = createProcess('S', 3, pid);
 
@@ -83,10 +71,10 @@ int main(int argc, char * argv[]) {
     // Wait the end of all child
     pid_t child;
     int status;
-    while ((child = wait(&status)) != -1){
+    while ((child = wait( & status)) != -1) {
         // printf("returned child %d with status %d\n", child, status);
     }
-    
+
     printLog("SM", "Process End");
     return 0;
 }
