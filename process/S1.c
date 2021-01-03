@@ -9,10 +9,13 @@
 #include "../pipe.h"
 
 #include <stdio.h>
+#include <unistd.h>
 
 int main(int argc, char * argv[]) {
-    printLog("R1", "Process start with exec");
+    printLog("S1", "Process start with exec");
     
-    printLog("R1", "Process End");
-    
+    // Wait for 1 second befor end
+    sleep(1);
+    printLog("S1", "Process End");
+    return 1;
 }
