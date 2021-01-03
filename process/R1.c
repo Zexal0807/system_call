@@ -11,6 +11,7 @@
 int main(int argc, char * argv[]) {
     printLog("R1", "Process start with exec");
     
+    printf("%s %s", argv[0],argv[1]);
     printLog("R1", "Process End");
     
 }

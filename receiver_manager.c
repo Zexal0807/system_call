@@ -16,7 +16,8 @@
 
 void functionR1(){
     printLog("R1", "Process start");
-    execvp("R1", (char*) NULL);
+    char *argv[] = { NULL };
+    int ret = execvp("./R1", argv);
     printLog("R1", "Process End");
     exit(0);
 }
@@ -55,7 +56,9 @@ int main(int argc, char * argv[]) {
     if(pid == -1){  
         return 1;
     }else if(pid == 0){
-        functionR1();
+      char *argv[] = { NULL };
+      execvp("./R1", argv);
+      ErrExit("R1 not start");
     }
     R1 = createProcess('R', 1, pid);
 

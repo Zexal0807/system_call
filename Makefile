@@ -87,15 +87,27 @@ $(OBJDIR)/%.o: %.c
 
 # Remove all object files
 clean:
-	@rm -vf ${RECEIVER_OBJS}
-	@rm -vf ${SENDER_OBJS}
-	@rm -vf ${HACKLER_OBJS}
-	@rm -vf receiver_manager
+	@rm -vf ${RECEIVER_1_OBJS}
 	@rm -vf R1
+	@rm -vf ${RECEIVER_2_OBJS}
 	@rm -vf R2
+	@rm -vf ${RECEIVER_3_OBJS}
 	@rm -vf R3
+	@rm -vf ${RECEIVER_OBJS}
+	@rm -vf receiver_manager
+
+	@rm -vf ${SENDER_1_OBJS}
+	@rm -vf S1
+	@rm -vf ${SENDER_2_OBJS}
+	@rm -vf S2
+	@rm -vf ${SENDER_3_OBJS}
+	@rm -vf S3
+	@rm -vf ${SENDER_OBJS}
 	@rm -vf sender_manager
+
+	@rm -vf ${HACKLER_OBJS}
 	@rm -vf hackler
+
 	@rm -rf ${OBJDIR}
 	@ipcrm -a
 	@echo "Removed object files and executables..."
