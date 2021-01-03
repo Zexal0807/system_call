@@ -9,21 +9,19 @@
 #include "pipe.h"
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
 #include <unistd.h>
-#include <sys/wait.h>
 
 int main(int argc, char * argv[]) {
   if (argc != 2){
-      printf("Error invocation of Hackler, you must pass the input file");
-      return 1;
+    printf("Error invocation of Hackler, you must pass the input file");
+    return 1;
   }
-
+  // Start process
   printLog("HK", "Process start");
 
-  //Aspetta 2 secondi
-  sleep(2);
 
+  // Wait for 2 second befor end
+  sleep(2);
   printLog("HK", "Process end");
+  return 0;
 }
