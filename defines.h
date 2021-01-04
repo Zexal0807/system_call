@@ -35,7 +35,7 @@ process *createProcess(
 	 - delay1 : Tempo di attessa in S1 e R1
 	 - delay2 : Tempo di attessa in S2 e R2
 	 - delay3 : Tempo di attessa in S3 e R3
-	 - comunication : Tipo di comunciazione [1 : MessageQueue, 2 : SharedMemory, 3 : FIFO]
+	 - comunication : Tipo di comunciazione
 */
 typedef struct {
 	int id;
@@ -45,7 +45,7 @@ typedef struct {
 	int delay1;
 	int delay2;
 	int delay3;
-	int comunication;
+	char* comunication;
 } message;
 
 message *createMessage(
@@ -56,7 +56,7 @@ message *createMessage(
 	int delay1, 
 	int delay2, 
 	int delay3, 
-	int comunication);
+	char* comunication);
 
 /*
 Struttura del traffico
@@ -69,6 +69,11 @@ typedef struct {
 	time_t arrival;
 	time_t departure;
 } trafficInfo;
+
+trafficInfo *createTrafficInfo(
+	message* message,
+	time_t arrival,
+	time_t departure);
 
 char *time_t2string(time_t time);
 
