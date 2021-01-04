@@ -48,8 +48,8 @@ const int FIFO = 3;
 message *createMessage(
 	int id, 
 	char* content, 
-	process sender, 
-	process reciver, 
+	process* sender, 
+	process* reciver, 
 	int delay1, 
 	int delay2, 
 	int delay3, 
@@ -85,7 +85,7 @@ const char* ACTION_SHUT_DOWN = "ShutDown";
 hackletAction *createHackletAction(
 	int id,
 	int delay,
-	process target,
+	process* target,
 	int action
 ){
 
@@ -105,7 +105,7 @@ char *time_t2string(time_t time){
     return s;
 }
 
-char *process2string(process p){
+char *process2string(process *p){
     char *s = (char*) malloc(sizeof(char) * 2);
     sprintf(s, "%c%d", p->type, p->number);
     return s;

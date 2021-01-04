@@ -40,8 +40,8 @@ process *createProcess(
 typedef struct {
 	int id;
 	char *content;
-	process sender;
-	process reciver;
+	process *sender;
+	process *reciver;
 	int delay1;
 	int delay2;
 	int delay3;
@@ -51,8 +51,8 @@ typedef struct {
 message *createMessage(
 	int id, 
 	char* message, 
-	process sender, 
-	process reciver, 
+	process* sender, 
+	process* reciver, 
 	int delay1, 
 	int delay2, 
 	int delay3, 
@@ -65,7 +65,7 @@ Struttura del traffico
 	 - departure : Tempo di partenza
 */
 typedef struct {
-	message message;
+	message* message;
 	time_t arrival;
 	time_t departure;
 } trafficInfo;
@@ -78,14 +78,14 @@ char *process2string(process p);
 typedef struct {
 	int id;
 	int delay;
-	process target;
+	process* target;
 	int action;
 } hackletAction;
 
 hackletAction *createHackletAction(
 	int id,
 	int delay,
-	process target,
+	process* target,
 	int action);
 
 char* readFile(char* filename);
