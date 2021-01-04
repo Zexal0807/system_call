@@ -122,3 +122,27 @@ void printProcessList(char *filename, char type, process *p1, process *p2, proce
 
     close(file);
 }
+
+void printTrafficInfo(char *filename, trafficInfo *data){
+    int file;
+    if(access(filename, F_OK) == 0){
+        // File exist
+        file = open(filename, O_WRONLY , S_IRWXU | S_IRWXG | S_IRWXO);
+    }else{
+        // File not exist
+        file = open(filename, O_WRONLY | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
+        char headerBuffer[] = "Id;Message;Id Sender;Id Receiver;Time arrival;Time departure\n";
+        write(file, headerBuffer, strlen(headerBuffer));
+    }
+
+    char *buffer;
+    sprintf(buffer, "%d;%s;%d;%d;%s;%s\n", 
+        data->message->id, 
+        data->message->content, 
+        process2string(data->message->sender),
+        process2string(data->message->receiver),
+        time_t2string(data->arrival),
+        time_t2string(data->departure));
+
+    write(file, buffer, strlen(buffer));
+}
