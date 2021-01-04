@@ -41,10 +41,6 @@ process *createProcess(
     return p;
 }
 
-const int MESSAGE_QUEUE = 1;
-const int SHARED_MEMORY = 2;
-const int FIFO = 3;
-
 message *createMessage(
 	int id, 
 	char* content, 
@@ -53,7 +49,7 @@ message *createMessage(
 	int delay1, 
 	int delay2, 
 	int delay3, 
-    int comunication
+  char* comunication
 ){
 
     message *m = (message*) malloc(sizeof(message));
