@@ -70,6 +70,11 @@ typedef struct {
 	time_t departure;
 } trafficInfo;
 
+trafficInfo *createTrafficInfo(
+	message* message,
+	time_t arrival,
+	time_t departure);
+
 char *time_t2string(time_t time);
 
 char *process2string(process *p);

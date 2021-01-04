@@ -17,16 +17,6 @@ void printLog(char *p, char *text){
     printf("%s\t:%s\n", p, text);
 }
 
-const process SENDER_1 = {'S', 1, 0};
-const process SENDER_2 = {'S', 2, 0};
-const process SENDER_3 = {'S', 3, 0};
-
-const process RECIVER_1 = {'R', 1, 0};
-const process RECIVER_2 = {'R', 2, 0};
-const process RECIVER_3 = {'R', 3, 0};
-
-const process ALL_PROCESS = {'Z', 0, 0};
-
 process *createProcess(
 	char type,
 	int number,
@@ -64,6 +54,21 @@ message *createMessage(
     m->comunication = comunication;
 
     return m;
+}
+
+trafficInfo *createTrafficInfo(
+	message* message,
+	time_t arrival,
+	time_t departure
+){
+
+    trafficInfo *t = (trafficInfo*) malloc(sizeof(trafficInfo));
+
+    t->message = message;
+    t->arrival = arrival;
+    t->departure = departure;
+
+    return t;
 }
 
 const int INCREASE_DELAY = 0;
