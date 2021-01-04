@@ -49,7 +49,7 @@ message *createMessage(
 	int id, 
 	char* content, 
 	process* sender, 
-	process* reciver, 
+	process* receiver, 
 	int delay1, 
 	int delay2, 
 	int delay3, 
@@ -61,7 +61,7 @@ message *createMessage(
     m->id = id;
     m->content = strdup(content);
     m->sender = sender;
-    m->reciver = reciver;
+    m->receiver = receiver;
     m->delay1 = delay1;
     m->delay2 = delay2;
     m->delay3 = delay3;
@@ -136,7 +136,7 @@ void printTrafficInfo(char *filename, trafficInfo *data){
     }
 
     char *buffer;
-    sprintf(buffer, "%d;%s;%d;%d;%s;%s\n", 
+    sprintf(buffer, "%d;%s;%s;%s;%s;%s\n", 
         data->message->id, 
         data->message->content, 
         process2string(data->message->sender),

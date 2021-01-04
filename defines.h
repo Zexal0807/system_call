@@ -41,7 +41,7 @@ typedef struct {
 	int id;
 	char *content;
 	process *sender;
-	process *reciver;
+	process *receiver;
 	int delay1;
 	int delay2;
 	int delay3;
@@ -52,7 +52,7 @@ message *createMessage(
 	int id, 
 	char* message, 
 	process* sender, 
-	process* reciver, 
+	process* receiver, 
 	int delay1, 
 	int delay2, 
 	int delay3, 
@@ -72,7 +72,7 @@ typedef struct {
 
 char *time_t2string(time_t time);
 
-char *process2string(process p);
+char *process2string(process *p);
 
 /*-----------------Hacklet-----------------*/
 typedef struct {
