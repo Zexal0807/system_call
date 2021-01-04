@@ -97,4 +97,6 @@ char* readFile(char* filename);
 
 void printProcessList(char *filename, char type, process *p1, process *p2, process *p3);
 
+int countTrafficChar(trafficInfo *t);
+
 void printTrafficInfo(char *filename, trafficInfo *data);

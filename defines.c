@@ -12,6 +12,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <math.h>
 
 void printLog(char *p, char *text){
     printf("%s\t:%s\n", p, text);
@@ -101,8 +102,14 @@ hackletAction *createHackletAction(
 }
 
 char *time_t2string(time_t time){
-    char *s = (char*) malloc(sizeof(char) * 8);
-    strftime(s, 8, "%H:%M:%S", localtime(&time));
+    char *s = (char*) malloc(sizeof(char) * 9);
+    struct tm *info = localtime(&time);
+
+// Fix legal hour
+
+   info->tm_hour = (info->tm_hour+1)%24;
+
+    strftime(s, 9, "%H:%M:%S", info);
     return s;
 }
 
@@ -124,11 +131,33 @@ void printProcessList(char *filename, char type, process *p1, process *p2, proce
     close(file);
 }
 
+int countTrafficChar(trafficInfo *t){
+  int chars = 0;
+
+  // Number of digit of the id
+  chars += floor (log10 (abs (t->message->id))) + 1;
+  // Length of the content
+  chars += strlen(t->message->content);
+  // Sender process is S#
+  chars += 2;
+  // Receiver process is R#
+  chars += 2;
+  // time arrival is HH:MM:SS
+  chars += 8;
+  // time departure is HH:MM:SS
+  chars += 8 ;
+  // Add the ;
+  chars +=5;
+  // Add \n
+  chars +=1;
+  return chars;
+}
+
 void printTrafficInfo(char *filename, trafficInfo *data){
     int file;
     if(access(filename, F_OK) == 0){
         // File exist
-        file = open(filename, O_WRONLY , S_IRWXU | S_IRWXG | S_IRWXO);
+        file = open(filename, O_WRONLY | O_APPEND, S_IRWXU | S_IRWXG | S_IRWXO);
     }else{
         // File not exist
         file = open(filename, O_WRONLY | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
@@ -136,14 +165,17 @@ void printTrafficInfo(char *filename, trafficInfo *data){
         write(file, headerBuffer, strlen(headerBuffer));
     }
 
-    char *buffer;
+    int chars = countTrafficChar(data);
+
+    char *buffer  = (char*) malloc(sizeof(char) * chars);
     sprintf(buffer, "%d;%s;%s;%s;%s;%s\n", 
         data->message->id, 
         data->message->content, 
         process2string(data->message->sender),
         process2string(data->message->receiver),
         time_t2string(data->arrival),
-        time_t2string(data->departure));
+        time_t2string(data->departure)
+    );
 
     write(file, buffer, strlen(buffer));
 }
