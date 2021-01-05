@@ -43,7 +43,7 @@ int countTrafficChar(trafficInfo *t){
 	int chars = 0;
 
 	// Number of digit of the id
-	chars += floor (log10 (abs (t->message->id))) + 1;
+	chars += floor(log10(t->message->id)) + 1;
 	// Length of the content
 	chars += strlen(t->message->content);
 	// Sender process is S#
@@ -55,26 +55,26 @@ int countTrafficChar(trafficInfo *t){
 	// time departure is HH:MM:SS
 	chars += 8 ;
 	// Add the ;
-	chars +=5;
+	chars += 5;
 	// Add \n
-	chars +=1;
+	chars += 1;
 	return chars;
 }
 
 void printTrafficInfo(char *filename, trafficInfo *data){
 	int file;
 	if(access(filename, F_OK) == 0){
-		// File exist
+		// File exist, open in append mode
 		file = open(filename, O_WRONLY | O_APPEND, S_IRWXU | S_IRWXG | S_IRWXO);
 	}else{
-		// File not exist
+		// File not exist, create it, and print the header
 		file = open(filename, O_WRONLY | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
 		char headerBuffer[] = "Id;Message;Id Sender;Id Receiver;Time arrival;Time departure\n";
 		write(file, headerBuffer, strlen(headerBuffer));
 	}
 
+  // Print a line
 	int chars = countTrafficChar(data);
-
 	char *buffer  = (char*) malloc(sizeof(char) * chars);
 	sprintf(buffer, "%d;%s;%s;%s;%s;%s\n", 
 		data->message->id, 
@@ -84,8 +84,8 @@ void printTrafficInfo(char *filename, trafficInfo *data){
 		time_t2string(data->arrival),
 		time_t2string(data->departure)
 	);
-
 	write(file, buffer, strlen(buffer));
 
+  // Close file
 	close(file);
 }
