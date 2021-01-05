@@ -6,32 +6,14 @@
 
 #include <time.h>
 
-#include "struct/process.c"
-#include "struct/message.c"
+#include "struct/process.h"
+#include "struct/message.h"
+#include "struct/trafficInfo.h"
+
 /*
 	Procedura per stampare a console un log di quello che avviene
 */
 void printLog(char *p, char *text);
-
-/*
-Struttura del traffico
-	 - message : Messaggio
-	 - arrival : Tempo di arrivo
-	 - departure : Tempo di partenza
-*/
-typedef struct {
-	message* message;
-	time_t arrival;
-	time_t departure;
-} trafficInfo;
-
-/*
-	Funzione per creare un trafficInfo
-*/
-trafficInfo *createTrafficInfo(
-	message* message,
-	time_t arrival,
-	time_t departure);
 
 /*
 	Funzione per convertire un time_t in stringa nel formato HH:MM:SS

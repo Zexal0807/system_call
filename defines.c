@@ -18,20 +18,6 @@ void printLog(char *p, char *text){
     printf("%s\t:%s\n", p, text);
 }
 
-trafficInfo *createTrafficInfo(
-	message* message,
-	time_t arrival,
-	time_t departure
-){
-
-    trafficInfo *t = (trafficInfo*) malloc(sizeof(trafficInfo));
-
-    t->message = message;
-    t->arrival = arrival;
-    t->departure = departure;
-
-    return t;
-}
 
 const int INCREASE_DELAY = 0;
 const char* ACTION_INCREASE_DELAY = "IncreaseDealy";
