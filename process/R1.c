@@ -16,8 +16,8 @@ int main(int argc, char * argv[]) {
     
     time_t a;
     time_t d;
-    time ( &a );
-    time ( &d );
+    time(&a);
+    time(&d);
 
     trafficInfo *t = createTrafficInfo(
       createMessage(
