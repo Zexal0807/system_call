@@ -9,15 +9,12 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <sys/stat.h>
-#include <sys/types.h>
-#include <sys/wait.h>
 #include <unistd.h>
 #include <math.h>
 
 void printLog(char *p, char *text){
     printf("%s\t:%s\n", p, text);
 }
-
 
 const int INCREASE_DELAY = 0;
 const char* ACTION_INCREASE_DELAY = "IncreaseDealy";

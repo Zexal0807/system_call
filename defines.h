@@ -4,8 +4,6 @@
 
 #pragma once
 
-#include <time.h>
-
 #include "struct/process.h"
 #include "struct/message.h"
 #include "struct/trafficInfo.h"
