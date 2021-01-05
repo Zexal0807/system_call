@@ -2,6 +2,8 @@
 
 #include "message.h"
 
+#include <time.h>
+
 /*
 Struttura del traffico
 	 - message : Messaggio
