@@ -13,9 +13,6 @@ typedef struct {
 	int pid;
 } process;
 
-process *createProcess(
-	char type,
-	int number,
-	int pid);
+process *createProcess(char type, int number, int pid);
 
 char *process2string(process *p);

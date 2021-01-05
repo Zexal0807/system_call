@@ -19,7 +19,4 @@ typedef struct {
 /*
 	Funzione per creare un trafficInfo
 */
-trafficInfo *createTrafficInfo(
-	message* message,
-	time_t arrival,
-	time_t departure);
+trafficInfo *createTrafficInfo(message* message, time_t arrival, time_t departure);

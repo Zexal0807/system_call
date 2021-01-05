@@ -20,9 +20,8 @@ char *time_t2string(time_t time){
 	char *s = (char*) malloc(sizeof(char) * 9);
 	struct tm *info = localtime(&time);
 
-// Fix legal hour
-
-   info->tm_hour = (info->tm_hour+1)%24;
+	// Fix legal hour
+	info->tm_hour = (info->tm_hour + 1) % 24;
 
 	strftime(s, 9, "%H:%M:%S", info);
 	return s;
@@ -41,25 +40,25 @@ void printProcessList(char *filename, char type, process *p1, process *p2, proce
 }
 
 int countTrafficChar(trafficInfo *t){
-  int chars = 0;
+	int chars = 0;
 
-  // Number of digit of the id
-  chars += floor (log10 (abs (t->message->id))) + 1;
-  // Length of the content
-  chars += strlen(t->message->content);
-  // Sender process is S#
-  chars += 2;
-  // Receiver process is R#
-  chars += 2;
-  // time arrival is HH:MM:SS
-  chars += 8;
-  // time departure is HH:MM:SS
-  chars += 8 ;
-  // Add the ;
-  chars +=5;
-  // Add \n
-  chars +=1;
-  return chars;
+	// Number of digit of the id
+	chars += floor (log10 (abs (t->message->id))) + 1;
+	// Length of the content
+	chars += strlen(t->message->content);
+	// Sender process is S#
+	chars += 2;
+	// Receiver process is R#
+	chars += 2;
+	// time arrival is HH:MM:SS
+	chars += 8;
+	// time departure is HH:MM:SS
+	chars += 8 ;
+	// Add the ;
+	chars +=5;
+	// Add \n
+	chars +=1;
+	return chars;
 }
 
 void printTrafficInfo(char *filename, trafficInfo *data){

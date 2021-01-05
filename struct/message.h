@@ -24,14 +24,7 @@ typedef struct {
 	char* comunication;
 } message;
 
-
-message *createMessage(
-	int id, 
-	char* content, 
-	process* sender, 
-	process* receiver, 
-	int delay1, 
-	int delay2, 
-	int delay3, 
-  char* comunication
-);
+/*
+	Funzione per create un messaggio
+*/
+message *createMessage(int id, char* content, process* sender, process* receiver, int delay1, int delay2, int delay3, char* comunication);
