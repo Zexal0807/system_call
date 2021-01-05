@@ -13,7 +13,7 @@
 #include <math.h>
 
 void printLog(char *p, char *text){
-    printf("%s\t:%s\n", p, text);
+	printf("%s\t:%s\n", p, text);
 }
 
 const int INCREASE_DELAY = 0;
@@ -35,38 +35,38 @@ hackletAction *createHackletAction(
 	int action
 ){
 
-    hackletAction *a = (hackletAction*) malloc(sizeof(hackletAction));
+	hackletAction *a = (hackletAction*) malloc(sizeof(hackletAction));
 
-    a->id = id;
-    a->delay = delay;
-    a->target = target;
-    a->target = target;
+	a->id = id;
+	a->delay = delay;
+	a->target = target;
+	a->target = target;
 
-    return a;
+	return a;
 }
 
 char *time_t2string(time_t time){
-    char *s = (char*) malloc(sizeof(char) * 9);
-    struct tm *info = localtime(&time);
+	char *s = (char*) malloc(sizeof(char) * 9);
+	struct tm *info = localtime(&time);
 
 // Fix legal hour
 
    info->tm_hour = (info->tm_hour+1)%24;
 
-    strftime(s, 9, "%H:%M:%S", info);
-    return s;
+	strftime(s, 9, "%H:%M:%S", info);
+	return s;
 }
 
 void printProcessList(char *filename, char type, process *p1, process *p2, process *p3){
-    
-    int file = open(filename, O_WRONLY | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
-    char buffer[50];
+	
+	int file = open(filename, O_WRONLY | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
+	char buffer[50];
 
-    sprintf(buffer, "%s ID;PID\n%c1;%i\n%c2;%i\n%c3;%i\n", (type=='S' ? "SENDER" : "RECEIVER"), type, p1->pid, type, p2->pid, type, p3->pid);
+	sprintf(buffer, "%s ID;PID\n%c1;%i\n%c2;%i\n%c3;%i\n", (type=='S' ? "SENDER" : "RECEIVER"), type, p1->pid, type, p2->pid, type, p3->pid);
 
-    write(file, buffer, strlen(buffer));
+	write(file, buffer, strlen(buffer));
 
-    close(file);
+	close(file);
 }
 
 int countTrafficChar(trafficInfo *t){
@@ -92,30 +92,30 @@ int countTrafficChar(trafficInfo *t){
 }
 
 void printTrafficInfo(char *filename, trafficInfo *data){
-    int file;
-    if(access(filename, F_OK) == 0){
-        // File exist
-        file = open(filename, O_WRONLY | O_APPEND, S_IRWXU | S_IRWXG | S_IRWXO);
-    }else{
-        // File not exist
-        file = open(filename, O_WRONLY | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
-        char headerBuffer[] = "Id;Message;Id Sender;Id Receiver;Time arrival;Time departure\n";
-        write(file, headerBuffer, strlen(headerBuffer));
-    }
+	int file;
+	if(access(filename, F_OK) == 0){
+		// File exist
+		file = open(filename, O_WRONLY | O_APPEND, S_IRWXU | S_IRWXG | S_IRWXO);
+	}else{
+		// File not exist
+		file = open(filename, O_WRONLY | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
+		char headerBuffer[] = "Id;Message;Id Sender;Id Receiver;Time arrival;Time departure\n";
+		write(file, headerBuffer, strlen(headerBuffer));
+	}
 
-    int chars = countTrafficChar(data);
+	int chars = countTrafficChar(data);
 
-    char *buffer  = (char*) malloc(sizeof(char) * chars);
-    sprintf(buffer, "%d;%s;%s;%s;%s;%s\n", 
-        data->message->id, 
-        data->message->content, 
-        process2string(data->message->sender),
-        process2string(data->message->receiver),
-        time_t2string(data->arrival),
-        time_t2string(data->departure)
-    );
+	char *buffer  = (char*) malloc(sizeof(char) * chars);
+	sprintf(buffer, "%d;%s;%s;%s;%s;%s\n", 
+		data->message->id, 
+		data->message->content, 
+		process2string(data->message->sender),
+		process2string(data->message->receiver),
+		time_t2string(data->arrival),
+		time_t2string(data->departure)
+	);
 
-    write(file, buffer, strlen(buffer));
+	write(file, buffer, strlen(buffer));
 
-    close(file);
+	close(file);
 }

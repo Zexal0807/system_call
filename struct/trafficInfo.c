@@ -8,11 +8,11 @@ trafficInfo *createTrafficInfo(
 	time_t departure
 ){
 
-    trafficInfo *t = (trafficInfo*) malloc(sizeof(trafficInfo));
+	trafficInfo *t = (trafficInfo*) malloc(sizeof(trafficInfo));
 
-    t->message = message;
-    t->arrival = arrival;
-    t->departure = departure;
+	t->message = message;
+	t->arrival = arrival;
+	t->departure = departure;
 
-    return t;
+	return t;
 }
