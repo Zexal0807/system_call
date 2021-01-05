@@ -17,6 +17,10 @@ process *createProcess(
 	return p;
 }
 
+process *createProcessFromString(char *str){
+  return createProcess(str[0], str[1], 0);
+}
+
 char *process2string(process *p){
 	char *s = (char*) malloc(sizeof(char) * 2);
 	sprintf(s, "%c%d", p->type, p->number);
