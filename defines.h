@@ -6,57 +6,12 @@
 
 #include <time.h>
 
+#include "struct/process.c"
+#include "struct/message.c"
+/*
+	Procedura per stampare a console un log di quello che avviene
+*/
 void printLog(char *p, char *text);
-
-/*
-	Struttura di un processo
-	 - type : Tipo del processo [S: Sender, R: Reciver]
-	 - number : Numero del processo
-	 - pid : PID del processo
-	Target Z0 : ALL
-*/
-typedef struct {
-	char type;
-	int number;
-	int pid;
-} process;
-
-process *createProcess(
-	char type,
-	int number,
-	int pid);
-
-/*
-	Struttura del messaggio
-	 - id : Identificativo del messaggio
-	 - content : Stringa del messsaggio
-	 - sender : Processo che deve spedire il messaggio
-	 - reciver : Pocesso che deve riceve il messsaggio
-	 - delay1 : Tempo di attessa in S1 e R1
-	 - delay2 : Tempo di attessa in S2 e R2
-	 - delay3 : Tempo di attessa in S3 e R3
-	 - comunication : Tipo di comunciazione
-*/
-typedef struct {
-	int id;
-	char *content;
-	process *sender;
-	process *receiver;
-	int delay1;
-	int delay2;
-	int delay3;
-	char* comunication;
-} message;
-
-message *createMessage(
-	int id, 
-	char* message, 
-	process* sender, 
-	process* receiver, 
-	int delay1, 
-	int delay2, 
-	int delay3, 
-	char* comunication);
 
 /*
 Struttura del traffico
@@ -70,14 +25,19 @@ typedef struct {
 	time_t departure;
 } trafficInfo;
 
+/*
+	Funzione per creare un trafficInfo
+*/
 trafficInfo *createTrafficInfo(
 	message* message,
 	time_t arrival,
 	time_t departure);
 
+/*
+	Funzione per convertire un time_t in stringa nel formato HH:MM:SS
+*/
 char *time_t2string(time_t time);
 
-char *process2string(process *p);
 
 /*-----------------Hacklet-----------------*/
 typedef struct {

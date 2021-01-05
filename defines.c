@@ -18,45 +18,6 @@ void printLog(char *p, char *text){
     printf("%s\t:%s\n", p, text);
 }
 
-process *createProcess(
-	char type,
-	int number,
-	int pid){
-
-    process *p = (process*) malloc(sizeof(process));
-
-    p->type = type;
-    p->number = number;
-    p->pid = pid;
-    
-    return p;
-}
-
-message *createMessage(
-	int id, 
-	char* content, 
-	process* sender, 
-	process* receiver, 
-	int delay1, 
-	int delay2, 
-	int delay3, 
-  char* comunication
-){
-
-    message *m = (message*) malloc(sizeof(message));
-
-    m->id = id;
-    m->content = strdup(content);
-    m->sender = sender;
-    m->receiver = receiver;
-    m->delay1 = delay1;
-    m->delay2 = delay2;
-    m->delay3 = delay3;
-    m->comunication = comunication;
-
-    return m;
-}
-
 trafficInfo *createTrafficInfo(
 	message* message,
 	time_t arrival,
@@ -110,12 +71,6 @@ char *time_t2string(time_t time){
    info->tm_hour = (info->tm_hour+1)%24;
 
     strftime(s, 9, "%H:%M:%S", info);
-    return s;
-}
-
-char *process2string(process *p){
-    char *s = (char*) malloc(sizeof(char) * 2);
-    sprintf(s, "%c%d", p->type, p->number);
     return s;
 }
 
@@ -178,4 +133,6 @@ void printTrafficInfo(char *filename, trafficInfo *data){
     );
 
     write(file, buffer, strlen(buffer));
+
+    close(file);
 }
