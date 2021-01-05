@@ -16,35 +16,6 @@ void printLog(char *p, char *text){
 	printf("%s\t:%s\n", p, text);
 }
 
-const int INCREASE_DELAY = 0;
-const char* ACTION_INCREASE_DELAY = "IncreaseDealy";
-
-const int REMOVE_MSG = 1;
-const char* ACTION_REMOVE_MSG = "RemoveMsg";
-
-const int SEND_MSG = 2;
-const char* ACTION_SEND_MSG = "SendMsg";
-
-const int SHUT_DOWN = 3;
-const char* ACTION_SHUT_DOWN = "ShutDown";
-
-hackletAction *createHackletAction(
-	int id,
-	int delay,
-	process* target,
-	int action
-){
-
-	hackletAction *a = (hackletAction*) malloc(sizeof(hackletAction));
-
-	a->id = id;
-	a->delay = delay;
-	a->target = target;
-	a->target = target;
-
-	return a;
-}
-
 char *time_t2string(time_t time){
 	char *s = (char*) malloc(sizeof(char) * 9);
 	struct tm *info = localtime(&time);
