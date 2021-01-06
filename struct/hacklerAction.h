@@ -17,7 +17,6 @@ typedef struct {
 	int action;
 } hackletAction;
 
-
 /*
 	Funzione per creare un hacklet Action
 */

@@ -18,7 +18,7 @@ process *createProcess(
 }
 
 process *createProcessFromString(char *str){
-  return createProcess(str[0], str[1], 0);
+	return createProcess(str[0], str[1], 0);
 }
 
 char *process2string(process *p){
