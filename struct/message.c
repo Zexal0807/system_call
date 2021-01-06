@@ -1,7 +1,8 @@
 #include <stdlib.h>
 #include <string.h>
-#include "message.h"
 #include <stdio.h>
+
+#include "message.h"
 
 message *createMessage(int id,
 	char* content,
@@ -28,7 +29,7 @@ message *createMessage(int id,
 }
 
 int readDelay(char *buffer, int *i){
-	int delay = 0
+	int delay = 0;
 	//se trovo come delay -, allora segno 0
 	if(*(buffer + *i) == '-')
 		*(buffer + *i) = '0';
@@ -42,14 +43,18 @@ int readDelay(char *buffer, int *i){
 
 message* linetoStruct(
 	char *buffer, 
-	int *i, 
-	process *s1, 
-	process *s2, 
-	process *s3, 
-	process *r1, 
-	process *r2, 
-	process *r3
+	int *i
 ){
+
+  process *s1 = createProcess('S', 1, 0);
+  process *s2 = createProcess('S', 2, 0);
+  process *s3 = createProcess('S', 3, 0);
+
+  process *r1 = createProcess('R', 1, 0);
+  process *r2 = createProcess('R', 2, 0);
+  process *r3 = createProcess('R', 3, 0);
+
+
 	int id, delay1, delay2, delay3;
 	char *content;
 	process *sender;

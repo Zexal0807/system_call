@@ -1,3 +1,7 @@
+#include <sys/stat.h>
+#include <fcntl.h>
+#include<unistd.h>
+
 #include "list.h"
 
 node* inserisciInCoda(node* n, message* m){
@@ -42,17 +46,11 @@ int hasNext(node* n ){
 	if(n->next == NULL){
 		return 0;
 	}
-	return 1
+	return 1;
 }
 
 node* createList(
-	char* filename,
-	process *s1, 
-	process *s2, 
-	process *s3, 
-	process *r1, 
-	process *r2, 
-	process *r3
+	char* filename
 ){
 	node * list = NULL;
 
@@ -77,7 +75,7 @@ node* createList(
 	i++;
 
 	while(*(buffer+i) != 0x0){
-		message *m = linetoStruct(buffer, &i, s1, s2, s3, r1, r2, r3);
+		message *m = linetoStruct(buffer, &i);
 		list = inserisciInCoda(list, m);
 		i++;
 	}
