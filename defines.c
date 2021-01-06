@@ -27,9 +27,15 @@ char *time_t2string(time_t time){
 	return s;
 }
 
-void printProcessList(char *filename, char type, process *p1, process *p2, process *p3){
+void printProcessList(
+  char *filename, 
+  char type, 
+  process *p1, 
+  process *p2, 
+  process *p3
+){
 	
-	int file = open(filename, O_WRONLY | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
+	int file = open(filename, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU | S_IRWXG | S_IRWXO);
 	char buffer[50];
 
 	sprintf(buffer, "%s ID;PID\n%c1;%i\n%c2;%i\n%c3;%i\n", (type=='S' ? "SENDER" : "RECEIVER"), type, p1->pid, type, p2->pid, type, p3->pid);
