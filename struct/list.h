@@ -14,3 +14,12 @@ node* inserisciOrdinato(node*n , message* m);
 node* rimuovi(node* n, message* m);
 node* getNext(node* n);
 int hasNext(node* n);
+
+node* createList(char* filename,
+    process *s1, 
+    process *s2, 
+    process *s3, 
+    process *r1, 
+    process *r2, 
+    process *r3
+);

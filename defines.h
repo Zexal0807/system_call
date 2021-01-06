@@ -8,6 +8,7 @@
 #include "struct/message.h"
 #include "struct/trafficInfo.h"
 #include "struct/hacklerAction.h"
+#include "struct/list.h"
 
 /*
 	Procedura per stampare a console un log di quello che avviene
