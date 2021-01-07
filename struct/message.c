@@ -28,17 +28,20 @@ message *createMessage(int id,
 	return m;
 }
 
-int readDelay(char *buffer, int *i){
-	int delay = 0;
-	//se trovo come delay -, allora segno 0
-	if(*(buffer + *i) == '-')
-		*(buffer + *i) = '0';
-	
-	while(*(buffer + *i)!=';'){
-		delay = (delay * 10) + (int)(*(buffer + *i) - '0');
+void readComma(char *buffer, int *i){
+  *i = (*i) + 1;
+}
+
+int readInt(char *buffer, int *i){
+	int value = 0;
+	// Finche non arrivo al ;
+	while(*(buffer + *i) != ';'){
+    // Moltiplico per 10 e aggiungo il nuovo valore convertito in int
+		value = value * 10;
+    value += atoi(buffer + *i);
 		*i = (*i) + 1;
 	}
-	return delay;
+	return value;
 }
 
 message* linetoStruct(
@@ -46,22 +49,20 @@ message* linetoStruct(
 	int *i
 ){
 
-	int id, delay1, delay2, delay3;
+	int id, 
+    delay1,
+    delay2, 
+    delay3;
 	char *content;
 	process *sender;
 	process *receiver;
 	char *communication;
 
-	id = 0;
-	while( *(buffer + *i) != ';'){
-		id = (id * 10) + (int)(*(buffer + *i) - '0');
-		*i = (*i) + 1;
-	}
+  //Leggo l'id come intero
+	id = readInt(buffer, i);
+  readComma(buffer, i);
 
-	//Mi muovo verso il prossimo dato
-	*i = (*i) + 1;
-
-	//conto la dimensione del messaggio
+	//Conto la dimensione del messaggio
 	int j = *i;
 	int counter = 0;
 	while(*(buffer + j) != ';'){
@@ -75,19 +76,15 @@ message* linetoStruct(
 		*(content + j) = *(buffer + *i);
 		*i = (*i) + 1;
 	}
+  readComma(buffer, i);
 
-	//Mi muovo verso il prossimo dato
-	//Il prossimo dato è il Sender, che riconosco dal
-	//numero 
-	*i = (*i) + 1;
-
-	//mi assicuro che il carattere sia giusto
+	//Analizzo il Sender
+	//mi assicuro che il un Sender
 	if(*(buffer + *i) != 'S'){
 		perror("Error in sender");
 		exit(1);
 	}
 	*i = (*i) + 1;
-	
 	//In base al numero, trovo il sender corretto
 	switch (*(buffer+*i)){
 		case '1':
@@ -103,21 +100,17 @@ message* linetoStruct(
 			perror("Error in sender");
 			exit(1);
 	}
-	
-	//Mi muovo verso il prossimo dato
-	//Il prossimo dato è il Receiver, che riconosco 
-	//sempre dal numero
+	*i = (*i) + 1;
+  readComma(buffer, i);
 
-	*i = (*i) + 2;
-
+  //Analizzo il Receiver
+	//mi assicuro che il un Receiver
 	if(*(buffer + *i) != 'R'){
 		perror("Error in receiver");
 		exit(1);
 	}
-
 	*i = (*i) + 1;
-
-	//in base al numero, trovo il receiver corretto
+	//in base al numero, trovo il Receiver corretto
 	switch (*(buffer + *i)){
 		case '1':
 			receiver = RECEIVER_1();
@@ -132,59 +125,33 @@ message* linetoStruct(
 			perror("Error in receiver");
 			exit(1);
 	}
-	
-	//mi avvio al prossimo dato
-	*i = (*i) + 2;
+  *i = (*i) + 1;
+	readComma(buffer, i);
 
-	delay1 = 0;
-	delay2 = 0;
-	delay3 = 0;
-
-	//se trovo come delay -, allora segno 0
+  //Per la lettura dei delay devo controllare se sono -, nel caso li trasfomo in 0
 	if(*(buffer + *i) == '-')
 		*(buffer + *i) = '0';
-	
-	while(*(buffer + *i)!=';'){
-		delay1 = (delay1 * 10) + (int)(*(buffer + *i) - '0');
-		*i = (*i) + 1;
-	}
+	delay1 = readInt(buffer, i);
+	readComma(buffer, i);
 
-	*i = (*i) + 1;
-	
-	//ripeto per il delay 2
 	if(*(buffer + *i) == '-')
 		*(buffer + *i) = '0';
+	delay2 = readInt(buffer, i);
+	readComma(buffer, i);
 
-	while(*(buffer+*i)!=';'){
-		delay2=(delay2*10)+(int)(*(buffer+*i)-'0');
-		*i=(*i)+1;
-	}
+	if(*(buffer + *i) == '-')
+		*(buffer + *i) = '0';
+  delay3 = readInt(buffer, i);
+	readComma(buffer, i);
 
-	*i=(*i)+1;
-
-	//ripeto per il delay 3
-	if(*(buffer+*i)=='-')
-		*(buffer+*i)='0';
-
-	while(*(buffer+*i)!=';'){
-		delay3 = (delay3 * 10) + (int)( *(buffer + *i) - '0');
-		*i = (*i) + 1;
-	}
-
-	//avanzo al prossimo dato
-
-	*i = (*i) + 1;
-
-	//calcolo la dimensione della strinfa
+  //Analizzo il tipo di comunicazion
+	//calcolo la dimensione della stringa
 	counter = 0;
-
 	for(j = *i; *(buffer + j) != '\n'; j++)
 		counter++;
 
 	//creo la stringa
 	communication = (char*)malloc(sizeof(char) * counter);
-
-
 	for(j = 0; *(buffer+*i) != '\n' && *(buffer + *i) != '\0'; j++){
 		*(communication + j) = *(buffer + *i);
 		*i = (*i) + 1;

@@ -18,7 +18,7 @@ int main(int argc, char * argv[]) {
     node *l = createList("input/F0.csv");
     
     while(l != NULL){
-      printf("%s\n", l->message->content);
+      printf("%s %d\n", l->message->content, l->message->delay1);
       l = getNext(l);
     }
 

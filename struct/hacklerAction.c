@@ -14,7 +14,7 @@ hackletAction *createHackletAction(
 	a->id = id;
 	a->delay = delay;
 	a->target = target;
-	a->target = target;
+	a->action = action;
 
 	return a;
 }
