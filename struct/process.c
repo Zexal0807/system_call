@@ -5,20 +5,19 @@
 
 process *createProcess(
 	char type,
-	int number,
-	int pid){
+	int number
+){
 
 	process *p = (process*) malloc(sizeof(process));
 
 	p->type = type;
 	p->number = number;
-	p->pid = pid;
 	
 	return p;
 }
 
 process *createProcessFromString(char *str){
-	return createProcess(str[0], str[1], 0);
+	return createProcess(str[0], str[1]);
 }
 
 char *process2string(process *p){

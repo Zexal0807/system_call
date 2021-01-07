@@ -46,13 +46,13 @@ message* linetoStruct(
 	int *i
 ){
 
-  process *s1 = createProcess('S', 1, 0);
-  process *s2 = createProcess('S', 2, 0);
-  process *s3 = createProcess('S', 3, 0);
+  process *s1 = createProcess('S', 1);
+  process *s2 = createProcess('S', 2);
+  process *s3 = createProcess('S', 3);
 
-  process *r1 = createProcess('R', 1, 0);
-  process *r2 = createProcess('R', 2, 0);
-  process *r3 = createProcess('R', 3, 0);
+  process *r1 = createProcess('R', 1);
+  process *r2 = createProcess('R', 2);
+  process *r3 = createProcess('R', 3);
 
 
 	int id, delay1, delay2, delay3;

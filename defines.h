@@ -5,6 +5,7 @@
 #pragma once
 
 #include "struct/process.h"
+#include "struct/child.h"
 #include "struct/message.h"
 #include "struct/trafficInfo.h"
 #include "struct/hacklerAction.h"
@@ -22,7 +23,7 @@ char *time_t2string(time_t time);
 
 char* readFile(char* filename);
 
-void printProcessList(char *filename, char type, process *p1, process *p2, process *p3);
+void printChildList(char *filename, char type, child *p1, child *p2, child *p3);
 
 int countTrafficChar(trafficInfo *t);
 

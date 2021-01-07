@@ -24,9 +24,9 @@ int main(int argc, char * argv[]) {
 	printLog("RM", "Process start");
 
 	// Define the 3 struct process
-	process * R1 = NULL;
-	process * R2 = NULL;
-	process * R3 = NULL;
+	child * R1 = NULL;
+	child * R2 = NULL;
+	child * R3 = NULL;
 
 	// Try to create a child, in each child functione must me an exit
 	int pid = fork();
@@ -39,7 +39,7 @@ int main(int argc, char * argv[]) {
 		execvp("./R1", argv);
 		ErrExit("R1 not start");
 	}
-	R1 = createProcess('R', 1, pid);
+	R1 = createChild('R', 1, pid);
 
 	// Try to create a child, in each child functione must me an exit
 	pid = fork();
@@ -52,7 +52,7 @@ int main(int argc, char * argv[]) {
 		execvp("./R2", argv);
 		ErrExit("R2 not start");
 	}
-	R2 = createProcess('R', 2, pid);
+	R2 = createChild('R', 2, pid);
 
 	// Try to create a child, in each child functione must me an exit
 	pid = fork();
@@ -65,10 +65,10 @@ int main(int argc, char * argv[]) {
 		execvp("./R3", argv);
 		ErrExit("R3 not start");
 	}
-	R3 = createProcess('R', 3, pid);
+	R3 = createChild('R', 3, pid);
 
 	//Save process pid in file
-	printProcessList("output/F9.csv", 'R', R1, R2, R3);
+	printChildList("output/F9.csv", 'R', R1, R2, R3);
 
 	// Wait the end of all child
 	pid_t child;

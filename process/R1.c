@@ -23,8 +23,8 @@ int main(int argc, char * argv[]) {
       createMessage(
         1, 
         "Ciao come va?",
-        createProcess('S', 1, 1),
-        createProcess('R', 1, 1),
+        createProcess('S', 1),
+        createProcess('R', 1),
         1,
         1,
         1,

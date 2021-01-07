@@ -27,12 +27,12 @@ char *time_t2string(time_t time){
 	return s;
 }
 
-void printProcessList(
+void printChildList(
   char *filename, 
   char type, 
-  process *p1, 
-  process *p2, 
-  process *p3
+  child *p1, 
+  child *p2, 
+  child *p3
 ){
 	
 	int file = open(filename, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU | S_IRWXG | S_IRWXO);
