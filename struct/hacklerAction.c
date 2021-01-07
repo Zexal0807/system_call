@@ -18,3 +18,21 @@ hackletAction *createHackletAction(
 
 	return a;
 }
+
+int countHacklerActionChars(hackletAction *h){
+	int chars = 0;
+
+	// Number of digit of the id
+	chars += floor(log10(h->id)) + 1;
+	// Number of digit of the delay
+	chars += floor(log10(H->delay)) + 1;
+	// Target process
+	chars += strlen(process2string(h->target));
+	// Target process
+	chars += strlen(h->action);
+	// Add the ;
+	chars += 3;
+	// Add \n
+	chars += 1;
+	return chars;
+}

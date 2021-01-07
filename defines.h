@@ -25,6 +25,4 @@ char* readFile(char* filename);
 
 void printChildList(char *filename, char type, child *p1, child *p2, child *p3);
 
-int countTrafficChar(trafficInfo *t);
-
 void printTrafficInfo(char *filename, trafficInfo *data);

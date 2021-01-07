@@ -29,16 +29,8 @@ char *time_t2string(time_t time){
 
 void printChildList(
 	char *filename, 
-  char *filename, 
-	char *filename, 
-	char type, 
-  char type, 
 	char type, 
 	child *p1, 
-  child *p1, 
-	child *p1, 
-	child *p2, 
-  child *p2, 
 	child *p2, 
 	child *p3
 ){
@@ -51,28 +43,6 @@ void printChildList(
 	write(file, buffer, strlen(buffer));
 
 	close(file);
-}
-
-int countTrafficChar(trafficInfo *t){
-	int chars = 0;
-
-	// Number of digit of the id
-	chars += floor(log10(t->message->id)) + 1;
-	// Length of the content
-	chars += strlen(t->message->content);
-	// Sender process is S#
-	chars += 2;
-	// Receiver process is R#
-	chars += 2;
-	// time arrival is HH:MM:SS
-	chars += 8;
-	// time departure is HH:MM:SS
-	chars += 8 ;
-	// Add the ;
-	chars += 5;
-	// Add \n
-	chars += 1;
-	return chars;
 }
 
 void printTrafficInfo(char *filename, trafficInfo *data){

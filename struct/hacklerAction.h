@@ -21,3 +21,5 @@ typedef struct {
 	Funzione per creare un hacklet Action
 */
 hackletAction *createHackletAction(int id, int delay, process* target, char* action);
+
+int countHacklerActionChars(hackletAction *h);
