@@ -5,15 +5,13 @@
 #include "defines.h"
 
 #include <stdlib.h>
-#include <string.h>
 #include <stdio.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <math.h>
 
 void printLog(char *p, char *text){
-	printf("%s\t:%s\n", p, text);
+	printf("%s\t:\t%s\n", p, text);
 }
 
 char *time_t2string(time_t time){
