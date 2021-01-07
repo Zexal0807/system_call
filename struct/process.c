@@ -40,7 +40,13 @@ process *string2process(char *str){
 }
 
 char *process2string(process *p){
-	char *s = (char*) malloc(sizeof(char) * 2);
-	sprintf(s, "%c%d", p->type, p->number);
-	return s;
+	if (p->type == 'Z'){
+		char *s = (char*) malloc(sizeof(char) * 3);
+		sprintf(s, "ALL");
+		return s;
+	}else{
+		char *s = (char*) malloc(sizeof(char) * 2);
+		sprintf(s, "%c%d", p->type, p->number);
+		return s;
+	}
 }
