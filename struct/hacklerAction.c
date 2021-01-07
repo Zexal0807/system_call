@@ -1,4 +1,6 @@
 #include <stdlib.h>
+#include <math.h>
+#include <string.h>
 
 #include "hacklerAction.h"
 
@@ -25,7 +27,7 @@ int countHacklerActionChars(hackletAction *h){
 	// Number of digit of the id
 	chars += floor(log10(h->id)) + 1;
 	// Number of digit of the delay
-	chars += floor(log10(H->delay)) + 1;
+	chars += floor(log10(h->delay)) + 1;
 	// Target process
 	chars += strlen(process2string(h->target));
 	// Target process
