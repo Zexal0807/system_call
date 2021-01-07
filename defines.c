@@ -28,11 +28,19 @@ char *time_t2string(time_t time){
 }
 
 void printChildList(
+	char *filename, 
   char *filename, 
+	char *filename, 
+	char type, 
   char type, 
+	char type, 
+	child *p1, 
   child *p1, 
+	child *p1, 
+	child *p2, 
   child *p2, 
-  child *p3
+	child *p2, 
+	child *p3
 ){
 	
 	int file = open(filename, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU | S_IRWXG | S_IRWXO);
@@ -79,8 +87,8 @@ void printTrafficInfo(char *filename, trafficInfo *data){
 		write(file, headerBuffer, strlen(headerBuffer));
 	}
 
-  // Print a line
-	int chars = countTrafficChar(data);
+	// Print a line
+	int chars = countTrafficInfoChars(data);
 	char *buffer  = (char*) malloc(sizeof(char) * chars);
 	sprintf(buffer, "%d;%s;%s;%s;%s;%s\n", 
 		data->message->id, 
@@ -92,12 +100,11 @@ void printTrafficInfo(char *filename, trafficInfo *data){
 	);
 	write(file, buffer, strlen(buffer));
 
-  // Close file
+	// Close file
 	close(file);
 }
 
-
-void printHacklerAction(char *filename, hacklerAction *data){
+void printHacklerAction(char *filename, hackletAction *data){
 	int file;
 	if(access(filename, F_OK) == 0){
 		// File exist, open in append mode
@@ -105,23 +112,21 @@ void printHacklerAction(char *filename, hacklerAction *data){
 	}else{
 		// File not exist, create it, and print the header
 		file = open(filename, O_WRONLY | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
-		char headerBuffer[] = "Id;Message;Id Sender;Id Receiver;Time arrival;Time departure\n";
+		char headerBuffer[] = "Id;Delay;Target;Action\n";
 		write(file, headerBuffer, strlen(headerBuffer));
 	}
 
-  // Print a line
-	int chars = countTrafficChar(data);
+	// Print a line
+	int chars = countHacklerActionChars(data);
 	char *buffer  = (char*) malloc(sizeof(char) * chars);
-	sprintf(buffer, "%d;%s;%s;%s;%s;%s\n", 
-		data->message->id, 
-		data->message->content, 
-		process2string(data->message->sender),
-		process2string(data->message->receiver),
-		time_t2string(data->arrival),
-		time_t2string(data->departure)
+	sprintf(buffer, "%d;%d;%s;%s;\n", 
+		data->id, 
+		data->delay, 
+		process2string(data->target),
+		data->action
 	);
 	write(file, buffer, strlen(buffer));
 
-  // Close file
+	// Close file
 	close(file);
 }

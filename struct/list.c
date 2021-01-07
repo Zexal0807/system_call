@@ -15,7 +15,7 @@ node* inserisciInCoda(node* n, message* m){
 		if(n == NULL){
 			n = tmp;
 		}else{
-			for(prec=n;prec->next!=NULL;prec=prec->next);
+			for(prec = n; prec->next != NULL; prec = prec->next);
 			prec->next = tmp;
 		}
 	} else{
@@ -42,7 +42,7 @@ node* getNext(node* n){
 	return n->next;
 }
 
-int hasNext(node* n ){
+int hasNext(node* n){
 	if(n->next == NULL){
 		return 0;
 	}
@@ -71,7 +71,7 @@ node* createList(
 	read(file, buffer, size);
 
 	int i;
-	for(i=0;*(buffer+i)!='\n';i++);
+	for(i=0; *(buffer+i) != '\n'; i++);
 	i++;
 
 	while(*(buffer+i) != 0x0){

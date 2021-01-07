@@ -36,9 +36,9 @@ int readInt(char *buffer, int *i){
 	int value = 0;
 	// Finche non arrivo al ;
 	while(*(buffer + *i) != ';'){
-    // Moltiplico per 10 e aggiungo il nuovo valore convertito in int
+		// Moltiplico per 10 e aggiungo il nuovo valore convertito in int
 		value = value * 10;
-    value += atoi(buffer + *i);
+		value += atoi(buffer + *i);
 		*i = (*i) + 1;
 	}
 	return value;
@@ -50,17 +50,17 @@ message* linetoStruct(
 ){
 
 	int id, 
-    delay1,
-    delay2, 
-    delay3;
+		delay1,
+		delay2, 
+		delay3;
 	char *content;
 	process *sender;
 	process *receiver;
 	char *communication;
 
-  //Leggo l'id come intero
+	//Leggo l'id come intero
 	id = readInt(buffer, i);
-  readComma(buffer, i);
+	readComma(buffer, i);
 
 	//Conto la dimensione del messaggio
 	int j = *i;
@@ -76,7 +76,7 @@ message* linetoStruct(
 		*(content + j) = *(buffer + *i);
 		*i = (*i) + 1;
 	}
-  readComma(buffer, i);
+	readComma(buffer, i);
 
 	//Analizzo il Sender
 	//mi assicuro che il un Sender
@@ -101,9 +101,9 @@ message* linetoStruct(
 			exit(1);
 	}
 	*i = (*i) + 1;
-  readComma(buffer, i);
+	readComma(buffer, i);
 
-  //Analizzo il Receiver
+	//Analizzo il Receiver
 	//mi assicuro che il un Receiver
 	if(*(buffer + *i) != 'R'){
 		perror("Error in receiver");
@@ -125,10 +125,10 @@ message* linetoStruct(
 			perror("Error in receiver");
 			exit(1);
 	}
-  *i = (*i) + 1;
+	*i = (*i) + 1;
 	readComma(buffer, i);
 
-  //Per la lettura dei delay devo controllare se sono -, nel caso li trasfomo in 0
+	//Per la lettura dei delay devo controllare se sono -, nel caso li trasfomo in 0
 	if(*(buffer + *i) == '-')
 		*(buffer + *i) = '0';
 	delay1 = readInt(buffer, i);
@@ -141,14 +141,14 @@ message* linetoStruct(
 
 	if(*(buffer + *i) == '-')
 		*(buffer + *i) = '0';
-  delay3 = readInt(buffer, i);
+	delay3 = readInt(buffer, i);
 	readComma(buffer, i);
 
-  //Analizzo il tipo di comunicazion
+	//Analizzo il tipo di comunicazion
 	//calcolo la dimensione della stringa
 	counter = 0;
 	for(j = *i; *(buffer + j) != '\n'; j++)
-		counter++;
+	counter++;
 
 	//creo la stringa
 	communication = (char*)malloc(sizeof(char) * counter);

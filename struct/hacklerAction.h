@@ -8,7 +8,7 @@
 	 - id : id della azione
 	 - delay : Numero del processo
 	 - target : PID del processo
-	 - action : PID del processo
+	 - action : Azione del disturbatore
 */
 typedef struct {
 	int id;
