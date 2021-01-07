@@ -12,4 +12,4 @@ typedef struct {
 	int pid;
 } child;
 
-child *createChild(char type, int number, int pid);
+child *createChild(process *p, int pid);

@@ -4,13 +4,11 @@
 #include "child.h"
 
 child *createChild(
-	char type,
-	int number,
+	process *p,
 	int pid
 ){
   
   child *c = (child*) malloc(sizeof(child));
-	process *p = createProcess(type, number);
 
 	c->process = p;
 	c->pid = pid;

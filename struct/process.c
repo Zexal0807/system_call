@@ -16,7 +16,26 @@ process *createProcess(
 	return p;
 }
 
-process *createProcessFromString(char *str){
+process *SENDER_1(){
+  return createProcess('S', 1);
+}
+process *SENDER_2(){
+  return createProcess('S', 2);
+}
+process *SENDER_3(){
+  return createProcess('S', 3);
+}
+process *RECEIVER_1(){
+  return createProcess('R', 1);
+}
+process *RECEIVER_2(){
+  return createProcess('R', 2);
+}
+process *RECEIVER_3(){
+  return createProcess('R', 3);
+}
+
+process *string2process(char *str){
 	return createProcess(str[0], str[1]);
 }
 

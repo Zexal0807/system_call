@@ -39,7 +39,7 @@ int main(int argc, char * argv[]) {
 		execvp("./R1", argv);
 		ErrExit("R1 not start");
 	}
-	R1 = createChild('R', 1, pid);
+	R1 = createChild(RECEIVER_1(), pid);
 
 	// Try to create a child, in each child functione must me an exit
 	pid = fork();
@@ -52,7 +52,7 @@ int main(int argc, char * argv[]) {
 		execvp("./R2", argv);
 		ErrExit("R2 not start");
 	}
-	R2 = createChild('R', 2, pid);
+	R2 = createChild(RECEIVER_2(), pid);
 
 	// Try to create a child, in each child functione must me an exit
 	pid = fork();
@@ -65,7 +65,7 @@ int main(int argc, char * argv[]) {
 		execvp("./R3", argv);
 		ErrExit("R3 not start");
 	}
-	R3 = createChild('R', 3, pid);
+	R3 = createChild(RECEIVER_3(), pid);
 
 	//Save process pid in file
 	printChildList("output/F9.csv", 'R', R1, R2, R3);

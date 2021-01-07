@@ -46,15 +46,6 @@ message* linetoStruct(
 	int *i
 ){
 
-  process *s1 = createProcess('S', 1);
-  process *s2 = createProcess('S', 2);
-  process *s3 = createProcess('S', 3);
-
-  process *r1 = createProcess('R', 1);
-  process *r2 = createProcess('R', 2);
-  process *r3 = createProcess('R', 3);
-
-
 	int id, delay1, delay2, delay3;
 	char *content;
 	process *sender;
@@ -100,13 +91,13 @@ message* linetoStruct(
 	//In base al numero, trovo il sender corretto
 	switch (*(buffer+*i)){
 		case '1':
-			sender = s1;
+			sender = SENDER_1();
 			break;
 		case '2':
-			sender = s2;
+			sender = SENDER_2();
 			break;
 		case '3':
-			sender = s3;
+			sender = SENDER_3();
 			break;
 		default:
 			perror("Error in sender");
@@ -129,13 +120,13 @@ message* linetoStruct(
 	//in base al numero, trovo il receiver corretto
 	switch (*(buffer + *i)){
 		case '1':
-			receiver = r1;
+			receiver = RECEIVER_1();
 			break;
 		case '2':
-			receiver = r2;
+			receiver = RECEIVER_2();
 			break;
 		case '3':
-			receiver = r3;
+			receiver = RECEIVER_3();
 			break;
 		default:
 			perror("Error in receiver");
