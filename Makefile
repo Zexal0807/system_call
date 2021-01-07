@@ -88,6 +88,9 @@ hackler: $(HACKLER_OBJS)
 $(OBJDIR)/%.o: %.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c $<
 
+run:
+	./sender_manager input/F0.csv & ./receiver_manager & ./hackler input/F7.csv
+
 # Remove all object files
 clean:
 	@rm -vf ${RECEIVER_1_OBJS}
