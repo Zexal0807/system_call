@@ -95,3 +95,33 @@ void printTrafficInfo(char *filename, trafficInfo *data){
   // Close file
 	close(file);
 }
+
+
+void printHacklerAction(char *filename, hacklerAction *data){
+	int file;
+	if(access(filename, F_OK) == 0){
+		// File exist, open in append mode
+		file = open(filename, O_WRONLY | O_APPEND, S_IRWXU | S_IRWXG | S_IRWXO);
+	}else{
+		// File not exist, create it, and print the header
+		file = open(filename, O_WRONLY | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
+		char headerBuffer[] = "Id;Message;Id Sender;Id Receiver;Time arrival;Time departure\n";
+		write(file, headerBuffer, strlen(headerBuffer));
+	}
+
+  // Print a line
+	int chars = countTrafficChar(data);
+	char *buffer  = (char*) malloc(sizeof(char) * chars);
+	sprintf(buffer, "%d;%s;%s;%s;%s;%s\n", 
+		data->message->id, 
+		data->message->content, 
+		process2string(data->message->sender),
+		process2string(data->message->receiver),
+		time_t2string(data->arrival),
+		time_t2string(data->departure)
+	);
+	write(file, buffer, strlen(buffer));
+
+  // Close file
+	close(file);
+}

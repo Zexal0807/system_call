@@ -14,10 +14,10 @@ typedef struct {
 	int id;
 	int delay;
 	process* target;
-	int action;
+	char* action;
 } hackletAction;
 
 /*
 	Funzione per creare un hacklet Action
 */
-hackletAction *createHackletAction(int id, int delay, process* target, int action);
+hackletAction *createHackletAction(int id, int delay, process* target, char* action);

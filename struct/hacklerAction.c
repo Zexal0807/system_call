@@ -6,7 +6,7 @@ hackletAction *createHackletAction(
 	int id,
 	int delay,
 	process* target,
-	int action
+	char* action
 ){
 
 	hackletAction *a = (hackletAction*) malloc(sizeof(hackletAction));
