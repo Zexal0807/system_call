@@ -15,13 +15,21 @@
 int main(int argc, char * argv[]) {
     printLog("S1", "Process start with exec");
     
-    node *l = createList("input/F0.csv");
+    char *filename = argv[0];
+    node *l = createList(filename);
+
+    char log[50];
+    sprintf(log, "Loaded message from file %s", filename);
+    printLog("S1", log);
     
     while(l != NULL){
-      printf("%s %d\n", l->message->content, l->message->delay1);
+      
+      sprintf(log, "Elaborated message: %d", l->message->id);
+      printLog("S1", log);
+      
       l = getNext(l);
     }
-
+    
     // Wait for 1 second befor end
     sleep(1);
     printLog("S1", "Process End");
