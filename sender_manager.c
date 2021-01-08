@@ -36,7 +36,9 @@ int main(int argc, char * argv[]) {
 		execvp("./S1", & argv[1]);
 		ErrExit("S1 not start");
 	}
-  S1 = createChild(SENDER_1(), pid);
+	S1 = createChild(SENDER_1(), pid);
+	printChild("output/F8.csv", S1);
+
 	// Try to create a child, in each child functione must me an exit
 	pid = fork();
 	if (pid == -1) {
@@ -49,6 +51,7 @@ int main(int argc, char * argv[]) {
 		ErrExit("S2 not start");
 	}
 	S2 = createChild(SENDER_2(), pid);
+	printChild("output/F8.csv", S2);
 
 	// Try to create a child, in each child functione must me an exit
 	pid = fork();
@@ -62,10 +65,8 @@ int main(int argc, char * argv[]) {
 		ErrExit("S3 not start");
 	}
 	S3 = createChild(SENDER_3(), pid);
-
-	//Save process pid in file
-	printChildList("output/F8.csv", 'S', S1, S2, S3);
-
+	printChild("output/F8.csv", S3);
+	
 	// Wait the end of all child
 	pid_t child;
 	int status;

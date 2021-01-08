@@ -25,21 +25,28 @@ char *time_t2string(time_t time){
 	return s;
 }
 
-void printChildList(
-	char *filename, 
-	char type, 
-	child *p1, 
-	child *p2, 
-	child *p3
-){
-	
-	int file = open(filename, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU | S_IRWXG | S_IRWXO);
-	char buffer[50];
+void printChild(char *filename, child *data){
+	int file;
+	if(access(filename, F_OK) == 0){
+		// File exist, open in append mode
+		file = open(filename, O_WRONLY | O_APPEND, S_IRWXU | S_IRWXG | S_IRWXO);
+	}else{
+		// File not exist, create it, and print the header
+		file = open(filename, O_WRONLY | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
+		char headerBuffer[] = "Id;Pid\n";
+		write(file, headerBuffer, strlen(headerBuffer));
+	}
 
-	sprintf(buffer, "%s ID;PID\n%c1;%i\n%c2;%i\n%c3;%i\n", (type=='S' ? "SENDER" : "RECEIVER"), type, p1->pid, type, p2->pid, type, p3->pid);
-
+	// Print a line
+	int chars = countChildChars(data);
+	char *buffer  = (char*) malloc(sizeof(char) * chars);
+	sprintf(buffer, "%s;%d\n", 
+		process2string(data->process),
+		data->pid
+	);
 	write(file, buffer, strlen(buffer));
 
+	// Close file
 	close(file);
 }
 

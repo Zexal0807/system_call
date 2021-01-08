@@ -13,3 +13,5 @@ typedef struct {
 } child;
 
 child *createChild(process *p, int pid);
+
+int countChildChars(child *c);

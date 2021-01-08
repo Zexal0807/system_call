@@ -40,6 +40,7 @@ int main(int argc, char * argv[]) {
 		ErrExit("R1 not start");
 	}
 	R1 = createChild(RECEIVER_1(), pid);
+	printChild("output/F9.csv", R1);
 
 	// Try to create a child, in each child functione must me an exit
 	pid = fork();
@@ -53,6 +54,7 @@ int main(int argc, char * argv[]) {
 		ErrExit("R2 not start");
 	}
 	R2 = createChild(RECEIVER_2(), pid);
+	printChild("output/F9.csv", R2);
 
 	// Try to create a child, in each child functione must me an exit
 	pid = fork();
@@ -66,10 +68,8 @@ int main(int argc, char * argv[]) {
 		ErrExit("R3 not start");
 	}
 	R3 = createChild(RECEIVER_3(), pid);
-
-	//Save process pid in file
-	printChildList("output/F9.csv", 'R', R1, R2, R3);
-
+	printChild("output/F9.csv", R3);
+	
 	// Wait the end of all child
 	pid_t child;
 	int status;

@@ -21,10 +21,17 @@ void printLog(char *p, char *text);
 */
 char *time_t2string(time_t time);
 
-char* readFile(char* filename);
+/*
+	Funzione per stampare un child su file
+*/
+void printChild(char *filename, child *data);
 
-void printChildList(char *filename, char type, child *p1, child *p2, child *p3);
-
+/*
+	Funzione per trafficInfo un child su file
+*/
 void printTrafficInfo(char *filename, trafficInfo *data);
 
+/*
+	Funzione per stampare un hackletAction su file
+*/
 void printHacklerAction(char *filenam, hackletAction *data);
