@@ -12,3 +12,9 @@ void ErrExit(const char *msg){
 	perror(msg);
 	exit(1);
 }
+
+void ErrOpen(int file){
+    if(file==-1){
+        ErrExit("File not found\n");
+    }
+}

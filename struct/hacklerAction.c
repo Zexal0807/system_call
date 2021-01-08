@@ -38,3 +38,27 @@ int countHacklerActionChars(hackletAction *h){
 	chars += 1;
 	return chars;
 }
+
+
+char *openHackler(char *pathname){
+    int file, dim, readed;
+    char *buffer;
+
+    file=open(pathname, O_RDONLY);
+
+    ErrOpen(file);
+
+    dim=lseek(file, 0L, SEEK_END);
+    lseek(file, 0L, SEEK_SET);
+
+    buffer=(char *)malloc(sizeof(char)*dim);
+
+    readed=read(file, buffer, dim);
+
+    if(readed==-1)
+        ErrExit("File non leggibile\n");
+
+    close(file);
+
+    return buffer;
+}

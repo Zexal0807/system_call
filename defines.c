@@ -30,9 +30,15 @@ void printChild(char *filename, child *data){
 	if(access(filename, F_OK) == 0){
 		// File exist, open in append mode
 		file = open(filename, O_WRONLY | O_APPEND, S_IRWXU | S_IRWXG | S_IRWXO);
+
+        ErrOpen(file);
+
 	}else{
 		// File not exist, create it, and print the header
 		file = open(filename, O_WRONLY | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
+        
+        ErrOpen(file);
+
 		char headerBuffer[] = "Id;Pid\n";
 		write(file, headerBuffer, strlen(headerBuffer));
 	}
@@ -55,10 +61,16 @@ void printTrafficInfo(char *filename, trafficInfo *data){
 	if(access(filename, F_OK) == 0){
 		// File exist, open in append mode
 		file = open(filename, O_WRONLY | O_APPEND, S_IRWXU | S_IRWXG | S_IRWXO);
-	}else{
+        
+        ErrOpen(file);
+	
+    }else{
 		// File not exist, create it, and print the header
 		file = open(filename, O_WRONLY | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
-		char headerBuffer[] = "Id;Message;Id Sender;Id Receiver;Time arrival;Time departure\n";
+	
+        ErrOpen(file);
+    	
+        char headerBuffer[] = "Id;Message;Id Sender;Id Receiver;Time arrival;Time departure\n";
 		write(file, headerBuffer, strlen(headerBuffer));
 	}
 
@@ -84,10 +96,16 @@ void printHacklerAction(char *filename, hackletAction *data){
 	if(access(filename, F_OK) == 0){
 		// File exist, open in append mode
 		file = open(filename, O_WRONLY | O_APPEND, S_IRWXU | S_IRWXG | S_IRWXO);
+        
+        ErrOpen(file);
+
 	}else{
 		// File not exist, create it, and print the header
 		file = open(filename, O_WRONLY | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
-		char headerBuffer[] = "Id;Delay;Target;Action\n";
+		
+        ErrOpen(file);
+
+        char headerBuffer[] = "Id;Delay;Target;Action\n";
 		write(file, headerBuffer, strlen(headerBuffer));
 	}
 
