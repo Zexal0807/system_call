@@ -37,7 +37,7 @@ int main(int argc, char * argv[]) {
 		ErrExit("S1 not start");
 	}
 	S1 = createChild(SENDER_1(), pid);
-	printChild("output/F8.csv", S1);
+	printChild(SENDER_FILENAME, S1);
 
 	// Try to create a child, in each child functione must me an exit
 	pid = fork();
@@ -51,7 +51,7 @@ int main(int argc, char * argv[]) {
 		ErrExit("S2 not start");
 	}
 	S2 = createChild(SENDER_2(), pid);
-	printChild("output/F8.csv", S2);
+	printChild(SENDER_FILENAME, S2);
 
 	// Try to create a child, in each child functione must me an exit
 	pid = fork();
@@ -65,7 +65,7 @@ int main(int argc, char * argv[]) {
 		ErrExit("S3 not start");
 	}
 	S3 = createChild(SENDER_3(), pid);
-	printChild("output/F8.csv", S3);
+	printChild(SENDER_FILENAME, S3);
 	
 	// Wait the end of all child
 	pid_t child;

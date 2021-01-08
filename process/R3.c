@@ -1,5 +1,5 @@
-/// @file R1.c
-/// @brief Contiene l'implementazione del receiver 1.
+/// @file R3.c
+/// @brief Contiene l'implementazione del receiver 3.
 
 #include "../err_exit.h"
 #include "../defines.h"
@@ -14,6 +14,30 @@
 int main(int argc, char * argv[]) {
     printLog("R3", "Process start with exec");
     
+    time_t arrival;
+    time_t departure;
+
+    // Messaggio di test
+    message *m = createMessage(
+      1, 
+      "Ciao come va?",
+      SENDER_1(),
+      RECEIVER_3(),
+      1,
+      1,
+      1,
+      "H"
+    );
+    time(&arrival);
+
+    sprintf(log, "Elaborated message: %d", m->id);
+    printLog("R3", log);
+      
+    time(&departure);
+
+    trafficInfo *t = createTrafficInfo(m, arrival, departure);
+    printTrafficInfo(RECEIVER_3_FILENAME, t);
+
     // Wait for 3 second befor end
     sleep(3);
     printLog("R3", "Process End");

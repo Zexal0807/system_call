@@ -1,5 +1,5 @@
-/// @file R1.c
-/// @brief Contiene l'implementazione del receiver 1.
+/// @file S1.c
+/// @brief Contiene l'implementazione del sender 1.
 
 #include "../err_exit.h"
 #include "../defines.h"
@@ -22,12 +22,20 @@ int main(int argc, char * argv[]) {
     sprintf(log, "Loaded message from file %s", filename);
     printLog("S1", log);
     
+    time_t arrival;
+    time_t departure;
+
     while(l != NULL){
-      
+      l = getNext(l);
+      time(&arrival);
+
       sprintf(log, "Elaborated message: %d", l->message->id);
       printLog("S1", log);
       
-      l = getNext(l);
+      time(&departure);
+
+      trafficInfo *t = createTrafficInfo(l, arrival, departure);
+      printTrafficInfo(SENDER_1_FILENAME, t);
     }
     
     // Wait for 1 second befor end

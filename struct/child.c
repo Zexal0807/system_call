@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 
 #include "child.h"
 
@@ -19,7 +20,7 @@ int countChildChars(child *c){
 	int chars = 0;
 
 	// Type of process
-	chars += 1
+	chars += 1;
 	// Number of process
 	chars += floor(log10(c->process->number)) + 1;
 	// Number of digit of the pid
