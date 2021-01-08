@@ -29,7 +29,8 @@ int main(int argc, char * argv[]) {
       "H"
     );
     time(&arrival);
-
+    
+    char log[50];
     sprintf(log, "Elaborated message: %d", m->id);
     printLog("R3", log);
       

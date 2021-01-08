@@ -30,6 +30,7 @@ int main(int argc, char * argv[]) {
     );
     time(&arrival);
 
+    char log[50];
     sprintf(log, "Elaborated message: %d", m->id);
     printLog("R1", log);
       
@@ -37,27 +38,6 @@ int main(int argc, char * argv[]) {
 
     trafficInfo *t = createTrafficInfo(m, arrival, departure);
     printTrafficInfo(RECEIVER_FILENAME, t);
-    time_t a;
-    time_t d;
-    time(&a);
-    time(&d);
-
-    trafficInfo *t = createTrafficInfo(
-      createMessage(
-        1, 
-        "Ciao come va?",
-        createProcess('S', 1),
-        createProcess('R', 1),
-        1,
-        1,
-        1,
-        "H"
-      ),
-      a,
-      d
-    );
-
-    printTrafficInfo("output/F1.csv",t);
 
     // Wait for 1 second befor end
     sleep(1);

@@ -34,7 +34,7 @@ int main(int argc, char * argv[]) {
       
       time(&departure);
 
-      trafficInfo *t = createTrafficInfo(l, arrival, departure);
+      trafficInfo *t = createTrafficInfo(l->message, arrival, departure);
       printTrafficInfo(SENDER_1_FILENAME, t);
     }
     
