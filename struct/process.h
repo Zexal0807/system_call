@@ -1,4 +1,5 @@
 #pragma once
+#include "../err_exit.h"
 
 /*
 	Struttura di un processo

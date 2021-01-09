@@ -1,7 +1,7 @@
 #pragma once
 
 #include "process.h"
-
+#include "../err_exit.h"
 /*
 	Struttura del messaggio
 	 - id : Identificativo del messaggio
@@ -33,3 +33,20 @@ message *createMessage(int id, char* content, process* sender, process* receiver
 	Funzione per creare un messaggio partendo da un buffer usando l'indice da cui inizia la riga
 */
 message* linetoStruct(char *buffer, int *i);
+
+//funzioni di supporto a linetoStruct
+
+/*
+funzione di avanzamento indice all'interno del file
+*/
+void fileAhead(int *i);
+
+/*
+funzione per ricavare i numeri dal file
+*/
+int readInt(char *buffer, int *i); 
+
+/*
+funzioen per la dimensione del messaggio da ricavare dal file
+*/
+int dimMessage(char *buffer, int *i); 

@@ -4,6 +4,7 @@
 
 #include "message.h"
 
+
 message *createMessage(int id,
 	char* content,
 	process* sender,
@@ -46,38 +47,38 @@ int readInt(char *buffer, int *i){
 	return value;
 }
 
-int dimMessage(int *i){
-    int j;
-	int counter = 0;
-    //Conto i caratteri fino al prossimo ;
+int dimMessage(char *buffer, int *i){
+    int j; //var indice per il conto
+	int counter = 0; //var per conto caratteri
+    /*
+    partendo dal punto in cui sono (indicato da i), avanzo l'indice j fino al prossimo ';' incrementando man mano il counter, che così finisce con il contenere il numero di caratteri
+    */
 	for(j=*i ; *(buffer + j) != ';'; j++)
 		counter++;
+    return counter;
 }
 
 message* linetoStruct(
 	char *buffer, 
 	int *i
 ){
-
-	int id, 
-		delay1,
+    //variabili necessarie
+	int id,     
+		delay1,  
 		delay2, 
 		delay3,
-        dim;
-	char *content;
-	process *sender;
-	process *receiver;
+        j;      //indice secondario
+	char *content;  
+	process *sender;  
+	process *receiver; 
 	char *communication;
 
-	//Leggo l'id come intero
+	//Leggo l'id dal file trasformandolo in intero
 	id = readInt(buffer, i);
 	fileAhead(i);
 
-	//Conto la dimensione del messaggio
-	dim=dimMessage(i);
-
-	//creo la stringa con il contenuto
-	content = (char*) malloc(sizeof(char) * dim);
+	//ricavo la stringa con il contenuto
+	content = (char*) malloc(sizeof(char) * dimMessage(buffer, i));
 	for (j = 0; *(buffer + *i) != ';'; j++){
 		*(content + j) = *(buffer + *i);
 		fileAhead(i);
@@ -125,8 +126,7 @@ message* linetoStruct(
 			receiver = RECEIVER_3();
 			break;
 		default:
-			perror("Error in receiver\n");
-			exit(1);
+			ErrExit("Error in receiver\n");
 	}
 	fileAhead(i);
 	fileAhead(i);
@@ -148,14 +148,11 @@ message* linetoStruct(
 	fileAhead(i);
 
 	//Analizzo il tipo di comunicazion
-	//calcolo la dimensione della stringa
-	dim=dimMessage(i);
-
 	//creo la stringa
-	communication = (char*)malloc(sizeof(char) * dim);
+	communication = (char*)malloc(sizeof(char) * dimMessage(buffer, i));
 	for(j = 0; *(buffer+*i) != '\n' && *(buffer + *i) != '\0'; j++){
 		*(communication + j) = *(buffer + *i);
-		*i = (*i) + 1;
+		fileAhead(i);
 	}
 
 	//creo il messaggio
