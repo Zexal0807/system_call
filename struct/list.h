@@ -10,9 +10,10 @@ typedef struct node_{
 
 node* inserisciInCoda(node* n, message* m);
 node* inserisciInTesta(node* n, message* m);
-node* inserisciOrdinato(node*n , message* m);
-node* rimuovi(node* n, message* m);
+
 node* getNext(node* n);
 int hasNext(node* n);
+
+node* rimuovi(node* n, message* m);
 
 node* createList(char* filename);

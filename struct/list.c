@@ -49,6 +49,29 @@ int hasNext(node* n){
 	return 1;
 }
 
+node* rimuovi(node* lista, message *m){
+  node *curr = lista, 
+    *prec = NULL, 
+    *canc;
+  int found = 0;    
+  while(curr && !found){
+    if(curr->m == m){
+      found = 1;
+      canc = curr;
+      curr = curr->next;     
+      if(prec != NULL)
+        prec->next = curr;
+      else
+        lista = curr;
+      free(canc);
+    }else{
+      prec=curr;
+      curr = curr->next;     
+    }
+  }
+  return lista;
+}
+
 node* createList(
 	char* filename
 ){
