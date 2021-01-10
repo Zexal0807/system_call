@@ -3,6 +3,7 @@
 #include<unistd.h>
 
 #include "list.h"
+#include "../err_exit.h"
 
 node* inserisciInCoda(node* n, message* m){
 	node *prec;
@@ -55,7 +56,7 @@ node* rimuovi(node* lista, message *m){
 	*canc;
   int found = 0;    
   while(curr && !found){
-	if(curr->m == m){
+	if(curr->message == m){
 	  found = 1;
 	  canc = curr;
 	  curr = curr->next;     
@@ -76,14 +77,9 @@ node* createMessageList(
 	char* filename
 ){
 	node * list = NULL;
-
 	//apro il file    
 	int file = open(filename, O_RDONLY);
-
-	if(file == -1){
-		perror("File non esistente");
-		exit(1);
-	}
+  ErrOpen(file);
 
 	//creo il buffer per la lettura del file
 	int size = lseek(file, 0L, SEEK_END);   //dimensione file
@@ -96,7 +92,7 @@ node* createMessageList(
 	int i;
 	for(i=0; *(buffer+i) != '\n'; i++);
 	i++;
-
+  
 	while(*(buffer+i) != 0x0){
 		message *m = line2message(buffer, &i);
 		list = inserisciInCoda(list, m);

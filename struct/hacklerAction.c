@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <math.h>
 #include <string.h>
 #include <unistd.h>
@@ -6,15 +7,16 @@
 #include <fcntl.h>
 
 #include "hacklerAction.h"
+#include "../err_exit.h"
 
-hackletAction *createHackletAction(
+hacklerAction *createHacklerAction(
 	int id,
 	int delay,
 	process* target,
 	char* action
 ){
 
-	hackletAction *a = (hackletAction*) malloc(sizeof(hackletAction));
+	hacklerAction *a = (hacklerAction*) malloc(sizeof(hacklerAction));
 
 	a->id = id;
 	a->delay = delay;
@@ -24,7 +26,7 @@ hackletAction *createHackletAction(
 	return a;
 }
 
-int countHacklerActionChars(hackletAction *h){
+int countHacklerActionChars(hacklerAction *h){
 	int chars = 0;
 
 	// Number of digit of the id
@@ -65,18 +67,19 @@ char *openHackler(char *pathname){
 	return buffer;
 }
 
-int dimAction(char *buffer, int *i){
+/*
+	partendo dal punto in cui sono (indicato da i), avanzo l'indice j fino al prossimo ';' incrementando man mano il counter, che così finisce con il contenere il numero di caratteri
+*/
+int dimString(char *buffer, int *i){
 	int j; //var indice per il conto
 	int counter = 0; //var per conto caratteri
-	/*
-	partendo dal punto in cui sono (indicato da i), avanzo l'indice j fino al prossimo ';' incrementando man mano il counter, che così finisce con il contenere il numero di caratteri
-	*/
+
 	for(j=*i ; *(buffer + j) != ';'; j++)
 		counter++;
 	return counter;
 }
 
-hackletAction* line2HaclerAction(
+hacklerAction* line2hacklerAction(
 	char *buffer, 
 	int *i
 ){
@@ -90,8 +93,8 @@ hackletAction* line2HaclerAction(
 	fileAhead(i);
 
 	//ricavo la stringa con il contenuto
-	char* tar = (char*) malloc(sizeof(char) * dimMessage(buffer, i));
-	for (j = 0; *(buffer + *i) != ';'; j++){
+	char* tar = (char*) malloc(sizeof(char) * dimString(buffer, i));
+	for (int j = 0; *(buffer + *i) != ';'; j++){
 		*(tar + j) = *(buffer + *i);
 		fileAhead(i);
 	}
@@ -102,12 +105,42 @@ hackletAction* line2HaclerAction(
 
 	//Analizzo l'azione
 	//creo la stringa
-	char* action = (char*)malloc(sizeof(char) * dimAction(buffer, i));
-	for(j = 0; *(buffer+*i) != '\n' && *(buffer + *i) != '\0'; j++){
+	char* action = (char*)malloc(sizeof(char) * dimString(buffer, i));
+	for(int j = 0; *(buffer+*i) != '\n' && *(buffer + *i) != '\0'; j++){
 		*(action + j) = *(buffer + *i);
 		fileAhead(i);
 	}
 
 	//creo l'azione
-	return line2haclerAction(id, delay, target, action);
+	return createHacklerAction(id, delay, target, action);
+}
+
+
+void printHacklerAction(char *filename, hacklerAction *data){
+	int file;
+	if(access(filename, F_OK) == 0){
+		// File exist, open in append mode
+		file = open(filename, O_WRONLY | O_APPEND, S_IRWXU | S_IRWXG | S_IRWXO);
+		ErrOpen(file);
+	}else{
+		// File not exist, create it, and print the header
+		file = open(filename, O_WRONLY | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
+		ErrOpen(file);
+		char headerBuffer[] = "Id;Delay;Target;Action\n";
+		write(file, headerBuffer, strlen(headerBuffer));
+	}
+
+	// Print a line
+	int chars = countHacklerActionChars(data);
+	char *buffer  = (char*) malloc(sizeof(char) * chars);
+	sprintf(buffer, "%d;%d;%s;%s;\n", 
+		data->id, 
+		data->delay, 
+		process2string(data->target),
+		data->action
+	);
+	write(file, buffer, strlen(buffer));
+
+	// Close file
+	close(file);
 }

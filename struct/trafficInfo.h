@@ -1,8 +1,8 @@
 #pragma once
 
-#include "message.h"
-
 #include <time.h>
+
+#include "message.h"
 
 /*
 Struttura del traffico
@@ -22,3 +22,13 @@ typedef struct {
 trafficInfo *createTrafficInfo(message* message, time_t arrival, time_t departure);
 
 int countTrafficInfoChars(trafficInfo *t);
+
+/*
+	Funzione per convertire un time_t in stringa nel formato HH:MM:SS
+*/
+char *time_t2string(time_t time);
+
+/*
+	Funzione per trafficInfo un child su file
+*/
+void printTrafficInfo(char *filename, trafficInfo *data);

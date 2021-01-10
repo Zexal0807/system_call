@@ -1,7 +1,6 @@
 #pragma once
 
 #include "process.h"
-#include "../err_exit.h"
 /*
 	Struttura del messaggio
 	 - id : Identificativo del messaggio
@@ -29,6 +28,10 @@ typedef struct {
 */
 message *createMessage(int id, char* content, process* sender, process* receiver, int delay1, int delay2, int delay3, char* comunication);
 
+
+void fileAhead(int *i);
+
+int readInt(char *buffer, int *i);
 /*
 	Funzione per creare un messaggio partendo da un buffer usando l'indice da cui inizia la riga
 */

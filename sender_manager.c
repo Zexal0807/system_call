@@ -71,7 +71,7 @@ int main(int argc, char * argv[]) {
 	pid_t child;
 	int status;
 	while ((child = wait( & status)) != -1) {
-		// printf("returned child %d with status %d\n", child, status);
+		//printf("returned child %d with status %d\n", child, status);
 	}
 
 	printLog("SM", "Process End");

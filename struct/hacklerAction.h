@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "process.h"
+#include "message.h"
 
 /*
 	Struttura di un'azione
@@ -15,16 +15,22 @@ typedef struct {
 	int delay;
 	process* target;
 	char* action;
-} hackletAction;
+} hacklerAction;
 
 /*
 	Funzione per creare un hacklet Action
 */
-hackletAction *createHackletAction(int id, int delay, process* target, char* action);
+hacklerAction *createHacklerAction(int id, int delay, process* target, char* action);
 
-int countHacklerActionChars(hackletAction *h);
+int countHacklerActionChars(hacklerAction *h);
 
+char *openHackler(char *pathname);
 /*
 	Funzione per creare un messaggio partendo da un buffer usando l'indice da cui inizia la riga
 */
-hackletAction* line2haclerAction(char *buffer, int *i);
+hacklerAction* line2hacklerAction(char *buffer, int *i);
+
+/*
+	Funzione per stampare un hacklerAction su file
+*/
+void printHacklerAction(char *filename, hacklerAction *data);

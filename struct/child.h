@@ -15,3 +15,8 @@ typedef struct {
 child *createChild(process *p, int pid);
 
 int countChildChars(child *c);
+
+/*
+	Funzione per stampare un child su file
+*/
+void printChild(char *filename, child *data);

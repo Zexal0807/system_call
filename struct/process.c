@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 #include "process.h"
+#include "../err_exit.h"
 
 process *createProcess(
 	char type,
@@ -43,10 +44,10 @@ process *string2process(char *str){
 			}	
 		}
 	}else{
-		int number = atoi(str[1]);
+		int number = atoi(&str[1]);
 		if(str[0] == 'S' || str[0] == 's'){
 			return createProcess('S', number);
-		}else if(str[0] == 'R' || str[0] == 'r'){{
+		}else if(str[0] == 'R' || str[0] == 'r'){
 			return createProcess('R', number);
 		}
 	}

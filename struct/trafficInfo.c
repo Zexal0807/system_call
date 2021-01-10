@@ -1,8 +1,13 @@
 #include <stdlib.h>
+#include <stdio.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include <math.h>
 #include <string.h>
 
 #include "trafficInfo.h"
+#include "../err_exit.h"
 
 trafficInfo *createTrafficInfo(
 	message* message,
@@ -39,4 +44,46 @@ int countTrafficInfoChars(trafficInfo *t){
 	// Add \n
 	chars += 1;
 	return chars;
+}
+
+char *time_t2string(time_t time){
+	char *s = (char*) malloc(sizeof(char) * 9);
+	struct tm *info = localtime(&time);
+
+	// Fix legal hour
+	info->tm_hour = (info->tm_hour + 1) % 24;
+
+	strftime(s, 9, "%H:%M:%S", info);
+	return s;
+}
+
+void printTrafficInfo(char *filename, trafficInfo *data){
+	int file;
+	if(access(filename, F_OK) == 0){
+		// File exist, open in append mode
+		file = open(filename, O_WRONLY | O_APPEND, S_IRWXU | S_IRWXG | S_IRWXO);
+		ErrOpen(file);
+}	else{
+		// File not exist, create it, and print the header
+		file = open(filename, O_WRONLY | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
+		ErrOpen(file);
+		char headerBuffer[] = "Id;Message;Id Sender;Id Receiver;Time arrival;Time departure\n";
+		write(file, headerBuffer, strlen(headerBuffer));
+	}
+
+	// Print a line
+	int chars = countTrafficInfoChars(data);
+	char *buffer  = (char*) malloc(sizeof(char) * chars);
+	sprintf(buffer, "%d;%s;%s;%s;%s;%s\n", 
+		data->message->id, 
+		data->message->content, 
+		process2string(data->message->sender),
+		process2string(data->message->receiver),
+		time_t2string(data->arrival),
+		time_t2string(data->departure)
+	);
+	write(file, buffer, strlen(buffer));
+
+	// Close file
+	close(file);
 }

@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 #include "message.h"
-
+#include "../err_exit.h"
 
 message *createMessage(int id,
 	char* content,
@@ -29,15 +29,41 @@ message *createMessage(int id,
 	return m;
 }
 
+/*
+	partendo dal punto in cui sono (indicato da i), avanzo l'indice j fino al prossimo ';' incrementando man mano il counter, che così finisce con il contenere il numero di caratteri
+	*/
 int dimMessage(char *buffer, int *i){
 	int j; //var indice per il conto
 	int counter = 0; //var per conto caratteri
-	/*
-	partendo dal punto in cui sono (indicato da i), avanzo l'indice j fino al prossimo ';' incrementando man mano il counter, che così finisce con il contenere il numero di caratteri
-	*/
+
 	for(j=*i ; *(buffer + j) != ';'; j++)
 		counter++;
 	return counter;
+}
+
+void fileAhead(int *i){
+	*i = (*i) + 1;
+}
+
+int dimComunication(char *buffer, int *i){
+	int j; //var indice per il conto
+	int counter = 0; //var per conto caratteri
+
+	for(j=*i ; *(buffer + j) != '\n' && *(buffer + j) != 0x0; j++)
+		counter++;
+	return counter;
+}
+
+int readInt(char *buffer, int *i){
+	int value = 0;
+	// Finche non arrivo al ;
+	while(*(buffer + *i) != ';'){
+		// Moltiplico per 10 e aggiungo il nuovo valore convertito in int
+		value = value * 10;
+		value += atoi(buffer + *i);
+		fileAhead(i);
+	}
+	return value;
 }
 
 message* line2message(
@@ -128,7 +154,7 @@ message* line2message(
 
 	//Analizzo il tipo di comunicazion
 	//creo la stringa
-	communication = (char*)malloc(sizeof(char) * dimMessage(buffer, i));
+	communication = (char*)malloc(sizeof(char) * dimComunication(buffer, i));
 	for(j = 0; *(buffer+*i) != '\n' && *(buffer + *i) != '\0'; j++){
 		*(communication + j) = *(buffer + *i);
 		fileAhead(i);

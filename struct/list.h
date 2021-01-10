@@ -16,4 +16,4 @@ int hasNext(node* n);
 
 node* rimuovi(node* n, message* m);
 
-node* createList(char* filename);
+node* createMessageList(char* filename);

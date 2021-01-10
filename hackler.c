@@ -1,5 +1,7 @@
 /// @file client.c
 /// @brief Contiene l'implementazione del client.
+#include <stdio.h>
+#include <unistd.h>
 
 #include "err_exit.h"
 #include "defines.h"
@@ -7,9 +9,6 @@
 #include "semaphore.h"
 #include "fifo.h"
 #include "pipe.h"
-
-#include <stdio.h>
-#include <unistd.h>
 
 int main(int argc, char * argv[]) {
 	if (argc != 2){
@@ -19,6 +18,21 @@ int main(int argc, char * argv[]) {
 	// Start process
 	printLog("HK", "Process start");
 
+  char *filename = argv[0];
+	char *buffer = openHackler(filename);
+
+  hacklerAction *data[10];
+  int cursor = 0;
+  int i = 0;
+
+  while(*(buffer+cursor) != 0x0){
+    data[i] = line2hacklerAction(buffer, &cursor);
+    i++;
+  }
+
+  for(int j = i; j >= 0; j++){
+    printHacklerAction("output/F7_out.csv", data[j]);
+  }
 
 	// Wait for 2 second befor end
 	sleep(2);
