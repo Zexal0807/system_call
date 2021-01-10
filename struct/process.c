@@ -36,7 +36,21 @@ process *RECEIVER_3(){
 }
 
 process *string2process(char *str){
-	return createProcess(str[0], str[1]);
+	if(str[0] == 'A' || str[0] == 'a'){
+		if(str[1] == 'L' || str[1] == 'l'){
+			if(str[2] == 'L' || str[2] == 'l'){
+				return createProcess('Z', 0);
+			}	
+		}
+	}else{
+		int number = atoi(str[1]);
+		if(str[0] == 'S' || str[0] == 's'){
+			return createProcess('S', number);
+		}else if(str[0] == 'R' || str[0] == 'r'){{
+			return createProcess('R', number);
+		}
+	}
+	ErrExit("Error can't convert string to process\n");
 }
 
 char *process2string(process *p){
