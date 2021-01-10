@@ -37,7 +37,7 @@ int main(int argc, char * argv[]) {
     time(&departure);
 
     trafficInfo *t = createTrafficInfo(m, arrival, departure);
-    printTrafficInfo(RECEIVER_FILENAME, t);
+    printTrafficInfo(RECEIVER_1_FILENAME, t);
 
     // Wait for 1 second befor end
     sleep(1);
