@@ -16,7 +16,7 @@ int main(int argc, char * argv[]) {
 	printLog("S1", "Process start with exec");
 	
 	char *filename = argv[0];
-    node *l = createList(filename);
+	node *l = createMessageList(filename);
 
 	char log[50];
 	sprintf(log, "Loaded message from file %s", filename);
