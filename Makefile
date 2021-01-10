@@ -116,6 +116,8 @@ clean:
 
 	@rm -rf ${OBJDIR}
 	@ipcrm -a
+
+	@rm -f output/*
 	@echo "Removed object files and executables..."
 
 .PHONY: run clean
