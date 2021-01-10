@@ -32,9 +32,4 @@ message *createMessage(int id, char* content, process* sender, process* receiver
 /*
 	Funzione per creare un messaggio partendo da un buffer usando l'indice da cui inizia la riga
 */
-message* linetoStruct(char *buffer, int *i);
-
-/*
-	funzione per la dimensione del messaggio da ricavare dal file
-*/
-int dimMessage(char *buffer, int *i); 
+message* line2message(char *buffer, int *i);

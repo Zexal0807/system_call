@@ -30,37 +30,30 @@ message *createMessage(int id,
 }
 
 int dimMessage(char *buffer, int *i){
-    int j; //var indice per il conto
+	int j; //var indice per il conto
 	int counter = 0; //var per conto caratteri
-    /*
-    partendo dal punto in cui sono (indicato da i), avanzo l'indice j fino al prossimo ';' incrementando man mano il counter, che così finisce con il contenere il numero di caratteri
-    */
+	/*
+	partendo dal punto in cui sono (indicato da i), avanzo l'indice j fino al prossimo ';' incrementando man mano il counter, che così finisce con il contenere il numero di caratteri
+	*/
 	for(j=*i ; *(buffer + j) != ';'; j++)
 		counter++;
-    return counter;
+	return counter;
 }
 
-message* linetoStruct(
+message* line2message(
 	char *buffer, 
 	int *i
 ){
-    //variabili necessarie
-	int id,     
-		delay1,  
-		delay2, 
-		delay3,
-        j;      //indice secondario
-	char *content;  
-	process *sender;  
-	process *receiver; 
+	
 	char *communication;
 
 	//Leggo l'id dal file trasformandolo in intero
-	id = readInt(buffer, i);
+	int id = readInt(buffer, i);
 	fileAhead(i);
 
 	//ricavo la stringa con il contenuto
-	content = (char*) malloc(sizeof(char) * dimMessage(buffer, i));
+	char *content = (char*) malloc(sizeof(char) * dimMessage(buffer, i));
+	int j;
 	for (j = 0; *(buffer + *i) != ';'; j++){
 		*(content + j) = *(buffer + *i);
 		fileAhead(i);
@@ -73,7 +66,9 @@ message* linetoStruct(
 		ErrExit("Error in sender\n");
 	}
 	fileAhead(i);
+
 	//In base al numero, trovo il sender corretto
+	process *sender;  
 	switch (*(buffer+*i)){
 		case '1':
 			sender = SENDER_1();
@@ -96,7 +91,9 @@ message* linetoStruct(
 		ErrExit("Error in receiver\n");
 	}
 	fileAhead(i);
+
 	//in base al numero, trovo il Receiver corretto
+	process *receiver;
 	switch (*(buffer + *i)){
 		case '1':
 			receiver = RECEIVER_1();
@@ -116,17 +113,17 @@ message* linetoStruct(
 	//Per la lettura dei delay devo controllare se sono -, nel caso li trasfomo in 0
 	if(*(buffer + *i) == '-')
 		*(buffer + *i) = '0';
-	delay1 = readInt(buffer, i);
+	int delay1 = readInt(buffer, i);
 	fileAhead(i);
 
 	if(*(buffer + *i) == '-')
 		*(buffer + *i) = '0';
-	delay2 = readInt(buffer, i);
+	int delay2 = readInt(buffer, i);
 	fileAhead(i);
 
 	if(*(buffer + *i) == '-')
 		*(buffer + *i) = '0';
-	delay3 = readInt(buffer, i);
+	int delay3 = readInt(buffer, i);
 	fileAhead(i);
 
 	//Analizzo il tipo di comunicazion

@@ -13,33 +13,33 @@
 #include <unistd.h>
 
 int main(int argc, char * argv[]) {
-    printLog("S1", "Process start with exec");
-    
-    char *filename = argv[0];
+	printLog("S1", "Process start with exec");
+	
+	char *filename = argv[0];
     node *l = createList(filename);
 
-    char log[50];
-    sprintf(log, "Loaded message from file %s", filename);
-    printLog("S1", log);
-    
-    time_t arrival;
-    time_t departure;
+	char log[50];
+	sprintf(log, "Loaded message from file %s", filename);
+	printLog("S1", log);
+	
+	time_t arrival;
+	time_t departure;
 
-    while(l != NULL){
-      l = getNext(l);
-      time(&arrival);
+	while(l != NULL){
+		l = getNext(l);
+		time(&arrival);
 
-      sprintf(log, "Elaborated message: %d", l->message->id);
-      printLog("S1", log);
-      
-      time(&departure);
+		sprintf(log, "Elaborated message: %d", l->message->id);
+		printLog("S1", log);
+		
+		time(&departure);
 
-      trafficInfo *t = createTrafficInfo(l->message, arrival, departure);
-      printTrafficInfo(SENDER_1_FILENAME, t);
-    }
-    
-    // Wait for 1 second befor end
-    sleep(1);
-    printLog("S1", "Process End");
-    return 1;
+		trafficInfo *t = createTrafficInfo(l->message, arrival, departure);
+		printTrafficInfo(SENDER_1_FILENAME, t);
+	}
+	
+	// Wait for 1 second befor end
+	sleep(1);
+	printLog("S1", "Process End");
+	return 1;
 }

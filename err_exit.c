@@ -14,7 +14,7 @@ void ErrExit(const char *msg){
 }
 
 void ErrOpen(int file){
-    if(file==-1){
-        ErrExit("File not found\n");
-    }
+	if(file==-1){
+		ErrExit("File not found\n");
+	}
 }

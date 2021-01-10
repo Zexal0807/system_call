@@ -51,28 +51,28 @@ int hasNext(node* n){
 
 node* rimuovi(node* lista, message *m){
   node *curr = lista, 
-    *prec = NULL, 
-    *canc;
+	*prec = NULL, 
+	*canc;
   int found = 0;    
   while(curr && !found){
-    if(curr->m == m){
-      found = 1;
-      canc = curr;
-      curr = curr->next;     
-      if(prec != NULL)
-        prec->next = curr;
-      else
-        lista = curr;
-      free(canc);
-    }else{
-      prec=curr;
-      curr = curr->next;     
-    }
+	if(curr->m == m){
+	  found = 1;
+	  canc = curr;
+	  curr = curr->next;     
+	  if(prec != NULL)
+		prec->next = curr;
+	  else
+		lista = curr;
+	  free(canc);
+	}else{
+	  prec=curr;
+	  curr = curr->next;     
+	}
   }
   return lista;
 }
 
-node* createList(
+node* createMessageList(
 	char* filename
 ){
 	node * list = NULL;
@@ -98,7 +98,7 @@ node* createList(
 	i++;
 
 	while(*(buffer+i) != 0x0){
-		message *m = linetoStruct(buffer, &i);
+		message *m = line2message(buffer, &i);
 		list = inserisciInCoda(list, m);
 		i++;
 	}

@@ -17,22 +17,22 @@ process *createProcess(
 }
 
 process *SENDER_1(){
-  return createProcess('S', 1);
+	return createProcess('S', 1);
 }
 process *SENDER_2(){
-  return createProcess('S', 2);
+	return createProcess('S', 2);
 }
 process *SENDER_3(){
-  return createProcess('S', 3);
+	return createProcess('S', 3);
 }
 process *RECEIVER_1(){
-  return createProcess('R', 1);
+	return createProcess('R', 1);
 }
 process *RECEIVER_2(){
-  return createProcess('R', 2);
+	return createProcess('R', 2);
 }
 process *RECEIVER_3(){
-  return createProcess('R', 3);
+	return createProcess('R', 3);
 }
 
 process *string2process(char *str){
