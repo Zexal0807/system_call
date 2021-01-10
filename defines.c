@@ -25,6 +25,22 @@ char *time_t2string(time_t time){
 	return s;
 }
 
+void fileAhead(int *i){
+  *i = (*i) + 1;
+}
+
+int readInt(char *buffer, int *i){
+	int value = 0;
+	// Finche non arrivo al ;
+	while(*(buffer + *i) != ';'){
+		// Moltiplico per 10 e aggiungo il nuovo valore convertito in int
+		value = value * 10;
+		value += atoi(buffer + *i);
+		fileAhead(i);
+	}
+	return value;
+}
+
 void printChild(char *filename, child *data){
 	int file;
 	if(access(filename, F_OK) == 0){

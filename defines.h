@@ -34,6 +34,16 @@ void printLog(char *p, char *text);
 char *time_t2string(time_t time);
 
 /*
+	Funzione di avanzamento indice all'interno del file
+*/
+void fileAhead(int *i);
+
+/*
+	Funzione per ricavare i numeri dal file
+*/
+int readInt(char *buffer, int *i); 
+
+/*
 	Funzione per stampare un child su file
 */
 void printChild(char *filename, child *data);

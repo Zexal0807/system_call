@@ -29,24 +29,6 @@ message *createMessage(int id,
 	return m;
 }
 
-void fileAhead(int *i){
-  *i = (*i) + 1;
-}
-
-
-
-int readInt(char *buffer, int *i){
-	int value = 0;
-	// Finche non arrivo al ;
-	while(*(buffer + *i) != ';'){
-		// Moltiplico per 10 e aggiungo il nuovo valore convertito in int
-		value = value * 10;
-		value += atoi(buffer + *i);
-		fileAhead(i);
-	}
-	return value;
-}
-
 int dimMessage(char *buffer, int *i){
     int j; //var indice per il conto
 	int counter = 0; //var per conto caratteri
