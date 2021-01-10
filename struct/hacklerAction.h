@@ -27,4 +27,4 @@ int countHacklerActionChars(hackletAction *h);
 /*
 	Funzione per creare un messaggio partendo da un buffer usando l'indice da cui inizia la riga
 */
-hackletAction* linetoStruct(char *buffer, int *i);
+hackletAction* line2haclerAction(char *buffer, int *i);

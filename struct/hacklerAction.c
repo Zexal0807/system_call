@@ -43,40 +43,40 @@ int countHacklerActionChars(hackletAction *h){
 }
 
 char *openHackler(char *pathname){
-    int file, dim, readed;
-    char *buffer;
+	int file, dim, readed;
+	char *buffer;
 
-    file = open(pathname, O_RDONLY);
+	file = open(pathname, O_RDONLY);
 
-    ErrOpen(file);
+	ErrOpen(file);
 
-    dim = lseek(file, 0L, SEEK_END);
-    lseek(file, 0L, SEEK_SET);
+	dim = lseek(file, 0L, SEEK_END);
+	lseek(file, 0L, SEEK_SET);
 
-    buffer = (char *)malloc(sizeof(char)*dim);
+	buffer = (char *)malloc(sizeof(char)*dim);
 
-    readed = read(file, buffer, dim);
+	readed = read(file, buffer, dim);
 
-    if(readed == -1)
-        ErrExit("File non leggibile\n");
+	if(readed == -1)
+		ErrExit("File non leggibile\n");
 
-    close(file);
+	close(file);
 
-    return buffer;
+	return buffer;
 }
 
 int dimAction(char *buffer, int *i){
-    int j; //var indice per il conto
+	int j; //var indice per il conto
 	int counter = 0; //var per conto caratteri
-    /*
-    partendo dal punto in cui sono (indicato da i), avanzo l'indice j fino al prossimo ';' incrementando man mano il counter, che così finisce con il contenere il numero di caratteri
-    */
+	/*
+	partendo dal punto in cui sono (indicato da i), avanzo l'indice j fino al prossimo ';' incrementando man mano il counter, che così finisce con il contenere il numero di caratteri
+	*/
 	for(j=*i ; *(buffer + j) != ';'; j++)
 		counter++;
-    return counter;
+	return counter;
 }
 
-hackletAction* linetoStruct(
+hackletAction* line2HaclerAction(
 	char *buffer, 
 	int *i
 ){
@@ -109,5 +109,5 @@ hackletAction* linetoStruct(
 	}
 
 	//creo l'azione
-	return createHackletAction(id, delay, target, action);
+	return line2haclerAction(id, delay, target, action);
 }
