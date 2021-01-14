@@ -51,7 +51,7 @@ void printChild(char *filename, child *data){
         
         ErrOpen(file);
 
-		char headerBuffer[] = "Id;Pid\n";
+		char headerBuffer[] = CHILD_FILE_HEADER;
 		write(file, headerBuffer, strlen(headerBuffer));
 	}
 

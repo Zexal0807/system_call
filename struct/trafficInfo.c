@@ -67,7 +67,7 @@ void printTrafficInfo(char *filename, trafficInfo *data){
 		// File not exist, create it, and print the header
 		file = open(filename, O_WRONLY | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
 		ErrOpen(file);
-		char headerBuffer[] = "Id;Message;Id Sender;Id Receiver;Time arrival;Time departure\n";
+		char headerBuffer[] = TRAFFINC_INFO_FILE_HEADER;
 		write(file, headerBuffer, strlen(headerBuffer));
 	}
 

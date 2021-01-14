@@ -116,7 +116,7 @@ void printHacklerAction(char *filename, hacklerAction *data){
 		// File not exist, create it, and print the header
 		file = open(filename, O_WRONLY | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
 		ErrOpen(file);
-		char headerBuffer[] = "Id;Delay;Target;Action\n";
+		char headerBuffer[] = HACKLER_ACTION_FILE_HEADER;
 		write(file, headerBuffer, strlen(headerBuffer));
 	}
 
