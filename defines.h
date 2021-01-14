@@ -4,7 +4,9 @@
 
 #pragma once
 
+#include "struct/process.h"
 #include "struct/child.h"
+#include "struct/message.h"
 #include "struct/trafficInfo.h"
 #include "struct/hacklerAction.h"
 #include "struct/list.h"
