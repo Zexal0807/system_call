@@ -46,6 +46,13 @@ int hasNext(node* n){
 	return 1;
 }
 
+int isEnded(node* n){
+	if(n == NULL){
+		return 0;
+	}
+	return 1;
+}
+
 node* rimuovi(node* lista, message *m){
   node *curr = lista, 
 	  *prec = NULL, 

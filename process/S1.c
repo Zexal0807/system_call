@@ -23,7 +23,7 @@ int main(int argc, char * argv[]) {
 	time_t arrival;
 	time_t departure;
 
-	while(l != NULL){
+	while(!isEnded(l)){
 		time(&arrival);
 
 		sprintf(log, "Elaborated message: %d", l->message->id);
