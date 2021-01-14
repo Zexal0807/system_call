@@ -44,10 +44,7 @@ int main(int argc, char * argv[]) {
 	if (pid == -1) {
 		ErrExit("Receiver Manager not fork S2");
 	} else if (pid == 0) {
-		char * argv[] = {
-			NULL
-		};
-		execvp("./S2", argv);
+		execvp("./S2", (char *) NULL);
 		ErrExit("S2 not start");
 	}
 	S2 = createChild(SENDER_2(), pid);
@@ -58,10 +55,7 @@ int main(int argc, char * argv[]) {
 	if (pid == -1) {
 		ErrExit("Receiver Manager not fork S3");
 	} else if (pid == 0) {
-		char * argv[] = {
-			NULL
-		};
-		execvp("./S3", argv);
+		execvp("./S3", (char *) NULL);
 		ErrExit("S3 not start");
 	}
 	S3 = createChild(SENDER_3(), pid);
