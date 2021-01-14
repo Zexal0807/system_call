@@ -21,8 +21,6 @@ typedef struct {
 */
 trafficInfo *createTrafficInfo(message* message, time_t arrival, time_t departure);
 
-int countTrafficInfoChars(trafficInfo *t);
-
 /*
 	Funzione per convertire un time_t in stringa nel formato HH:MM:SS
 */

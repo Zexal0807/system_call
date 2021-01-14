@@ -22,8 +22,6 @@ typedef struct {
 */
 hacklerAction *createHacklerAction(int id, int delay, process* target, char* action);
 
-int countHacklerActionChars(hacklerAction *h);
-
 char *openHackler(char *pathname);
 /*
 	Funzione per creare un messaggio partendo da una stringa
