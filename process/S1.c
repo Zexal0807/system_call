@@ -15,7 +15,7 @@ int main(int argc, char * argv[]) {
 	
 	char *filename = argv[0];
 	node *l = createMessageList(filename);
-  
+
 	char log[50];
 	sprintf(log, "Loaded message from file %s", filename);
 	printLog("S1", log);
@@ -33,7 +33,7 @@ int main(int argc, char * argv[]) {
 
 		trafficInfo *t = createTrafficInfo(l->message, arrival, departure);
 		printTrafficInfo(SENDER_1_FILENAME, t);
-    l = getNext(l);
+		l = getNext(l);
 	}
 	
 	// Wait for 1 second befor end
