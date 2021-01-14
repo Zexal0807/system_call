@@ -71,50 +71,57 @@ char *openHackler(char *pathname){
 	partendo dal punto in cui sono (indicato da i), avanzo l'indice j fino al prossimo ';' incrementando man mano il counter, che così finisce con il contenere il numero di caratteri
 */
 int dimString(char *buffer, int *i){
+
 	int j; //var indice per il conto
 	int counter = 0; //var per conto caratteri
 
-	for(j=*i ; *(buffer + j) != ';'; j++)
+	for(j=*i ; 
+    *(buffer + j) != ';' && 
+    *(buffer + j) != 0x0 && 
+    *(buffer + j) != '\n'; 
+    j++)
 		counter++;
 	return counter;
 }
 
 hacklerAction* line2hacklerAction(
-	char *buffer, 
-	int *i
+	char *buffer
 ){
+  char *end_buffer;
 
-	//Leggo l'id dal file trasformandolo in intero
-	int id = readInt(buffer, i);
-	fileAhead(i);
-	
-	//Leggo il delay dal file trasformandolo in intero
-	int delay = readInt(buffer, i);
-	fileAhead(i);
+  int id = 0;
+  int delay = 0;
+  process *target = SENDER_1();
+  char *action = "ShutDown";
 
-	//ricavo la stringa con il contenuto
-	char* tar = (char*) malloc(sizeof(char) * dimString(buffer, i));
-	for (int j = 0; *(buffer + *i) != ';'; j++){
-		*(tar + j) = *(buffer + *i);
-		fileAhead(i);
+  int counter = 0;
+
+  char *field = strtok_r(buffer, ";", &end_buffer);
+  while(field != NULL){
+
+    switch(counter){
+      case 0:
+        id = atoi(field);
+        break;
+      case 1:
+        delay = atoi(field);
+        break;
+      case 2:
+        target = string2process(field);
+        break;
+      case 3:
+        action = strdup(field);
+        break;
+      default:
+        //Ignore
+        break;
+    }
+
+		field = strtok_r(NULL, ";", &end_buffer);
+    counter++;
 	}
-	fileAhead(i);
-	process* target = string2process(tar);
-
-	fileAhead(i);
-
-	//Analizzo l'azione
-	//creo la stringa
-	char* action = (char*)malloc(sizeof(char) * dimString(buffer, i));
-	for(int j = 0; *(buffer+*i) != '\n' && *(buffer + *i) != '\0'; j++){
-		*(action + j) = *(buffer + *i);
-		fileAhead(i);
-	}
-
-	//creo l'azione
 	return createHacklerAction(id, delay, target, action);
 }
-
 
 void printHacklerAction(char *filename, hacklerAction *data){
 	int file;

@@ -26,9 +26,9 @@ int countHacklerActionChars(hacklerAction *h);
 
 char *openHackler(char *pathname);
 /*
-	Funzione per creare un messaggio partendo da un buffer usando l'indice da cui inizia la riga
+	Funzione per creare un messaggio partendo da una stringa
 */
-hacklerAction* line2hacklerAction(char *buffer, int *i);
+hacklerAction* line2hacklerAction(char *buffer);
 
 /*
 	Funzione per stampare un hacklerAction su file

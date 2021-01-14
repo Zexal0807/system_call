@@ -7,9 +7,7 @@
 
 node* inserisciInCoda(node* n, message* m){
 	node *prec;
-	node *tmp;
-
-	tmp = (node*) malloc(sizeof(node));
+	node *tmp = (node*) malloc(sizeof(node));
 	if(tmp != NULL){
 		tmp->next = NULL;
 		tmp->message = m;
@@ -26,9 +24,7 @@ node* inserisciInCoda(node* n, message* m){
 }
 
 node* inserisciInTesta(node* n, message* m){
-	node *tmp;
-
-	tmp = (node*) malloc(sizeof(node));
+	node *tmp = (node*) malloc(sizeof(node));
 	if(tmp != NULL){
 		tmp->message = m;
 		tmp->next = n;
@@ -52,23 +48,24 @@ int hasNext(node* n){
 
 node* rimuovi(node* lista, message *m){
   node *curr = lista, 
-	*prec = NULL, 
-	*canc;
-  int found = 0;    
+	  *prec = NULL, 
+	  *canc;
+  int found = 0;  
+
   while(curr && !found){
-	if(curr->message == m){
-	  found = 1;
-	  canc = curr;
-	  curr = curr->next;     
-	  if(prec != NULL)
-		prec->next = curr;
-	  else
-		lista = curr;
-	  free(canc);
-	}else{
-	  prec=curr;
-	  curr = curr->next;     
-	}
+    if(curr->message == m){
+      found = 1;
+      canc = curr;
+      curr = curr->next;     
+      if(prec != NULL)
+      prec->next = curr;
+      else
+      lista = curr;
+      free(canc);
+    }else{
+      prec=curr;
+      curr = curr->next;     
+    }
   }
   return lista;
 }

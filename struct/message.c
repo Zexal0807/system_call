@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <math.h>
 
 #include "message.h"
 #include "../err_exit.h"
@@ -55,14 +56,11 @@ int dimComunication(char *buffer, int *i){
 }
 
 int readInt(char *buffer, int *i){
-	int value = 0;
-	// Finche non arrivo al ;
-	while(*(buffer + *i) != ';'){
-		// Moltiplico per 10 e aggiungo il nuovo valore convertito in int
-		value = value * 10;
-		value += atoi(buffer + *i);
-		fileAhead(i);
-	}
+	int value = atoi(buffer + *i);
+  int tmp = log10(value) + 1;
+  for(int j = 0; j < tmp; j++){
+    fileAhead(i);
+  }
 	return value;
 }
 
