@@ -1,6 +1,5 @@
 /// @file defines.c
-/// @brief Contiene l'implementazione delle funzioni
-///         specifiche del progetto.
+/// @brief Contiene l'implementazione delle funzioni specifiche di tutto progetto.
 
 #include "defines.h"
 

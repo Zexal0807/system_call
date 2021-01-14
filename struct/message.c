@@ -57,10 +57,10 @@ int dimComunication(char *buffer, int *i){
 
 int readInt(char *buffer, int *i){
 	int value = atoi(buffer + *i);
-  int tmp = log10(value) + 1;
-  for(int j = 0; j < tmp; j++){
-    fileAhead(i);
-  }
+	int tmp = log10(value) + 1;
+	for(int j = 0; j < tmp; j++){
+		fileAhead(i);
+	}
 	return value;
 }
 
