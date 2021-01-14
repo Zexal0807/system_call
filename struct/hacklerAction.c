@@ -67,58 +67,41 @@ char *openHackler(char *pathname){
 	return buffer;
 }
 
-/*
-	partendo dal punto in cui sono (indicato da i), avanzo l'indice j fino al prossimo ';' incrementando man mano il counter, che così finisce con il contenere il numero di caratteri
-*/
-int dimString(char *buffer, int *i){
-
-	int j; //var indice per il conto
-	int counter = 0; //var per conto caratteri
-
-	for(j=*i ; 
-    *(buffer + j) != ';' && 
-    *(buffer + j) != 0x0 && 
-    *(buffer + j) != '\n'; 
-    j++)
-		counter++;
-	return counter;
-}
-
 hacklerAction* line2hacklerAction(
 	char *buffer
 ){
-  char *end_buffer;
+	char *end_buffer;
 
-  int id = 0;
-  int delay = 0;
-  process *target = SENDER_1();
-  char *action = "ShutDown";
+	int id = 0;
+	int delay = 0;
+	process *target = SENDER_1();
+	char *action = "ShutDown";
 
-  int counter = 0;
+	int counter = 0;
 
-  char *field = strtok_r(buffer, ";", &end_buffer);
-  while(field != NULL){
+	char *field = strtok_r(buffer, ";", &end_buffer);
+	while(field != NULL){
 
-    switch(counter){
-      case 0:
-        id = atoi(field);
-        break;
-      case 1:
-        delay = atoi(field);
-        break;
-      case 2:
-        target = string2process(field);
-        break;
-      case 3:
-        action = strdup(field);
-        break;
-      default:
-        //Ignore
-        break;
-    }
+		switch(counter){
+			case 0:
+				id = atoi(field);
+				break;
+			case 1:
+				delay = atoi(field);
+				break;
+			case 2:
+				target = string2process(field);
+				break;
+			case 3:
+				action = strdup(field);
+				break;
+			default:
+				//Ignored
+				break;
+		}
 
 		field = strtok_r(NULL, ";", &end_buffer);
-    counter++;
+		counter++;
 	}
 	return createHacklerAction(id, delay, target, action);
 }
@@ -140,7 +123,7 @@ void printHacklerAction(char *filename, hacklerAction *data){
 	// Print a line
 	int chars = countHacklerActionChars(data);
 	char *buffer  = (char*) malloc(sizeof(char) * chars);
-	sprintf(buffer, "%d;%d;%s;%s;\n", 
+	sprintf(buffer, "%d;%d;%s;%s\n", 
 		data->id, 
 		data->delay, 
 		process2string(data->target),
