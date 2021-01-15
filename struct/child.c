@@ -9,6 +9,10 @@
 #include "child.h"
 #include "../err_exit.h"
 
+#ifndef CHILD_FILE_HEADER
+#define CHILD_FILE_HEADER "Id;Pid\n"
+#endif
+
 child *createChild(
 	process *p,
 	int pid

@@ -14,10 +14,6 @@
 #ifndef CONSTANT
 #define CONSTANT
 
-#define CHILD_FILE_HEADER = "Id;Pid\n"
-#define TRAFFINC_INFO_FILE_HEADER "Id;Message;Id Sender;Id Receiver;Time arrival;Time departure\n"
-#define HACKLER_ACTION_FILE_HEADER = "Id;Delay;Target;Action\n"
-
 #define SENDER_FILENAME "output/F8.csv"
 #define SENDER_1_FILENAME "output/F1.csv"
 #define SENDER_2_FILENAME "output/F2.csv"

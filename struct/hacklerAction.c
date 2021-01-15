@@ -9,6 +9,10 @@
 #include "hacklerAction.h"
 #include "../err_exit.h"
 
+#ifndef HACKLER_ACTION_FILE_HEADER
+#define HACKLER_ACTION_FILE_HEADER "Id;Delay;Target;Action\n"
+#endif
+
 hacklerAction *createHacklerAction(
 	int id,
 	int delay,

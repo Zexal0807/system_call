@@ -1,6 +1,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
-#include<unistd.h>
+#include <unistd.h>
+#include <string.h>
 
 #include "list.h"
 #include "../err_exit.h"
@@ -100,7 +101,7 @@ node* createMessageList(
 
 	while(line != NULL){
 		if(firstline!=0){
-            message *m = line2message(line, &i);
+            message *m = line2message(line);
 		    list = inserisciInCoda(list, m);
         }
 		

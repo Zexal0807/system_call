@@ -30,45 +30,12 @@ message *createMessage(int id,
 	return m;
 }
 
-/*
-	partendo dal punto in cui sono (indicato da i), avanzo l'indice j fino al prossimo ';' incrementando man mano il counter, che così finisce con il contenere il numero di caratteri
-	*/
-int dimMessage(char *buffer, int *i){
-	int j; //var indice per il conto
-	int counter = 0; //var per conto caratteri
-
-	for(j=*i ; *(buffer + j) != ';'; j++)
-		counter++;
-	return counter;
-}
-
-void fileAhead(int *i){
-	*i = (*i) + 1;
-}
-
-int dimComunication(char *buffer, int *i){
-	int j; //var indice per il conto
-	int counter = 0; //var per conto caratteri
-
-	for(j=*i ; *(buffer + j) != '\n' && *(buffer + j) != 0x0; j++)
-		counter++;
-	return counter;
-}
-
-int readInt(char *buffer, int *i){
-	int value = atoi(buffer + *i);
-	int tmp = log10(value) + 1;
-	for(int j = 0; j < tmp; j++){
-		fileAhead(i);
-	}
-	return value;
-}
-
 message* line2message(
-	char *buffer, 
-	int *i
+	char *buffer
 ){
 	
+    char *end_buffer;
+
     int id;
     char *content;
     process *sender;
@@ -79,7 +46,7 @@ message* line2message(
     char *endline;
     char *field=strtok_r(buffer, ";", &endline);
 	
-    counter=0;
+    int counter = 0;
 
     while(field!=NULL){
         switch (counter){
@@ -107,7 +74,7 @@ message* line2message(
             case 7:
                 communication=strdup(field);
                 break;
-            default
+            default:
                 break;
 
         }

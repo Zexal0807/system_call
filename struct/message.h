@@ -29,10 +29,7 @@ typedef struct {
 message *createMessage(int id, char* content, process* sender, process* receiver, int delay1, int delay2, int delay3, char* comunication);
 
 
-void fileAhead(int *i);
-
-int readInt(char *buffer, int *i);
 /*
-	Funzione per creare un messaggio partendo da un buffer usando l'indice da cui inizia la riga
+	Funzione per creare un messaggio partendo da una riga
 */
-message* line2message(char *buffer, int *i);
+message* line2message(char *buffer);

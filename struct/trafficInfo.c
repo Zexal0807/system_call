@@ -9,6 +9,10 @@
 #include "trafficInfo.h"
 #include "../err_exit.h"
 
+#ifndef TRAFFINC_INFO_FILE_HEADER
+#define TRAFFINC_INFO_FILE_HEADER "Id;Message;Id Sender;Id Receiver;Time arrival;Time departure\n"
+#endif
+
 trafficInfo *createTrafficInfo(
 	message* message,
 	time_t arrival,

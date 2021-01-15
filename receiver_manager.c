@@ -33,7 +33,10 @@ int main(int argc, char * argv[]) {
 	if (pid == -1) {
 		ErrExit("Receiver Manager not fork R1");
 	} else if (pid == 0) {
-		execvp("./R1", (char *) NULL);
+		char * argv[] = {
+			NULL				
+		};			
+		execvp("./R1", argv);
 		ErrExit("R1 not start");
 	}
 	printLog("RM", "R1 start");
@@ -45,7 +48,10 @@ int main(int argc, char * argv[]) {
 	if (pid == -1) {
 		ErrExit("Receiver Manager not fork R2");
 	} else if (pid == 0) {
-		execvp("./R2", (char *) NULL);
+		char * argv[] = {
+			NULL
+		};
+		execvp("./R2", argv);
 		ErrExit("R2 not start");
 	}
 	printLog("RM", "R2 start");
@@ -57,7 +63,10 @@ int main(int argc, char * argv[]) {
 	if (pid == -1) {
 		ErrExit("Receiver Manager not fork R3");
 	} else if (pid == 0) {
-		execvp("./R3", (char *) NULL);
+		char * argv[] = {
+			NULL
+		};
+		execvp("./R3", argv);
 		ErrExit("R3 not start");
 	}
 	printLog("RM", "R3 start");
