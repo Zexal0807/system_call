@@ -34,54 +34,55 @@ message* line2message(
 	char *buffer
 ){
 	
-    char *end_buffer;
+	char *end_buffer;
 
-    int id;
-    char *content;
-    process *sender;
-    process *receiver; 
-    int delay1, delay2, delay3;
-    char *communication;
-    
-    char *endline;
-    char *field=strtok_r(buffer, ";", &endline);
+	int id;
+	char *content;
+	process *sender;
+	process *receiver; 
+	int delay1, 
+		delay2,
+		delay3;
+	char *communication;
 	
-    int counter = 0;
+	char *endline;
+	char *field = strtok_r(buffer, ";", &endline);
+	
+	int counter = 0;
 
-    while(field!=NULL){
-        switch (counter){
-            case 0:
-                id=atoi(field);
-                break;
-            case 1:
-                content=strdup(field);
-                break;
-            case 2:
-                sender=string2process(field);
-                break;
-            case 3:
-                receiver=string2process(field);
-                break;
-            case 4:
-                delay1=atoi(field);
-                break;
-            case 5:
-                delay2=atoi(field);
-                break;
-            case 6:
-                delay3=atoi(field);
-                break;
-            case 7:
-                communication=strdup(field);
-                break;
-            default:
-                break;
-
-        }
-        
-        field = strtok_r(NULL, ";", &end_buffer);
-        counter++;
-    }
+	while(field != NULL){
+		switch (counter){
+			case 0:
+				id = atoi(field);
+				break;
+			case 1:
+				content = strdup(field);
+				break;
+			case 2:
+				sender = string2process(field);
+				break;
+			case 3:
+				receiver = string2process(field);
+				break;
+			case 4:
+				delay1 = atoi(field);
+				break;
+			case 5:
+				delay2 = atoi(field);
+				break;
+			case 6:
+				delay3 = atoi(field);
+				break;
+			case 7:
+				communication = strdup(field);
+				break;
+			default:
+				break;
+		}
+		
+		field = strtok_r(NULL, ";", &end_buffer);
+		counter++;
+	}
 
 	//creo il messaggio
 	return createMessage(id, content, sender, receiver, delay1, delay2, delay3, communication);

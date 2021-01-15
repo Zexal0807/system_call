@@ -95,19 +95,17 @@ node* createMessageList(
 	read(file, buffer, size);
 
 	char *end_buffer;
-    char *line = strtok_r(buffer, "\n", &end_buffer);
+	char *line = strtok_r(buffer, "\n", &end_buffer);
 
-    int firstline=1;
+	int firstline = 1;
 
 	while(line != NULL){
-		if(firstline!=0){
-            message *m = line2message(line);
-		    list = inserisciInCoda(list, m);
-        }
-		
-        firstline=0;
-        
-        line = strtok_r(NULL, "\n", &end_buffer);
+		if(firstline != 0){
+			message *m = line2message(line);
+			list = inserisciInCoda(list, m);
+		}
+		firstline = 0;
+		line = strtok_r(NULL, "\n", &end_buffer);
 	}
 	
 	return list;

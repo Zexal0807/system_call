@@ -45,8 +45,8 @@ int main(int argc, char * argv[]) {
 		ErrExit("Receiver Manager not fork S2");
 	} else if (pid == 0) {
 		char * argv[] = {
-			NULL				
-		};			
+			NULL
+		};
 		execvp("./S2", argv);
 		ErrExit("S2 not start");
 	}
@@ -59,7 +59,7 @@ int main(int argc, char * argv[]) {
 		ErrExit("Receiver Manager not fork S3");
 	} else if (pid == 0) {
 		char * argv[] = {
-			NULL	
+			NULL
 		};
 		execvp("./S3", argv);
 		ErrExit("S3 not start");

@@ -34,8 +34,8 @@ int main(int argc, char * argv[]) {
 		ErrExit("Receiver Manager not fork R1");
 	} else if (pid == 0) {
 		char * argv[] = {
-			NULL				
-		};			
+			NULL
+		};
 		execvp("./R1", argv);
 		ErrExit("R1 not start");
 	}

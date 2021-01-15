@@ -46,15 +46,11 @@ void printChild(char *filename, child *data){
 	if(access(filename, F_OK) == 0){
 		// File exist, open in append mode
 		file = open(filename, O_WRONLY | O_APPEND, S_IRWXU | S_IRWXG | S_IRWXO);
-
-        ErrOpen(file);
-
+		ErrOpen(file);
 	}else{
 		// File not exist, create it, and print the header
 		file = open(filename, O_WRONLY | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
-        
-        ErrOpen(file);
-
+		ErrOpen(file);
 		char headerBuffer[] = CHILD_FILE_HEADER;
 		write(file, headerBuffer, strlen(headerBuffer));
 	}
