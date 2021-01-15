@@ -69,94 +69,52 @@ message* line2message(
 	int *i
 ){
 	
-	char *communication;
+    int id;
+    char *content;
+    process *sender;
+    process *receiver; 
+    int delay1, delay2, delay3;
+    char *communication;
+    
+    char *endline;
+    char *field=strtok_r(buffer, ";", &endline);
+	
+    counter=0;
 
-	//Leggo l'id dal file trasformandolo in intero
-	int id = readInt(buffer, i);
-	fileAhead(i);
+    while(field!=NULL){
+        switch (counter){
+            case 0:
+                id=atoi(field);
+                break;
+            case 1:
+                content=strdup(field);
+                break;
+            case 2:
+                sender=string2process(field);
+                break;
+            case 3:
+                receiver=string2process(field);
+                break;
+            case 4:
+                delay1=atoi(field);
+                break;
+            case 5:
+                delay2=atoi(field);
+                break;
+            case 6:
+                delay3=atoi(field);
+                break;
+            case 7:
+                communication=strdup(field);
+                break;
+            default
+                break;
 
-	//ricavo la stringa con il contenuto
-	char *content = (char*) malloc(sizeof(char) * dimMessage(buffer, i));
-	int j;
-	for (j = 0; *(buffer + *i) != ';'; j++){
-		*(content + j) = *(buffer + *i);
-		fileAhead(i);
-	}
-	fileAhead(i);
-
-	//Analizzo il Sender
-	//mi assicuro che il un Sender
-	if(*(buffer + *i) != 'S'){
-		ErrExit("Error in sender\n");
-	}
-	fileAhead(i);
-
-	//In base al numero, trovo il sender corretto
-	process *sender;  
-	switch (*(buffer+*i)){
-		case '1':
-			sender = SENDER_1();
-			break;
-		case '2':
-			sender = SENDER_2();
-			break;
-		case '3':
-			sender = SENDER_3();
-			break;
-		default:
-			ErrExit("Error in sender\n");
-	}
-	fileAhead(i);
-	fileAhead(i);
-
-	//Analizzo il Receiver
-	//mi assicuro che il un Receiver
-	if(*(buffer + *i) != 'R'){
-		ErrExit("Error in receiver\n");
-	}
-	fileAhead(i);
-
-	//in base al numero, trovo il Receiver corretto
-	process *receiver;
-	switch (*(buffer + *i)){
-		case '1':
-			receiver = RECEIVER_1();
-			break;
-		case '2':
-			receiver = RECEIVER_2();
-			break;
-		case '3':
-			receiver = RECEIVER_3();
-			break;
-		default:
-			ErrExit("Error in receiver\n");
-	}
-	fileAhead(i);
-	fileAhead(i);
-
-	//Per la lettura dei delay devo controllare se sono -, nel caso li trasfomo in 0
-	if(*(buffer + *i) == '-')
-		*(buffer + *i) = '0';
-	int delay1 = readInt(buffer, i);
-	fileAhead(i);
-
-	if(*(buffer + *i) == '-')
-		*(buffer + *i) = '0';
-	int delay2 = readInt(buffer, i);
-	fileAhead(i);
-
-	if(*(buffer + *i) == '-')
-		*(buffer + *i) = '0';
-	int delay3 = readInt(buffer, i);
-	fileAhead(i);
-
-	//Analizzo il tipo di comunicazion
-	//creo la stringa
-	communication = (char*)malloc(sizeof(char) * dimComunication(buffer, i));
-	for(j = 0; *(buffer+*i) != '\n' && *(buffer + *i) != '\0'; j++){
-		*(communication + j) = *(buffer + *i);
-		fileAhead(i);
-	}
+        }
+        
+        field = strtok_r(NULL, ";", &end_buffer);
+        counter++;
+    }
 
 	//creo il messaggio
 	return createMessage(id, content, sender, receiver, delay1, delay2, delay3, communication);
