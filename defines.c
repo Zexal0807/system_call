@@ -6,5 +6,31 @@
 #include <stdio.h>
 
 void printLog(char *p, char *text){
-	printf("%s\t:\t%s\n", p, text);
+  switch(p[0]){
+    case 'S':
+      if(p[1] == 'M'){
+        printf("\033[0;34m");
+      }else{
+        printf("\033[0;36m");
+      }
+      break;
+    case 'R':
+      if(p[1] == 'M'){
+        printf("\033[0;31m");
+      }else{
+        printf("\033[0;35m");
+      }
+      break;
+    case 'H':
+      if(p[1] == 'K'){
+        printf("\033[0;32m");
+      }
+      break;
+    default:
+      printf("\033[0m");
+      break;
+  }
+  printf("%s", p);
+  printf("\033[0m");
+  printf(" : %s\n", text);
 }
