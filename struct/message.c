@@ -46,7 +46,7 @@ message* line2message(
 	char *communication;
 	
 	char *endline;
-	char *field = strtok_r(buffer, ";", &endline);
+	char *field = strtok(buffer, ";");
 	
 	int counter = 0;
 
@@ -80,7 +80,7 @@ message* line2message(
 				break;
 		}
 		
-		field = strtok_r(NULL, ";", &end_buffer);
+		field = strtok(NULL, ";");
 		counter++;
 	}
 
