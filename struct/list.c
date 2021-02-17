@@ -47,7 +47,7 @@ int hasNext(node* n){
 	return 1;
 }
 
-int isEnded(node* n){
+int isSet(node* n){
 	if(n == NULL){
 		return 0;
 	}
@@ -78,6 +78,13 @@ node* rimuovi(node* lista, message *m){
 	return lista;
 }
 
+void printList(node* lista){
+    if(lista != NULL){
+        printf("%d -> ", lista->message->id);
+        printList(lista->next);
+    }
+}
+
 node* createMessageList(
 	char* filename
 ){
@@ -100,7 +107,7 @@ node* createMessageList(
 	int firstline = 1;
 
 	while(line != NULL){
-		if(firstline != 0){
+		if(firstline != 1){
 			message *m = line2message(line);
 			list = inserisciInCoda(list, m);
 		}

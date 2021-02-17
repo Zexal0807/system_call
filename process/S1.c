@@ -23,19 +23,18 @@ int main(int argc, char * argv[]) {
 	time_t arrival;
 	time_t departure;
 
-	while(!isEnded(l)){
+	while(isSet(l)){
 		time(&arrival);
+        //Send message
 
 		sprintf(log, "Elaborated message: %d", l->message->id);
 		printLog("S1", log);
-		
 		time(&departure);
-
 		trafficInfo *t = createTrafficInfo(l->message, arrival, departure);
 		printTrafficInfo(SENDER_1_FILENAME, t);
 		l = getNext(l);
 	}
-	
+
 	// Wait for 1 second befor end
 	sleep(1);
 	printLog("S1", "Process End");

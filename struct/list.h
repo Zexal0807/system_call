@@ -13,8 +13,9 @@ node* inserisciInTesta(node* n, message* m);
 
 node* getNext(node* n);
 int hasNext(node* n);
-int isEnded(node* n);
+int isSet(node* n);
 
 node* rimuovi(node* n, message* m);
+void printList(node* lista);
 
 node* createMessageList(char* filename);
