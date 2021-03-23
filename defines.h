@@ -10,6 +10,7 @@
 #include "struct/trafficInfo.h"
 #include "struct/hacklerAction.h"
 #include "struct/list.h"
+#include "err_exit.h"
 
 #ifndef CONSTANT
 #define CONSTANT
@@ -26,9 +27,20 @@
 
 #define HACKLER_FILENAME "output/F7_out.csv"
 #define MAX_HACKLER_ACTION 10
+
+#define KEY_INIT_SEM 1
+
+#define KEY_PIPE_S1_S2 2
+#define KEY_PIPE_S2_S3 3
+
+#define KEY_PIPE_R1_R2 4
+#define KEY_PIPE_R2_R3 5
+
 #endif
 
 /*
 	Procedura per stampare a console un log di quello che avviene
 */
 void printLog(char *p, char *text);
+
+key_t generateKey(int id);

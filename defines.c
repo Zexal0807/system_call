@@ -4,6 +4,7 @@
 #include "defines.h"
 
 #include <stdio.h>
+#include <sys/ipc.h>
 
 void printLog(char *p, char *text){
 	switch(p[0]){
@@ -33,4 +34,12 @@ void printLog(char *p, char *text){
 	printf("%s", p);
 	printf("\033[0m");
 	printf(" : %s\n", text);
+}
+
+key_t generateKey(int idProject){
+    key_t key = ftok("key.dat", idProject);
+    if(key == -1){
+        ErrExit("Can't create key");
+    }
+    return key;
 }
