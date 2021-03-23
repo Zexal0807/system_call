@@ -52,6 +52,7 @@ process *string2process(char *str){
 		}
 	}
 	ErrExit("Error can't convert string to process\n");
+    return createProcess('E', 9);
 }
 
 char *process2string(process *p){
