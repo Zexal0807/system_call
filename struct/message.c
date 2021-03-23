@@ -33,9 +33,6 @@ message *createMessage(int id,
 message* line2message(
 	char *buffer
 ){
-	
-	char *end_buffer;
-
 	int id;
 	char *content;
 	process *sender;
@@ -45,7 +42,6 @@ message* line2message(
 		delay3;
 	char *communication;
 	
-	char *endline;
 	char *field = strtok(buffer, ";");
 	
 	int counter = 0;
