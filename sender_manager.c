@@ -9,6 +9,7 @@
 #include "pipe.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/wait.h>
@@ -24,9 +25,7 @@ int main(int argc, char * argv[]) {
 	printLog("SM", "Process start");
 
     int initSemId = createInitSemaphore();
-
-    
-
+    setInitSemaphore(initSemId);
 
 	// Define the 3 struct process
 	child *S1 = NULL;
@@ -38,7 +37,17 @@ int main(int argc, char * argv[]) {
 	if (pid == -1) {
 		ErrExit("Receiver Manager not fork S1");
 	} else if (pid == 0) {
-		execvp("./S1", & argv[1]);
+        char string_initSemId[5];
+        sprintf(string_initSemId, "%d", initSemId);
+        char string_inputFile[50];
+        sprintf(string_inputFile, "%s", argv[1]);
+
+        char * argv[] = {
+			string_initSemId,
+            string_inputFile,
+            NULL
+		};
+		execvp("./S1", argv);
 		ErrExit("S1 not start");
 	}
 	S1 = createChild(SENDER_1(), pid);
@@ -49,8 +58,11 @@ int main(int argc, char * argv[]) {
 	if (pid == -1) {
 		ErrExit("Receiver Manager not fork S2");
 	} else if (pid == 0) {
-		char * argv[] = {
-			NULL
+        char string_initSemId[5];
+        sprintf(string_initSemId, "%d", initSemId);
+        char * argv[] = {
+			string_initSemId,
+            NULL
 		};
 		execvp("./S2", argv);
 		ErrExit("S2 not start");
@@ -63,8 +75,11 @@ int main(int argc, char * argv[]) {
 	if (pid == -1) {
 		ErrExit("Receiver Manager not fork S3");
 	} else if (pid == 0) {
-		char * argv[] = {
-			NULL
+		char string_initSemId[5];
+        sprintf(string_initSemId, "%d", initSemId);
+        char * argv[] = {
+			string_initSemId,
+            NULL
 		};
 		execvp("./S3", argv);
 		ErrExit("S3 not start");
@@ -72,6 +87,8 @@ int main(int argc, char * argv[]) {
 	S3 = createChild(SENDER_3(), pid);
 	printChild(SENDER_FILENAME, S3);
 	
+    removeSemaphore(initSemId);
+
 	// Wait the end of all child
 	pid_t child;
 	int status;

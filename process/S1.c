@@ -13,7 +13,7 @@
 int main(int argc, char * argv[]) {
 	printLog("S1", "Process start with exec");
 	
-	char *filename = argv[0];
+	char *filename = argv[1];
 	node *l = createMessageList(filename);
 
 	char log[50];

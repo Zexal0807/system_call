@@ -13,8 +13,10 @@ int generateSemaphore(key_t key, int n, int flags);
 
 int createInitSemaphore();
 
-void setInitSempaphore(int semid);
+void setInitSemaphore(int semid);
 
 int getInitSemaphore();
+
+void removeSemaphore(int semid);
 
 void semOp (int semid, unsigned short sem_num, short sem_op);

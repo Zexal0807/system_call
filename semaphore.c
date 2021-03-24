@@ -22,13 +22,18 @@ int createInitSemaphore(){
     return id;
 }
 
-void setInitSemaphore(semid){
-    unsigned short semInitVal[] = {3, 3, 1, 3};
+void setInitSemaphore(int semid){
+    unsigned short semInitVal[] = {2, 3, 1, 3};
     union semun arg;
     arg.array = semInitVal;
 
-    if (semctl(semid, 0, SETALL, semInitVal) == 1)
-        ErrExit("Init semctl SETALL failed");
+    if (semctl(semid, 0, SETALL, arg) == 1)
+        ErrExit("semctl SETALL failed");
+}
+
+void removeSemaphore(int semid){
+    if (semctl(semid, 0, IPC_RMID, 0) == -1)
+        ErrExit("semctl failed");
 }
 
 int getInitSemaphore(){
