@@ -22,7 +22,10 @@ int main(int argc, char * argv[]) {
 
 	printLog("RM", "Process start");
 
-    int initSemId = getInitSemaphore();
+    int initSemId = createInitSemaphore();
+    semOp(initSemId, 0, -1);
+    printf("RM SEM");
+    printSemaphoresValue(initSemId);
 
 	// Define the 3 struct process
 	child * R1 = NULL;
@@ -34,8 +37,11 @@ int main(int argc, char * argv[]) {
 	if (pid == -1) {
 		ErrExit("Receiver Manager not fork R1");
 	} else if (pid == 0) {
-		char * argv[] = {
-			NULL
+		char string_initSemId[5];
+        sprintf(string_initSemId, "%d", initSemId);
+        char * argv[] = {
+			string_initSemId,
+            NULL
 		};
 		execvp("./R1", argv);
 		ErrExit("R1 not start");
@@ -49,8 +55,11 @@ int main(int argc, char * argv[]) {
 	if (pid == -1) {
 		ErrExit("Receiver Manager not fork R2");
 	} else if (pid == 0) {
-		char * argv[] = {
-			NULL
+		char string_initSemId[5];
+        sprintf(string_initSemId, "%d", initSemId);
+        char * argv[] = {
+			string_initSemId,
+            NULL
 		};
 		execvp("./R2", argv);
 		ErrExit("R2 not start");
@@ -64,8 +73,11 @@ int main(int argc, char * argv[]) {
 	if (pid == -1) {
 		ErrExit("Receiver Manager not fork R3");
 	} else if (pid == 0) {
-		char * argv[] = {
-			NULL
+		char string_initSemId[5];
+        sprintf(string_initSemId, "%d", initSemId);
+        char * argv[] = {
+			string_initSemId,
+            NULL
 		};
 		execvp("./R3", argv);
 		ErrExit("R3 not start");
@@ -73,7 +85,7 @@ int main(int argc, char * argv[]) {
 	printLog("RM", "R3 start");
 	R3 = createChild(RECEIVER_3(), pid);
 	printChild(RECEIVER_FILENAME, R3);
-	
+
 	// Wait the end of all child
 	pid_t child;
 	int status;

@@ -12,6 +12,10 @@
 #include <unistd.h>
 
 int main(int argc, char * argv[]) {
+
+    // ARGV: initSemId
+    int initSemId = atoi(argv[0]);
+
 	printLog("R1", "Process start with exec");
 
 	time_t arrival;

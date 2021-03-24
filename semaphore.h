@@ -15,8 +15,8 @@ int createInitSemaphore();
 
 void setInitSemaphore(int semid);
 
-int getInitSemaphore();
-
 void removeSemaphore(int semid);
 
 void semOp (int semid, unsigned short sem_num, short sem_op);
+
+void printSemaphoresValue (int semid);

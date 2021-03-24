@@ -26,6 +26,12 @@ int main(int argc, char * argv[]) {
 
     int initSemId = createInitSemaphore();
     setInitSemaphore(initSemId);
+    printf("SM SEM");
+    printSemaphoresValue(initSemId);
+    semOp(initSemId, 0, -1);
+
+    printf("SM SEM");
+    printSemaphoresValue(initSemId);
 
 	// Define the 3 struct process
 	child *S1 = NULL;
@@ -41,7 +47,6 @@ int main(int argc, char * argv[]) {
         sprintf(string_initSemId, "%d", initSemId);
         char string_inputFile[50];
         sprintf(string_inputFile, "%s", argv[1]);
-
         char * argv[] = {
 			string_initSemId,
             string_inputFile,

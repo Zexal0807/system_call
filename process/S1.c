@@ -11,10 +11,16 @@
 #include "../pipe.h"
 
 int main(int argc, char * argv[]) {
+
 	printLog("S1", "Process start with exec");
-	
+
+    // ARGV: initSemId, inputFile
+    int initSemId = atoi(argv[0]);
 	char *filename = argv[1];
+
 	node *l = createMessageList(filename);
+
+    //semOp(semid, 3, 0);
 
 	char log[50];
 	sprintf(log, "Loaded message from file %s", filename);

@@ -15,11 +15,15 @@ int main(int argc, char *argv[]) {
 		printf("Error invocation of Hackler, you must pass the input file");
 		return 1;
 	}
-	char log[100];
+	
 	// Start process
 	printLog("HK", "Process start");
 
-    int initSemId = getInitSemaphore();
+    int initSemId = createInitSemaphore();
+    semOp(initSemId, 0, -1);
+
+    printf("HK SEM");
+    printSemaphoresValue(initSemId);
 
 	char *filename = argv[1];
 
@@ -28,7 +32,7 @@ int main(int argc, char *argv[]) {
 
 	char *buffer = openHackler(filename);
 	char *end_buffer;
-	
+	char log[100];
 	// Divido la stringa al carattere \n
 	char *line = strtok_r(buffer, "\n", &end_buffer);
 	int firstLine = 1;
