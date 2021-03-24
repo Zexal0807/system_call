@@ -18,9 +18,17 @@ int main(int argc, char * argv[]) {
     int initSemId = atoi(argv[0]);
 	char *filename = argv[1];
 
-	node *l = createMessageList(filename);
+    // Open SHM
+    // Open MSGQ
+    // OPEN PIPE S1 S2
 
-    //semOp(semid, 3, 0);
+	node *l = createMessageList(filename);
+    
+    // Set this process as end init
+    semOp(initSemId, 1, -1);
+
+    // Wait all init end
+    semOp(initSemId, 4, 0);
 
 	char log[50];
 	sprintf(log, "Loaded message from file %s", filename);

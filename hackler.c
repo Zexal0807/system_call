@@ -22,9 +22,9 @@ int main(int argc, char *argv[]) {
     int initSemId = createInitSemaphore();
     semOp(initSemId, 0, -1);
 
-    printf("HK SEM");
-    printSemaphoresValue(initSemId);
-
+    // Wait all process open sem
+    semOp(initSemId, 0, 0);
+    
 	char *filename = argv[1];
 
 	hacklerAction *data[MAX_HACKLER_ACTION];
@@ -53,8 +53,17 @@ int main(int argc, char *argv[]) {
 	}
 	printLog("HK", "End file");
 	
+    // Set this process as end init     
+    semOp(initSemId, 3, -1);
+
+    // Set this process as end init     
+    semOp(initSemId, 4, -1);
+
+    // Wait all init end 
+    semOp(initSemId, 4, 0);
 	//Esecuzione delle azioni
 	printLog("HK", "Start execution of the action");
+    
 	for(int j = index - 1; j >= 0; j--){
 		hacklerAction *h = data[j];
 		printHacklerAction(HACKLER_FILENAME, data[j]);

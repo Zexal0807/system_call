@@ -13,10 +13,21 @@
 
 int main(int argc, char * argv[]) {
 
-    // ARGV: initSemId
+	printLog("S3", "Process start with exec");
+
+     // ARGV: initSemId
     int initSemId = atoi(argv[0]);
 
-	printLog("S3", "Process start with exec");
+    // Open SHM
+    // Open MSGQ
+    // OPEN FIFO
+    // OPEN PIPE S2 S3
+    
+    // Set this process as end init 
+    semOp(initSemId, 1, -1);
+
+    // Wait all init end
+    semOp(initSemId, 4, 0);
 	
 	time_t arrival;
 	time_t departure;
