@@ -1,5 +1,9 @@
 /// @file receiver_manager.c
 /// @brief Contiene l'implementazione del receiver_manager.
+#include <stdio.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <sys/wait.h>
 
 #include "err_exit.h"
 #include "defines.h"
@@ -7,11 +11,6 @@
 #include "semaphore.h"
 #include "fifo.h"
 #include "pipe.h"
-
-#include <stdio.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <sys/wait.h>
 
 int main(int argc, char * argv[]) {
 
@@ -22,6 +21,8 @@ int main(int argc, char * argv[]) {
 	}
 
 	printLog("RM", "Process start");
+
+    int initSemId = getInitSemaphore();
 
 	// Define the 3 struct process
 	child * R1 = NULL;

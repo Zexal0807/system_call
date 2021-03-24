@@ -22,6 +22,15 @@ int createInitSemaphore(){
     return id;
 }
 
+void setInitSemaphore(semid){
+    unsigned short semInitVal[] = {3, 3, 1, 3};
+    union semun arg;
+    arg.array = semInitVal;
+
+    if (semctl(semid, 0, SETALL, semInitVal) == 1)
+        ErrExit("Init semctl SETALL failed");
+}
+
 int getInitSemaphore(){
     key_t key = generateKey(KEY_INIT_SEM);
     int id = generateSemaphore(key, 4, S_IRUSR | S_IWUSR );

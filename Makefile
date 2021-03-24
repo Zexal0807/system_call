@@ -78,7 +78,7 @@ sender_manager: $(SENDER_OBJS)
 	@$(CC) $^ -o $@  -lm
 
 # Define and create Hackler
-HACKLER_SRCS = $(DEFINES_SRCS) err_exit.c hackler.c
+HACKLER_SRCS = $(DEFINES_SRCS) err_exit.c semaphore.c hackler.c
 HACKLER_OBJS = $(addprefix $(OBJDIR)/, $(HACKLER_SRCS:.c=.o))
 
 hackler: $(HACKLER_OBJS)

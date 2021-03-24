@@ -19,6 +19,8 @@ int main(int argc, char *argv[]) {
 	// Start process
 	printLog("HK", "Process start");
 
+    int initSemId = getInitSemaphore();
+
 	char *filename = argv[1];
 
 	hacklerAction *data[MAX_HACKLER_ACTION];

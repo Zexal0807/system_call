@@ -23,6 +23,11 @@ int main(int argc, char * argv[]) {
 
 	printLog("SM", "Process start");
 
+    int initSemId = createInitSemaphore();
+
+    
+
+
 	// Define the 3 struct process
 	child *S1 = NULL;
 	child *S2 = NULL;
