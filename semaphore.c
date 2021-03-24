@@ -18,7 +18,7 @@ int generateSemaphore(key_t key, int n, int flags){
 
 int createInitSemaphore(){
     key_t key = generateKey(KEY_INIT_SEM);
-    int id = generateSemaphore(key, 4, S_IRUSR | S_IWUSR | IPC_CREAT);
+    int id = generateSemaphore(key, 5, S_IRUSR | S_IWUSR | IPC_CREAT);
     return id;
 }
 
@@ -43,13 +43,15 @@ void semOp (int semid, unsigned short sem_num, short sem_op) {
       sem_op,
       0
     };
-
-    if (semop(semid, &sop, 1) == -1)
+    
+    if (semop(semid, &sop, 1) == -1){
+        printf("ERRORE semOP: %d, %d\n", sem_num, sem_op);
         ErrExit("semop failed");
+    }
 }
 
 void printSemaphoresValue (int semid) {
-    unsigned short semVal[4];
+    unsigned short semVal[5];
     union semun arg;
     arg.array = semVal;
 
@@ -59,6 +61,6 @@ void printSemaphoresValue (int semid) {
 
     // print the semaphore's value
     printf("semaphore set state:\n");
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 5; i++)
         printf("id: %d --> %d\n", i, semVal[i]);
 }
