@@ -10,6 +10,10 @@
 #include "fifo.h"
 #include "pipe.h"
 
+void readFrom(char * filename){
+
+}
+
 int main(int argc, char *argv[]) {
 	if (argc != 2){
 		printf("Error invocation of Hackler, you must pass the input file");
@@ -22,9 +26,9 @@ int main(int argc, char *argv[]) {
     int initSemId = createInitSemaphore();
     semOp(initSemId, 0, -1);
 
-    printf("HK SEM");
-    printSemaphoresValue(initSemId);
-
+    // Wait all process open sem
+    semOp(initSemId, 0, 0);
+    
 	char *filename = argv[1];
 
 	hacklerAction *data[MAX_HACKLER_ACTION];
@@ -53,10 +57,34 @@ int main(int argc, char *argv[]) {
 	}
 	printLog("HK", "End file");
 	
+    pid_t s1, s2, s3, r1, r2, r3;
+
+    // Wait all sender child init end
+    semOp(initSemId, 1, 0);
+    readFrom(SENDER_FILENAME);
+    printLog("HK", "Read Sender PID");
+
+    // Wait all receiver child init end
+    semOp(initSemId, 2, 0);
+    readFrom(RECEIVER_FILENAME);
+    printLog("HK", "Read Receiver PID");
+
+    // Set this process as end init     
+    semOp(initSemId, 3, -1);
+
+    // Set this process as end init     
+    semOp(initSemId, 4, -1);
+
+    // Wait all init end 
+    semOp(initSemId, 4, 0);
 	//Esecuzione delle azioni
 	printLog("HK", "Start execution of the action");
+    
 	for(int j = index - 1; j >= 0; j--){
 		hacklerAction *h = data[j];
+
+        // Exec action h
+
 		printHacklerAction(HACKLER_FILENAME, data[j]);
 	}
 	printLog("HK", "End action");
