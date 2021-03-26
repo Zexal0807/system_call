@@ -10,6 +10,10 @@
 #include "fifo.h"
 #include "pipe.h"
 
+void readFrom(char * filename){
+
+}
+
 int main(int argc, char *argv[]) {
 	if (argc != 2){
 		printf("Error invocation of Hackler, you must pass the input file");
@@ -66,6 +70,9 @@ int main(int argc, char *argv[]) {
     
 	for(int j = index - 1; j >= 0; j--){
 		hacklerAction *h = data[j];
+
+        // Exec action h
+
 		printHacklerAction(HACKLER_FILENAME, data[j]);
 	}
 	printLog("HK", "End action");

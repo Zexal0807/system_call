@@ -10,6 +10,18 @@
 #include "../fifo.h"
 #include "../pipe.h"
 
+void sendMessage(message* m){
+    sleep(m->delay1);
+    printLog("S1", "Message can be send");
+    if(m->sender->number == 1){
+        // Send message whit correct channel
+
+    }else{
+        // Send to S2 by pipe
+        
+    }
+}
+
 int main(int argc, char * argv[]) {
 
 	printLog("S1", "Process start with exec");
@@ -40,6 +52,7 @@ int main(int argc, char * argv[]) {
 	while(isSet(l)){
 		time(&arrival);
         //Send message
+        sendMessage(l->message);
 
 		sprintf(log, "Elaborated message: %d", l->message->id);
 		printLog("S1", log);

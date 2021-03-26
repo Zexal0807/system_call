@@ -11,6 +11,10 @@
 #include <stdio.h>
 #include <unistd.h>
 
+void sendMessage(message m){
+    
+}
+
 int main(int argc, char * argv[]) {
 
 	printLog("S3", "Process start with exec");
@@ -45,6 +49,8 @@ int main(int argc, char * argv[]) {
 	);
 	time(&arrival);
 	
+    // sendMessage(l->message);
+
 	char log[50];
 	sprintf(log, "Elaborated message: %d", m->id);
 	printLog("S3", log);
