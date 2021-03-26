@@ -11,12 +11,27 @@
 #include <stdio.h>
 #include <unistd.h>
 
+void sendMessage(message m){
+    
+}
+
 int main(int argc, char * argv[]) {
+
+    printLog("S2", "Process start with exec");
 
     // ARGV: initSemId
     int initSemId = atoi(argv[0]);
 
-	printLog("S2", "Process start with exec");
+    // Open SHM
+    // Open MSGQ
+    // OPEN PIPE S1 S2
+    // OPEN PIPE S2 S3
+    
+    // Set this process as end init 
+    semOp(initSemId, 1, -1);
+
+    // Wait all init end
+    semOp(initSemId, 4, 0);
 
 	time_t arrival;
 	time_t departure;
@@ -34,6 +49,8 @@ int main(int argc, char * argv[]) {
 	);
 	time(&arrival);
 	
+    // sendMessage(l->message);
+
 	char log[50];
 	sprintf(log, "Elaborated message: %d", m->id);
 	printLog("S2", log);

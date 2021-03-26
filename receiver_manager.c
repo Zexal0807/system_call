@@ -24,8 +24,9 @@ int main(int argc, char * argv[]) {
 
     int initSemId = createInitSemaphore();
     semOp(initSemId, 0, -1);
-    printf("RM SEM");
-    printSemaphoresValue(initSemId);
+    
+    // Wait all process open sem
+    semOp(initSemId, 0, 0);
 
 	// Define the 3 struct process
 	child * R1 = NULL;
@@ -85,6 +86,15 @@ int main(int argc, char * argv[]) {
 	printLog("RM", "R3 start");
 	R3 = createChild(RECEIVER_3(), pid);
 	printChild(RECEIVER_FILENAME, R3);
+
+    // Wait all child init end
+    semOp(initSemId, 2, 0);
+
+    // Set this process as end init     
+    semOp(initSemId, 4, -1);
+
+    // Wait all init end
+    semOp(initSemId, 4, 0);
 
 	// Wait the end of all child
 	pid_t child;
