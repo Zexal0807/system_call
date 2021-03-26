@@ -114,11 +114,13 @@ clean:
 	@rm -vf ${HACKLER_OBJS}
 	@rm -vf hackler
 
-	@rm -rf ${OBJDIR}
-	@ipcrm -a
+	@rm -vrf ${OBJDIR}
 
-	@rm -f output/*
-	@echo "Removed object files and executables..."
+	@rm -vf output/*
+	@echo "Removed object files and executables"
+
+	@ipcrm -a
+	@echo "Removed all active IPC"
 
 .PHONY: run clean
 
