@@ -7,6 +7,7 @@
 #include "../err_exit.h"
 #include "../defines.h"
 #include "../shared_memory.h"
+#include "../message_queue.h"
 #include "../semaphore.h"
 #include "../fifo.h"
 #include "../pipe.h"
@@ -25,6 +26,7 @@ void openResource(){
     // Open SHM
     sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
     // Open MSGQ
+    messageQueueId = getMessageQueue();
 }
 
 int closeResource(){
@@ -116,7 +118,13 @@ int main(int argc, char * argv[]) {
     openResource();
 
 	l = createMessageList(filename);
-    
+    char log[50];
+	sprintf(log, "Loaded message from file %s", filename);
+	printLog("S1", log);
+	
+	time_t arrival;
+	time_t departure;
+
     signal(SIGUSR1, hacklerIncraseDelayHandle);
     signal(SIGUSR2, hacklerRemoveMsgHandle);
     signal(SIGCONT, hacklerSendMsgHandle);
@@ -127,13 +135,8 @@ int main(int argc, char * argv[]) {
 
     // Wait all init end
     semOp(initSemId, 4, 0);
-
-	char log[50];
-	sprintf(log, "Loaded message from file %s", filename);
-	printLog("S1", log);
-	
-	time_t arrival;
-	time_t departure;
+    
+    printLog("S1", "End init start");
 
 	while(isSet(l)){
 		time(&arrival);

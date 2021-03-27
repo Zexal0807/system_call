@@ -65,6 +65,9 @@ int main(int argc, char *argv[]) {
 
     // Wait all init end 
     semOp(initSemId, 4, 0);
+
+    printLog("HK", "End init start");
+
 	//Esecuzione delle azioni
 	printLog("HK", "Start execution of the action");
     

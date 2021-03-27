@@ -4,6 +4,7 @@
 #include "../err_exit.h"
 #include "../defines.h"
 #include "../shared_memory.h"
+#include "../message_queue.h"
 #include "../semaphore.h"
 #include "../fifo.h"
 #include "../pipe.h"
@@ -25,6 +26,7 @@ void openResource(){
     // Open SHM
     sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
     // Open MSGQ
+    messageQueueId = getMessageQueue();
 }
 
 int closeResource(){
@@ -120,6 +122,8 @@ int main(int argc, char * argv[]) {
 
     // Wait all init end
     semOp(initSemId, 4, 0);
+    
+    printLog("S2", "End init start");
 
 	time_t arrival;
 	time_t departure;

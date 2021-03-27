@@ -14,7 +14,7 @@ $(OBJDIR):
 DEFINES_SRCS = defines.c struct/process.c struct/child.c struct/message.c struct/trafficInfo.c struct/hacklerAction.c struct/list.c
 
 # Define and create R1 executable
-RECEIVER_1_SRCS = $(DEFINES_SRCS) err_exit.c shared_memory.c semaphore.c pipe.c fifo.c process/R1.c
+RECEIVER_1_SRCS = $(DEFINES_SRCS) err_exit.c shared_memory.c message_queue.c semaphore.c pipe.c fifo.c process/R1.c
 RECEIVER_1_OBJS = $(addprefix $(OBJDIR)/, $(RECEIVER_1_SRCS:.c=.o))
 
 R1: $(RECEIVER_1_OBJS)
@@ -22,7 +22,7 @@ R1: $(RECEIVER_1_OBJS)
 	@$(CC) $^ -o $@  -lm
 
 # Define and create R2 executable
-RECEIVER_2_SRCS = $(DEFINES_SRCS) err_exit.c shared_memory.c semaphore.c pipe.c fifo.c process/R2.c
+RECEIVER_2_SRCS = $(DEFINES_SRCS) err_exit.c shared_memory.c message_queue.c semaphore.c pipe.c fifo.c process/R2.c
 RECEIVER_2_OBJS = $(addprefix $(OBJDIR)/, $(RECEIVER_2_SRCS:.c=.o))
 
 R2: $(RECEIVER_2_OBJS)
@@ -30,7 +30,7 @@ R2: $(RECEIVER_2_OBJS)
 	@$(CC) $^ -o $@  -lm
 
 # Define and create R3 executable
-RECEIVER_3_SRCS = $(DEFINES_SRCS) err_exit.c shared_memory.c semaphore.c pipe.c fifo.c process/R3.c
+RECEIVER_3_SRCS = $(DEFINES_SRCS) err_exit.c shared_memory.c message_queue.c semaphore.c pipe.c fifo.c process/R3.c
 RECEIVER_3_OBJS = $(addprefix $(OBJDIR)/, $(RECEIVER_3_SRCS:.c=.o))
 
 R3: $(RECEIVER_3_OBJS)
@@ -38,7 +38,7 @@ R3: $(RECEIVER_3_OBJS)
 	@$(CC) $^ -o $@  -lm
 
 # Define and create Receiver Manager
-RECEIVER_SRCS = $(DEFINES_SRCS) err_exit.c shared_memory.c semaphore.c pipe.c fifo.c receiver_manager.c
+RECEIVER_SRCS = $(DEFINES_SRCS) err_exit.c shared_memory.c  semaphore.c pipe.c fifo.c receiver_manager.c
 RECEIVER_OBJS = $(addprefix $(OBJDIR)/, $(RECEIVER_SRCS:.c=.o))
 
 receiver_manager: $(RECEIVER_OBJS)
@@ -46,7 +46,7 @@ receiver_manager: $(RECEIVER_OBJS)
 	@$(CC) $^ -o $@  -lm
 
 # Define and create S1 executable
-SENDER_1_SRCS = $(DEFINES_SRCS) err_exit.c shared_memory.c semaphore.c pipe.c fifo.c process/S1.c
+SENDER_1_SRCS = $(DEFINES_SRCS) err_exit.c shared_memory.c message_queue.c semaphore.c pipe.c fifo.c process/S1.c
 SENDER_1_OBJS = $(addprefix $(OBJDIR)/, $(SENDER_1_SRCS:.c=.o))
 
 S1: $(SENDER_1_OBJS)
@@ -54,7 +54,7 @@ S1: $(SENDER_1_OBJS)
 	@$(CC) $^ -o $@  -lm
 
 # Define and create S2 executable
-SENDER_2_SRCS = $(DEFINES_SRCS) err_exit.c shared_memory.c semaphore.c pipe.c fifo.c process/S2.c
+SENDER_2_SRCS = $(DEFINES_SRCS) err_exit.c shared_memory.c message_queue.c semaphore.c pipe.c fifo.c process/S2.c
 SENDER_2_OBJS = $(addprefix $(OBJDIR)/, $(SENDER_2_SRCS:.c=.o))
 
 S2: $(SENDER_2_OBJS)
@@ -62,7 +62,7 @@ S2: $(SENDER_2_OBJS)
 	@$(CC) $^ -o $@  -lm
 
 # Define and create S3 executable
-SENDER_3_SRCS = $(DEFINES_SRCS) err_exit.c shared_memory.c semaphore.c pipe.c fifo.c process/S3.c
+SENDER_3_SRCS = $(DEFINES_SRCS) err_exit.c shared_memory.c message_queue.c semaphore.c pipe.c fifo.c process/S3.c
 SENDER_3_OBJS = $(addprefix $(OBJDIR)/, $(SENDER_3_SRCS:.c=.o))
 
 S3: $(SENDER_3_OBJS)

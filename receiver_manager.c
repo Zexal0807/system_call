@@ -96,6 +96,8 @@ int main(int argc, char * argv[]) {
     // Wait all init end
     semOp(initSemId, 4, 0);
 
+    printLog("RM", "End init start");
+
 	// Wait the end of all child
 	pid_t child;
 	int status;
