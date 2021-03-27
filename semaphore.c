@@ -67,7 +67,7 @@ void semOp (int semid, unsigned short sem_num, short sem_op) {
 }
 
 void printSemaphoresValue (int semid) {
-    unsigned short semVal[5];
+    unsigned short semVal[6];
     union semun arg;
     arg.array = semVal;
 
@@ -77,6 +77,6 @@ void printSemaphoresValue (int semid) {
 
     // print the semaphore's value
     printf("semaphore set state:\n");
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 6; i++)
         printf("id: %d --> %d\n", i, semVal[i]);
 }

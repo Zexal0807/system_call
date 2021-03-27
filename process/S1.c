@@ -32,12 +32,13 @@ void openResource(){
 int closeResource(){
     // Close SHM
     detachSharedMemory(sharedMemoryData);
-
+    printLog("S1", "detachSharedMemory");
     // Close MSGQ
 
     // Wait S2 end
+    printLog("S2", "Wait S3");
     semOp(senderSemId, 2, 0);
-
+    
     // Close PIPE S1 S2
     closePipe(pipeId);
 
@@ -45,8 +46,9 @@ int closeResource(){
     semOp(senderSemId, 1, -1);
 
 	// Wait for 1 second befor end
+    printLog("S1", "Process End");
 	sleep(1);
-	printLog("S1", "Process End");
+	printLog("S1", "Process Exit");
 	return 1;
 }
 

@@ -15,3 +15,5 @@ void closePipe(int fd){
     if(close(fd) == -1)
         ErrExit("Impossible close pipe");
 }
+
+

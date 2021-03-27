@@ -32,10 +32,11 @@ void openResource(){
 int closeResource(){
     // Close SHM
     detachSharedMemory(sharedMemoryData);
-
+    printLog("S2", "detachSharedMemory");
     // Close MSGQ
 
     // Wait S3 end
+    printLog("S2", "Wait S3");
     semOp(senderSemId, 3, 0);
 
 	// Close PIPE S2 S3
@@ -46,8 +47,9 @@ int closeResource(){
     semOp(senderSemId, 2, -1);
 
 	// Wait for 2 second befor end
-	sleep(2);
 	printLog("S2", "Process End");
+	sleep(2);
+	printLog("S2", "Process Exit");
 	return 1;
 }
 
@@ -114,7 +116,7 @@ int main(int argc, char * argv[]) {
 
     // Open sender sem
     senderSemId = createSenderSemaphore();
-    
+
 	openResource();
     
     // Set this process as end init 
@@ -129,7 +131,7 @@ int main(int argc, char * argv[]) {
 	time_t departure;
 
 	char log[50];
-    int thereMessage = 1;
+    int thereMessage = 0;
 
 	while(1){
 		// Wait can read from PIPE S1 S2

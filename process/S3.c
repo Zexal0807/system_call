@@ -16,11 +16,11 @@
 node *l;
 int initSemId;
 int senderSemId;
-int sharedMemoryId;
+int sharedMemoryId ;
 message * sharedMemoryData;
 int messageQueueId;
-int pipeId;
-int fifoId;
+int pipeId ;
+int fifoId ;
 
 void openResource(){
     // Open SHM
@@ -33,7 +33,6 @@ void openResource(){
 int closeResource(){
 	// Close SHM
     detachSharedMemory(sharedMemoryData);
-
 	// Close MSGQ
 	// Close FIFO
 
@@ -41,8 +40,9 @@ int closeResource(){
 	semOp(senderSemId, 3, -1);
 
 	// Wait for 3 second befor end
-	sleep(3);
 	printLog("S3", "Process End");
+	sleep(3);
+	printLog("S3", "Process Exit");
 	return 1;
 }
 
@@ -84,7 +84,7 @@ void hacklerShutDownHandle(int sig){
 
 void sendMessage(message* m){
     sleep(m->delay1);
-    printLog("S1", "Message can be send");
+    printLog("S3", "Message can be send");
     if(m->sender->number == 1){
         if (strcmp(m->comunication, "Q") == 0) {
 
@@ -107,8 +107,8 @@ int main(int argc, char * argv[]) {
     sharedMemoryId = atoi(argv[2]);
 
     // Open sender sem
-    int senderSemId = createSenderSemaphore();
-    
+    senderSemId = createSenderSemaphore();
+
 	openResource();
     
 	signal(SIGUSR1, hacklerIncraseDelayHandle);
@@ -131,12 +131,12 @@ int main(int argc, char * argv[]) {
 	trafficInfo *t;
 	message *m;
 
-    int thereMessage = 1;
+    int thereMessage = 0;
 
 	while(1){
 		// Wait can read from PIPE S2 S3
 		semOp(senderSemId, 5, -1);
-
+        
 		if(thereMessage){
 			// Read message
 			//m = ...

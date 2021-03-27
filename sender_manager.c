@@ -26,13 +26,11 @@ int main(int argc, char * argv[]) {
 
     int initSemId = createInitSemaphore();
     setInitSemaphore(initSemId);
+
     semOp(initSemId, 0, -1);
 
     // Wait all process open sem
     semOp(initSemId, 0, 0);
-
-    int senderSemId = createSenderSemaphore();
-    setSenderSemaphore(senderSemId);
 
     int pipeS1S2[2];
     int pipeS2S3[2];
@@ -145,6 +143,9 @@ int main(int argc, char * argv[]) {
 	// Wait all child init end
     semOp(initSemId, 1, 0);
 
+    int senderSemId = createSenderSemaphore();
+    setSenderSemaphore(senderSemId);
+
     // Set this process as end init     
     semOp(initSemId, 4, -1);
 
@@ -157,7 +158,7 @@ int main(int argc, char * argv[]) {
 	pid_t child;
 	int status;
 	while ((child = wait( & status)) != -1) {
-		printf("returned child %d with status %d\n", child, status);
+		//printf("returned child %d with status %d\n", child, status);
 	}
 
     // Remove used IPC
