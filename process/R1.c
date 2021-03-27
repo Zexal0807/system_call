@@ -46,7 +46,7 @@ int main(int argc, char * argv[]) {
 
 	char log[50];
 	sprintf(log, "Elaborated message: %d", m->id);
-	printLog("R1", log);
+	//printLog("R1", log);
 		
 	time(&departure);
 

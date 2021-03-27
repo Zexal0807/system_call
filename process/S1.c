@@ -23,15 +23,15 @@ int pipeId;
 
 void openResource(){
     // Open SHM
-    sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId);
+    sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
     // Open MSGQ
 }
 
 int closeResource(){
     // Close SHM
+    detachSharedMemory(sharedMemoryData);
 
     // Close MSGQ
-
 
     // Wait S2 end
     semOp(senderSemId, 2, 0);
@@ -87,6 +87,7 @@ void hacklerShutDownHandle(int sig){
 void sendMessage(message* m){
     sleep(m->delay1);
     printLog("S1", "Message can be send");
+    printf("S1 %d\n", m->id);
     if(m->sender->number == 1){
         if (strcmp(m->comunication, "Q") == 0) {
 

@@ -23,13 +23,15 @@ int fifoId;
 
 void openResource(){
     // Open SHM
-    sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId);
+    sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
     // Open MSGQ
     // OPEN FIFO
 }
 
 int closeResource(){
 	// Close SHM
+    detachSharedMemory(sharedMemoryData);
+
 	// Close MSGQ
 	// Close FIFO
 

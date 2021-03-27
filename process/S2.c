@@ -23,12 +23,14 @@ int pipeS2S3Id;
 
 void openResource(){
     // Open SHM
-    sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId);
+    sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
     // Open MSGQ
 }
 
 int closeResource(){
     // Close SHM
+    detachSharedMemory(sharedMemoryData);
+
     // Close MSGQ
 
     // Wait S3 end
