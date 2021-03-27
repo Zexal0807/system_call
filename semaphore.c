@@ -34,13 +34,13 @@ void setInitSemaphore(int semid){
 
 int createSenderSemaphore(){
     key_t key = generateKey(KEY_SENDER_SEM);
-    int id = generateSemaphore(key, 4, S_IRUSR | S_IWUSR | IPC_CREAT);
+    int id = generateSemaphore(key, 6, S_IRUSR | S_IWUSR | IPC_CREAT);
     return id;
 }
 
 void setSenderSemaphore(int semid){   
     // ??, S1 have msgs, S2 have msgs, S3 have msgs, there's something on PIPES1S2, there's something on PIPES2S3
-    unsigned short semInitVal[] = {1, 1, 1, 1};
+    unsigned short semInitVal[] = {1, 1, 1, 1, 1, 1};
     union semun arg;
     arg.array = semInitVal;
 
