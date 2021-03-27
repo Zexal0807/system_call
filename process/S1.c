@@ -2,6 +2,7 @@
 /// @brief Contiene l'implementazione del sender 1.
 #include <stdio.h>
 #include <unistd.h>
+#include <signal.h>
 
 #include "../err_exit.h"
 #include "../defines.h"
@@ -11,6 +12,41 @@
 #include "../pipe.h"
 
 node *l;
+
+int initSemId;
+int senderSemId;
+int sharedMemoryId;
+message * sharedMemoryData;
+int messageQueueId;
+int pipeId;
+
+
+void openResource(){
+    // Open SHM
+    sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId);
+    // Open MSGQ
+}
+
+int closeResource(){
+    // Close SHM
+
+    // Close MSGQ
+
+
+    // Wait S2 end
+    semOp(senderSemId, 2, 0);
+
+    // Close PIPE S1 S2
+    closePipe(pipeId);
+
+    // Set this process as end
+    semOp(senderSemId, 1, -1);
+
+	// Wait for 1 second befor end
+	sleep(1);
+	printLog("S1", "Process End");
+	return 1;
+}
 
 // SIGUSR1 del IncraseDelay dell HK
 void hacklerIncraseDelayHandle(int sig){
@@ -28,7 +64,7 @@ void hacklerRemoveMsgHandle(int sig){
     node *tmp = l;
     tmp = getNext(tmp);
     while(isSet(l)){
-        rimuovi(l, l->message)
+        rimuovi(l, l->message);
         tmp = getNext(tmp);
     }
 }
@@ -63,50 +99,22 @@ void sendMessage(message* m){
     }
 }
 
-int initSemId;
-int senderSemId;
-int sharedMemoryId;
-int messageQueueId;
-int pipeId;
-
-void openResource(){
-    // Open SHM
-    // Open MSGQ
-    // Open PIPE S1 S2
-}
-
-int closeResource(){
-    // Close SHM
-    // Close MSGQ
-
-    // Wait S2 end
-    semOp(senderSemId, 2, 0);
-
-    // Close PIPE S1 S2
-
-    // Set this process as end
-    semOp(senderSemId, 1, -1);
-
-	// Wait for 1 second befor end
-	sleep(1);
-	printLog("S1", "Process End");
-	return 1;
-}
-
 int main(int argc, char * argv[]) {
 
 	printLog("S1", "Process start with exec");
 
-    // ARGV: initSemId, inputFile
+    // ARGV: initSemId, PIPE_S1S2, shmId,inputFile
     initSemId = atoi(argv[0]);
-	char *filename = argv[1];
+    pipeId = atoi(argv[1]);
+    sharedMemoryId = atoi(argv[2]);
+	char *filename = argv[3];
 
     // Open sender sem
     senderSemId = createSenderSemaphore();
 
     openResource();
 
-	*l = createMessageList(filename);
+	l = createMessageList(filename);
     
     signal(SIGUSR1, hacklerIncraseDelayHandle);
     signal(SIGUSR2, hacklerRemoveMsgHandle);

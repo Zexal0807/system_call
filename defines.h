@@ -32,7 +32,7 @@
 #define KEY_SENDER_SEM 2
 #define KEY_PIPE_S1_S2 3
 #define KEY_PIPE_S2_S3 4
-#define KEY_SENDER_SEM 5
+#define KEY_RECEIVER_SEM 5
 #define KEY_PIPE_R1_R2 6
 #define KEY_PIPE_R2_R3 7
 #define KEY_SHARED_MEMORY 8

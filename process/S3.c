@@ -10,8 +10,37 @@
 
 #include <stdio.h>
 #include <unistd.h>
+#include <signal.h>
 
 node *l;
+int initSemId;
+int senderSemId;
+int sharedMemoryId;
+message * sharedMemoryData;
+int messageQueueId;
+int pipeId;
+int fifoId;
+
+void openResource(){
+    // Open SHM
+    sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId);
+    // Open MSGQ
+    // OPEN FIFO
+}
+
+int closeResource(){
+	// Close SHM
+	// Close MSGQ
+	// Close FIFO
+
+	// Set this process as end
+	semOp(senderSemId, 3, -1);
+
+	// Wait for 3 second befor end
+	sleep(3);
+	printLog("S3", "Process End");
+	return 1;
+}
 
 // SIGUSR1 del IncraseDelay dell HK
 void hacklerIncraseDelayHandle(int sig){
@@ -29,7 +58,7 @@ void hacklerRemoveMsgHandle(int sig){
     node *tmp = l;
     tmp = getNext(tmp);
     while(isSet(l)){
-        rimuovi(l, l->message)
+        rimuovi(l, l->message);
         tmp = getNext(tmp);
     }
 }
@@ -64,41 +93,14 @@ void sendMessage(message* m){
     }
 }
 
-int initSemId;
-int senderSemId;
-int sharedMemoryId;
-int messageQueueId;
-int pipeId;
-int fifoId;
-
-void openResource(){
-    // Open SHM
-    // Open MSGQ
-    // OPEN FIFO
-    // OPEN PIPE S2 S3
-}
-
-int closeResource(){
-    // Close PIPE S2 S3
-	// Close SHM
-	// Close MSGQ
-	// Close FIFO
-
-	// Set this process as end
-	semOp(senderSemId, 3, -1);
-
-	// Wait for 3 second befor end
-	sleep(3);
-	printLog("S3", "Process End");
-	return 1;
-}
-
 int main(int argc, char * argv[]) {
 
 	printLog("S3", "Process start with exec");
 
-     // ARGV: initSemId
+    // ARGV: initSemId, PIPE_S2S3
     int initSemId = atoi(argv[0]);
+    pipeId = atoi(argv[1]);
+    sharedMemoryId = atoi(argv[2]);
 
     // Open sender sem
     int senderSemId = createSenderSemaphore();
@@ -122,6 +124,8 @@ int main(int argc, char * argv[]) {
 	char log[50];
 	trafficInfo *t;
 	message *m;
+
+    int thereMessage = 1;
 
 	while(1){
 		// Wait can read from PIPE S2 S3

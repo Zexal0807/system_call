@@ -15,6 +15,10 @@ int createInitSemaphore();
 
 void setInitSemaphore(int semid);
 
+int createSenderSemaphore();
+
+void setSenderSemaphore(int semid);
+
 void removeSemaphore(int semid);
 
 void semOp (int semid, unsigned short sem_num, short sem_op);

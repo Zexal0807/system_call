@@ -34,6 +34,13 @@ int main(int argc, char * argv[]) {
     int senderSemId = createSenderSemaphore();
     setSenderSemaphore(senderSemId);
 
+    int pipeS1S2[2];
+    int pipeS2S3[2];
+    createPipe(pipeS1S2);
+    createPipe(pipeS2S3);
+
+    int shmid = createSharedMemory();
+
 	// Define the 3 struct process
 	child *S1 = NULL;
 	child *S2 = NULL;
@@ -46,10 +53,22 @@ int main(int argc, char * argv[]) {
 	} else if (pid == 0) {
         char string_initSemId[5];
         sprintf(string_initSemId, "%d", initSemId);
+
+        char string_pipes1s2[5];
+        sprintf(string_pipes1s2, "%d", pipeS1S2[1]);
+        closePipe(pipeS1S2[0]);
+        closePipe(pipeS2S3[0]);
+        closePipe(pipeS2S3[1]);
+
+        char string_shmId[5];
+        sprintf(string_shmId, "%d", shmid);
+
         char string_inputFile[50];
         sprintf(string_inputFile, "%s", argv[1]);
         char * argv[] = {
 			string_initSemId,
+            string_pipes1s2,
+            string_shmId,
             string_inputFile,
             NULL
 		};
@@ -67,8 +86,23 @@ int main(int argc, char * argv[]) {
 	} else if (pid == 0) {
         char string_initSemId[5];
         sprintf(string_initSemId, "%d", initSemId);
+
+        char string_pipes1s2[5];
+        sprintf(string_pipes1s2, "%d", pipeS1S2[0]);
+        closePipe(pipeS1S2[1]);
+
+        char string_pipes2s3[5];
+        sprintf(string_pipes2s3, "%d", pipeS2S3[1]);
+        closePipe(pipeS2S3[0]);
+        
+        char string_shmId[5];
+        sprintf(string_shmId, "%d", shmid);
+
         char * argv[] = {
 			string_initSemId,
+            string_pipes1s2,
+            string_pipes2s3,
+            string_shmId,
             NULL
 		};
 		execvp("./S2", argv);
@@ -85,8 +119,20 @@ int main(int argc, char * argv[]) {
 	} else if (pid == 0) {
 		char string_initSemId[5];
         sprintf(string_initSemId, "%d", initSemId);
+
+        char string_pipes2s3[5];
+        sprintf(string_pipes2s3, "%d", pipeS2S3[0]);
+        closePipe(pipeS1S2[0]);
+        closePipe(pipeS1S2[1]);
+        closePipe(pipeS2S3[1]);
+
+        char string_shmId[5];
+        sprintf(string_shmId, "%d", shmid);
+
         char * argv[] = {
 			string_initSemId,
+            string_pipes2s3,
+            string_shmId,
             NULL
 		};
 		execvp("./S3", argv);
@@ -109,7 +155,7 @@ int main(int argc, char * argv[]) {
 	pid_t child;
 	int status;
 	while ((child = wait( & status)) != -1) {
-		//printf("returned child %d with status %d\n", child, status);
+		printf("returned child %d with status %d\n", child, status);
 	}
 
     // Remove used IPC

@@ -10,8 +10,42 @@
 
 #include <stdio.h>
 #include <unistd.h>
+#include <signal.h>
 
 node *l;
+int initSemId;
+int senderSemId;
+int sharedMemoryId;
+message * sharedMemoryData;
+int messageQueueId;
+int pipeS1S2Id;
+int pipeS2S3Id;
+
+void openResource(){
+    // Open SHM
+    sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId);
+    // Open MSGQ
+}
+
+int closeResource(){
+    // Close SHM
+    // Close MSGQ
+
+    // Wait S3 end
+    semOp(senderSemId, 3, 0);
+
+	// Close PIPE S2 S3
+
+    // Close PIPE S1 S2
+
+    // Set this process as end
+    semOp(senderSemId, 2, -1);
+
+	// Wait for 2 second befor end
+	sleep(2);
+	printLog("S2", "Process End");
+	return 1;
+}
 
 // SIGUSR1 del IncraseDelay dell HK
 void hacklerIncraseDelayHandle(int sig){
@@ -29,7 +63,7 @@ void hacklerRemoveMsgHandle(int sig){
     node *tmp = l;
     tmp = getNext(tmp);
     while(isSet(l)){
-        rimuovi(l, l->message)
+        rimuovi(l, l->message);
         tmp = getNext(tmp);
     }
 }
@@ -64,46 +98,15 @@ void sendMessage(message* m){
     }
 }
 
-int initSemId;
-int senderSemId;
-int sharedMemoryId;
-int messageQueueId;
-int pipeS1S2Id;
-int pipeS2S3Id;
-
-void openResource(){
-    // Open SHM
-    // Open MSGQ
-    // OPEN FIFO
-    // OPEN PIPE S2 S3
-}
-
-int closeResource(){
-    // Close SHM
-    // Close MSGQ
-
-    // Wait S3 end
-    semOp(senderSemId, 3, 0);
-
-	// Close PIPE S2 S3
-
-    // Close PIPE S1 S2
-
-    // Set this process as end
-    semOp(senderSemId, 2, -1);
-
-	// Wait for 2 second befor end
-	sleep(2);
-	printLog("S2", "Process End");
-	return 1;
-}
-
 int main(int argc, char * argv[]) {
 
     printLog("S2", "Process start with exec");
 
-    // ARGV: initSemId
+    // ARGV: initSemId, PIPE_S2S3, PIPE_S2S3
     initSemId = atoi(argv[0]);
+    pipeS1S2Id = atoi(argv[1]);
+    pipeS2S3Id = atoi(argv[2]);
+    sharedMemoryId = atoi(argv[3]);
 
     // Open sender sem
     senderSemId = createSenderSemaphore();
@@ -120,6 +123,7 @@ int main(int argc, char * argv[]) {
 	time_t departure;
 
 	char log[50];
+    int thereMessage = 1;
 
 	while(1){
 		// Wait can read from PIPE S1 S2
