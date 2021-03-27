@@ -22,6 +22,9 @@ int main(int argc, char * argv[]) {
     // ARGV: initSemId
     int initSemId = atoi(argv[0]);
 
+    // Open sender sem
+    int senderSemId = createSenderSemaphore();
+    
     // Open SHM
     // Open MSGQ
     // OPEN PIPE S1 S2

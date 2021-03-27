@@ -29,13 +29,15 @@
 #define MAX_HACKLER_ACTION 10
 
 #define KEY_INIT_SEM 1
-#define KEY_PIPE_S1_S2 2
-#define KEY_PIPE_S2_S3 3
-#define KEY_PIPE_R1_R2 4
-#define KEY_PIPE_R2_R3 5
-#define KEY_SHARED_MEMORY 6
-#define KEY_MESSAGE_QUEUE 7
-#define KEY_FIFO 8
+#define KEY_SENDER_SEM 2
+#define KEY_PIPE_S1_S2 3
+#define KEY_PIPE_S2_S3 4
+#define KEY_SENDER_SEM 5
+#define KEY_PIPE_R1_R2 6
+#define KEY_PIPE_R2_R3 7
+#define KEY_SHARED_MEMORY 8
+#define KEY_MESSAGE_QUEUE 9
+#define KEY_FIFO 10
 
 #endif
 

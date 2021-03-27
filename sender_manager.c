@@ -31,6 +31,9 @@ int main(int argc, char * argv[]) {
     // Wait all process open sem
     semOp(initSemId, 0, 0);
 
+    int senderSemId = createSenderSemaphore();
+    setSenderSemaphore(senderSemId);
+
 	// Define the 3 struct process
 	child *S1 = NULL;
 	child *S2 = NULL;
