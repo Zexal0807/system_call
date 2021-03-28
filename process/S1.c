@@ -21,7 +21,6 @@ message * sharedMemoryData;
 int messageQueueId;
 int pipeId;
 
-
 void openResource(){
     // Open SHM
     sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
@@ -33,7 +32,9 @@ int closeResource(){
     // Close SHM
     detachSharedMemory(sharedMemoryData);
     printLog("S1", "detachSharedMemory");
+    
     // Close MSGQ
+    // Not need to be close
 
     // Wait S2 end
     printLog("S1", "Wait S2");
@@ -105,11 +106,14 @@ int main(int argc, char * argv[]) {
 
 	printLog("S1", "Process start with exec");
 
-    // ARGV: initSemId, PIPE_S1S2, shmId,inputFile
+    // ARGV: initSemId, PIPE_S1S2, shmId, inputFile, S2pid
     initSemId = atoi(argv[0]);
     pipeId = atoi(argv[1]);
     sharedMemoryId = atoi(argv[2]);
 	char *filename = argv[3];
+    int S2pid = atoi(argv[4]);
+
+    printf("S1: s2 pid %d\n", S2pid);
 
     // Open sender sem
     senderSemId = createSenderSemaphore();
@@ -158,7 +162,7 @@ int main(int argc, char * argv[]) {
                 
                 trafficInfo *t = createTrafficInfo(m, arrival, departure);
 		        printTrafficInfo(SENDER_1_FILENAME, t);
-                sendMessage(m)
+                sendMessage(m);
                 tmp = getNext(tmp);
                 l = rimuovi(l, m);
             }else{
@@ -170,6 +174,7 @@ int main(int argc, char * argv[]) {
     }
 
     // Send to S2 that msg are end
+    // kill(?)
     
     return closeResource();
 }

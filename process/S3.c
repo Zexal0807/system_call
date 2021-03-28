@@ -25,8 +25,10 @@ int fifoId ;
 void openResource(){
     // Open SHM
     sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
+
     // Open MSGQ
     messageQueueId = getMessageQueue();
+
     // OPEN FIFO
 }
 
@@ -36,6 +38,8 @@ int closeResource(){
     printLog("S3", "detachSharedMemory");
     
 	// Close MSGQ
+    // Not need to be close
+
 	// Close FIFO
 
 	// Set this process as end
@@ -85,17 +89,13 @@ void hacklerShutDownHandle(int sig){
 }
 
 void sendMessage(message* m){
-    sleep(m->delay1);
     printLog("S3", "Message can be send");
-    if(m->sender->number == 1){
-        if (strcmp(m->comunication, "Q") == 0) {
+    if (strcmp(m->comunication, "Q") == 0) {
 
-        }else if (strcmp(m->comunication, "SH") == 0) {
+    }else if (strcmp(m->comunication, "SH") == 0) {
 
-        }
-    }else{
-        // Send to S2 by pipe
-        
+    }else if (strcmp(m->comunication, "FIFO") == 0) {
+
     }
 }
 

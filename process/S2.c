@@ -33,8 +33,10 @@ int closeResource(){
     // Close SHM
     detachSharedMemory(sharedMemoryData);
     printLog("S2", "detachSharedMemory");
+    
     // Close MSGQ
-
+    // Not need to be close
+    
     // Wait S3 end
     printLog("S2", "Wait S3");
     semOp(senderSemId, 3, 0);
@@ -90,7 +92,6 @@ void hacklerShutDownHandle(int sig){
 }
 
 void sendMessage(message* m){
-    sleep(m->delay2);
     printLog("S2", "Message can be send");
     if(m->sender->number == 1){
         if (strcmp(m->comunication, "Q") == 0) {
@@ -108,11 +109,14 @@ int main(int argc, char * argv[]) {
 
     printLog("S2", "Process start with exec");
 
-    // ARGV: initSemId, PIPE_S2S3, PIPE_S2S3
+    // ARGV: initSemId, PIPE_S2S3, PIPE_S2S3, S3pid
     initSemId = atoi(argv[0]);
     pipeS1S2Id = atoi(argv[1]);
     pipeS2S3Id = atoi(argv[2]);
     sharedMemoryId = atoi(argv[3]);
+    int S3pid = atoi(argv[4]);
+
+    printf("S2: s3 pid %d\n", S3pid);
 
     // Open sender sem
     senderSemId = createSenderSemaphore();
