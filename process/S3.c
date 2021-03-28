@@ -33,6 +33,8 @@ void openResource(){
 int closeResource(){
 	// Close SHM
     detachSharedMemory(sharedMemoryData);
+    printLog("S3", "detachSharedMemory");
+    
 	// Close MSGQ
 	// Close FIFO
 

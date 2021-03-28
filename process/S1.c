@@ -36,7 +36,7 @@ int closeResource(){
     // Close MSGQ
 
     // Wait S2 end
-    printLog("S2", "Wait S3");
+    printLog("S1", "Wait S2");
     semOp(senderSemId, 2, 0);
     
     // Close PIPE S1 S2
@@ -140,8 +140,22 @@ int main(int argc, char * argv[]) {
     
     printLog("S1", "End init start");
 
+    time(&arrival);
+
+    node *tmp = l;
+
+    while(isSet(l)){
+
+
+
+
+
+        sleep(1);
+    }
+
+
 	while(isSet(l)){
-		time(&arrival);
+		
         //Send message
         sendMessage(l->message);
 

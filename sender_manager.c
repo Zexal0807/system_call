@@ -163,6 +163,7 @@ int main(int argc, char * argv[]) {
 
     // Remove used IPC
     removeSemaphore(initSemId);
+    removeSemaphore(senderSemId);
 
 	printLog("SM", "Process End");
 	return 0;
