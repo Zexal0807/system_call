@@ -89,18 +89,15 @@ void hacklerShutDownHandle(int sig){
 }
 
 void sendMessage(message* m){
-    sleep(m->delay1);
-    printLog("S1", "Message can be send");
-    printf("S1 %d\n", m->id);
     if(m->sender->number == 1){
         if (strcmp(m->comunication, "Q") == 0) {
-
+            printLog("S1", "Message send by MessageQueue");
         }else if (strcmp(m->comunication, "SH") == 0) {
-
+            printLog("S1", "Message send by SharedMemory");
         }
     }else{
         // Send to S2 by pipe
-        
+        printLog("S1", "Message send by PIPE S1S2");
     }
 }
 
@@ -142,30 +139,35 @@ int main(int argc, char * argv[]) {
 
     time(&arrival);
 
-    node *tmp = l;
+    node *tmp;
+    message *m;
 
     while(isSet(l)){
-
-
-
-
-
+        /*
+        printf("Message in list: ");
+        printList(l);
+        printf("\n");
+        */
+        tmp = l;
+        while(isSet(tmp)){
+            m = tmp->message;
+            if(m->delay1 <= 0){
+                time(&departure);
+                sprintf(log, "Message %d can be send", m->id);
+		        printLog("S1", log);
+                
+                trafficInfo *t = createTrafficInfo(m, arrival, departure);
+		        printTrafficInfo(SENDER_1_FILENAME, t);
+                sendMessage(m)
+                tmp = getNext(tmp);
+                l = rimuovi(l, m);
+            }else{
+                m->delay1 -=1;
+                tmp = getNext(tmp);
+            } 
+        }
         sleep(1);
     }
-
-
-	while(isSet(l)){
-		
-        //Send message
-        sendMessage(l->message);
-
-		sprintf(log, "Elaborated message: %d", l->message->id);
-		printLog("S1", log);
-		time(&departure);
-		trafficInfo *t = createTrafficInfo(l->message, arrival, departure);
-		printTrafficInfo(SENDER_1_FILENAME, t);
-		l = getNext(l);
-	}
 
     // Send to S2 that msg are end
     

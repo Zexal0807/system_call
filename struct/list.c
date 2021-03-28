@@ -58,20 +58,19 @@ node* rimuovi(node* lista, message *m){
 	node *curr = lista, 
 		*prec = NULL, 
 		*canc;
-	int found = 0;  
-
+	int found = 0;
 	while(curr && !found){
 		if(curr->message == m){
-			found = 1;
+            found = 1;
 			canc = curr;
-			curr = curr->next;     
-			if(prec != NULL)
-				prec->next = curr;
-			else
-				lista = curr;
+			if(prec != NULL){
+				prec->next = curr->next;
+			}else{
+				lista = curr->next;
+            }
 			free(canc);
 		}else{
-			prec=curr;
+			prec = curr;
 			curr = curr->next;     
 		}
 	}
