@@ -13,7 +13,7 @@
 #include <unistd.h>
 #include <signal.h>
 
-node *l;
+trafficInfo * lista;
 int initSemId;
 int senderSemId;
 int sharedMemoryId ;
@@ -21,6 +21,15 @@ message * sharedMemoryData;
 int messageQueueId;
 int pipeId ;
 int fifoId ;
+
+
+// SIGPIPE del S2
+void hacklerReadFromPipe(int sig){
+/*
+    message *m  = read(pipeS1S2Id,....);
+    aggiungiInCoda(l, m); 
+*/
+}
 
 void openResource(){
     // Open SHM
@@ -30,6 +39,9 @@ void openResource(){
     messageQueueId = getMessageQueue();
 
     // OPEN FIFO
+
+    // Seti signal for read from PIPE
+    signal(SIGPIPE, hacklerReadFromPipe);
 }
 
 int closeResource(){
@@ -52,41 +64,6 @@ int closeResource(){
 	return 1;
 }
 
-// SIGUSR1 del IncraseDelay dell HK
-void hacklerIncraseDelayHandle(int sig){
-    // ciclo su tutti i messagi e aumenta il time
-    node *tmp = l;
-    while(isSet(tmp)){
-        tmp->message->delay1 += 5;
-        tmp = getNext(tmp);
-    }
-}
-
-// SIGUSR2 del RemoveMsg del HK 
-void hacklerRemoveMsgHandle(int sig){
-    // ciclo su tutti i messaggi e rimuovo tutti eccetto il primo che verrà inviato a fine sleep
-    node *tmp = l;
-    tmp = getNext(tmp);
-    while(isSet(l)){
-        rimuovi(l, l->message);
-        tmp = getNext(tmp);
-    }
-}
-
-// SIGCONT del SendMessage del HK
-void hacklerSendMsgHandle(int sig){
-    //ciclo su tutti i messaggi setta a 0 i tempi d'attesa
-    node *tmp = l;
-    while(isSet(tmp)){
-        tmp->message->delay1 = 0;
-        tmp = getNext(tmp);
-    }
-}
-
-// SIGTERM ShutDown del HK
-void hacklerShutDownHandle(int sig){
-    closeResource();
-}
 
 void sendMessage(message* m){
     printLog("S3", "Message can be send");
@@ -112,12 +89,12 @@ int main(int argc, char * argv[]) {
     senderSemId = createSenderSemaphore();
 
 	openResource();
-    
+/*
 	signal(SIGUSR1, hacklerIncraseDelayHandle);
     signal(SIGUSR2, hacklerRemoveMsgHandle);
     signal(SIGCONT, hacklerSendMsgHandle);
     signal(SIGTERM, hacklerShutDownHandle);
-
+*/
     // Set this process as end init 
     semOp(initSemId, 1, -1);
 

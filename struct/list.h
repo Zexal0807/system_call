@@ -1,21 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "message.h"
+#include "trafficInfo.h"
 
 typedef struct node_{
-	message *message;
+	trafficInfo *trafficInfo;
 	struct node_ *next;
 } node;
 
-node* inserisciInCoda(node* n, message* m);
-node* inserisciInTesta(node* n, message* m);
+node* inserisciInCoda(node* n, trafficInfo* m);
+node* inserisciInTesta(node* n, trafficInfo* m);
 
 node* getNext(node* n);
 int hasNext(node* n);
 int isSet(node* n);
 
-node* rimuovi(node* n, message* m);
+node* rimuovi(node* n, trafficInfo* m);
 void printList(node* lista);
 
-node* createMessageList(char* filename);
+node* createTrafficInfoList(char* filename);

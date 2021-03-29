@@ -6,12 +6,12 @@
 #include "list.h"
 #include "../err_exit.h"
 
-node* inserisciInCoda(node* n, message* m){
+node* inserisciInCoda(node* n, trafficInfo* t){
 	node *prec;
 	node *tmp = (node*) malloc(sizeof(node));
 	if(tmp != NULL){
 		tmp->next = NULL;
-		tmp->message = m;
+		tmp->trafficInfo = t;
 		if(n == NULL){
 			n = tmp;
 		}else{
@@ -24,10 +24,10 @@ node* inserisciInCoda(node* n, message* m){
 	return n;
 }
 
-node* inserisciInTesta(node* n, message* m){
+node* inserisciInTesta(node* n, trafficInfo* t){
 	node *tmp = (node*) malloc(sizeof(node));
 	if(tmp != NULL){
-		tmp->message = m;
+		tmp->trafficInfo = t;
 		tmp->next = n;
 		n = tmp;    
 	} else{
@@ -54,13 +54,13 @@ int isSet(node* n){
 	return 1;
 }
 
-node* rimuovi(node* lista, message *m){
+node* rimuovi(node* lista, trafficInfo *t){
 	node *curr = lista, 
 		*prec = NULL, 
 		*canc;
 	int found = 0;
 	while(curr && !found){
-		if(curr->message == m){
+		if(curr->trafficInfo == t){
             found = 1;
 			canc = curr;
 			if(prec != NULL){
@@ -79,12 +79,12 @@ node* rimuovi(node* lista, message *m){
 
 void printList(node* lista){
     if(lista != NULL){
-        printf("%d -> ", lista->message->id);
+        printf("%d -> ", lista->trafficInfo->message->id);
         printList(lista->next);
     }
 }
 
-node* createMessageList(
+node* createTrafficInfoList(
 	char* filename
 ){
 	node * list = NULL;
@@ -104,11 +104,15 @@ node* createMessageList(
 	char *line = strtok_r(buffer, "\n", &end_buffer);
 
 	int firstline = 1;
+    time_t arrival;
 
 	while(line != NULL){
 		if(firstline != 1){
 			message *m = line2message(line);
-			list = inserisciInCoda(list, m);
+            time(&arrival);
+            trafficInfo *t = createTrafficInfo(m, arrival, NULL);
+
+			list = inserisciInCoda(list, t);
 		}
 		firstline = 0;
 		line = strtok_r(NULL, "\n", &end_buffer);

@@ -22,11 +22,23 @@ int messageQueueId;
 int pipeS1S2Id;
 int pipeS2S3Id;
 
+// SIGPIPE del S1
+void hacklerReadFromPipe(int sig){
+/*
+    message *m  = read(pipeS1S2Id,....);
+    aggiungiInCoda(l, m); 
+*/
+}
+
 void openResource(){
     // Open SHM
     sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
+    
     // Open MSGQ
     messageQueueId = getMessageQueue();
+
+    // Set signal for read form pipe
+    signal(SIGPIPE, hacklerReadFromPipe);
 }
 
 int closeResource(){
@@ -55,42 +67,6 @@ int closeResource(){
 	return 1;
 }
 
-// SIGUSR1 del IncraseDelay dell HK
-void hacklerIncraseDelayHandle(int sig){
-    // ciclo su tutti i messagi e aumenta il time
-    node *tmp = l;
-    while(isSet(tmp)){
-        tmp->message->delay1 += 5;
-        tmp = getNext(tmp);
-    }
-}
-
-// SIGUSR2 del RemoveMsg del HK 
-void hacklerRemoveMsgHandle(int sig){
-    // ciclo su tutti i messaggi e rimuovo tutti eccetto il primo che verrà inviato a fine sleep
-    node *tmp = l;
-    tmp = getNext(tmp);
-    while(isSet(l)){
-        rimuovi(l, l->message);
-        tmp = getNext(tmp);
-    }
-}
-
-// SIGCONT del SendMessage del HK
-void hacklerSendMsgHandle(int sig){
-    //ciclo su tutti i messaggi setta a 0 i tempi d'attesa
-    node *tmp = l;
-    while(isSet(tmp)){
-        tmp->message->delay1 = 0;
-        tmp = getNext(tmp);
-    }
-}
-
-// SIGTERM ShutDown del HK
-void hacklerShutDownHandle(int sig){
-    closeResource();
-}
-
 void sendMessage(message* m){
     printLog("S2", "Message can be send");
     if(m->sender->number == 1){
@@ -116,8 +92,6 @@ int main(int argc, char * argv[]) {
     sharedMemoryId = atoi(argv[3]);
     int S3pid = atoi(argv[4]);
 
-    printf("S2: s3 pid %d\n", S3pid);
-
     // Open sender sem
     senderSemId = createSenderSemaphore();
 
@@ -137,15 +111,15 @@ int main(int argc, char * argv[]) {
 	char log[50];
     int thereMessage = 0;
 
-	while(1){
-		// Wait can read from PIPE S1 S2
-		semOp(senderSemId, 4, -1);
+	while(thereMessage || isSet(l)){
+		
+/*
 
-		if(thereMessage){
+
 			// Read message
 			//m = ...
 
-			time(&arrival);
+			
 
 			//Send
 			// sendMessage(m);
@@ -160,5 +134,9 @@ int main(int argc, char * argv[]) {
 		}else{
 			return closeResource();
 		}
+        */
+
 	}
+
+    return closeResource();
 }
