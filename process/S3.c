@@ -13,7 +13,7 @@
 #include <unistd.h>
 #include <signal.h>
 
-trafficInfo * lista;
+node * l;
 int initSemId;
 int senderSemId;
 int sharedMemoryId ;
@@ -22,12 +22,14 @@ int messageQueueId;
 int pipeId ;
 int fifoId ;
 
-
 // SIGPIPE del S2
 void hacklerReadFromPipe(int sig){
 /*
     message *m  = read(pipeS1S2Id,....);
-    aggiungiInCoda(l, m); 
+    time_t arrival;
+    time(&arrival);
+    trafficInfo *t = createTrafficInfo(m, arrival, departure);
+    aggiungiInCoda(l, t); 
 */
 }
 
@@ -39,6 +41,7 @@ void openResource(){
     messageQueueId = getMessageQueue();
 
     // OPEN FIFO
+    fifoId = openSenderFIFO();
 
     // Seti signal for read from PIPE
     signal(SIGPIPE, hacklerReadFromPipe);
@@ -53,6 +56,7 @@ int closeResource(){
     // Not need to be close
 
 	// Close FIFO
+    close(fifoId);
 
 	// Set this process as end
 	semOp(senderSemId, 3, -1);
@@ -64,15 +68,14 @@ int closeResource(){
 	return 1;
 }
 
-
 void sendMessage(message* m){
     printLog("S3", "Message can be send");
     if (strcmp(m->comunication, "Q") == 0) {
-
+        printLog("S3", "Message send by MessageQueue");
     }else if (strcmp(m->comunication, "SH") == 0) {
-
+        printLog("S3", "Message send by SharedMemory");
     }else if (strcmp(m->comunication, "FIFO") == 0) {
-
+        printLog("S3", "Message send by FIFO");
     }
 }
 
@@ -102,38 +105,39 @@ int main(int argc, char * argv[]) {
     semOp(initSemId, 4, 0);
     
     printLog("S3", "End init start");
-	
-	time_t arrival;
+
 	time_t departure;
 
 	char log[50];
+    node *tmp;
 	trafficInfo *t;
-	message *m;
 
-    int thereMessage = 0;
+	while(isSet(l)){
+        /*
+        printf("Message in list: ");
+        printList(l);
+        printf("\n");
+        */
+        tmp = l;
+        while(isSet(tmp)){
+            t = tmp->trafficInfo;
+            if(t->message->delay3 <= 0){
+                time(&departure);
+                sprintf(log, "Message %d can be send", t->message->id);
+		        printLog("S3", log);
+                
+                t->departure = departure;
 
-	while(1){
-		// Wait can read from PIPE S2 S3
-		semOp(senderSemId, 5, -1);
-        
-		if(thereMessage){
-			// Read message
-			//m = ...
-
-			time(&arrival);
-
-			//Send
-			// sendMessage(m);
-		
-			//sprintf(log, "Elaborated message: %d", m->id);
-			//printLog("S3", log);
-		
-			time(&departure);
-
-			//t = createTrafficInfo(m, arrival, departure);
-			//printTrafficInfo(SENDER_3_FILENAME, t);
-		}else{
-			return closeResource();
-		}
+		        printTrafficInfo(SENDER_3_FILENAME, t);
+                sendMessage(t->message);
+                tmp = getNext(tmp);
+                l = rimuovi(l, t);
+            }else{
+                t->message->delay3 -=1;
+                tmp = getNext(tmp);
+            } 
+        }
+        sleep(1);
 	}	
+    return closeResource();
 }

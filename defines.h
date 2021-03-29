@@ -37,7 +37,7 @@
 #define KEY_PIPE_R2_R3 7
 #define KEY_SHARED_MEMORY 8
 #define KEY_MESSAGE_QUEUE 9
-#define KEY_FIFO 10
+#define KEY_FIFO "fifo.dat"
 
 #endif
 

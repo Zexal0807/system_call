@@ -2,3 +2,9 @@
 /// @brief Contiene la definizioni di variabili e funzioni specifiche per la gestione delle FIFO.
 
 #pragma once
+
+void createFIFO();
+
+int openSenderFIFO();
+
+int openReceiverFIFO();
