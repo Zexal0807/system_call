@@ -23,6 +23,9 @@ int pipeId;
 int S2pid;
 
 void openResource(){
+    // Open sender sem
+    senderSemId = createSenderSemaphore();
+
     // Open SHM
     sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
     // Open MSGQ
@@ -93,14 +96,28 @@ void hacklerShutDownHandle(int sig){
 void sendMessage(message* m){
     if(m->sender->number == 1){
         if (strcmp(m->comunication, "Q") == 0) {
+            switch(m->receiver->number){
+                case 1:
+                    sendToR1(messageQueueId, m);
+                    break;
+                case 2:
+                    sendToR1(messageQueueId, m);
+                    break;
+                case 3:
+                    sendToR1(messageQueueId, m);
+                    break;
+                default:
+                    ErrExit("receiver not exist");
+            }
             printLog("S1", "Message send by MessageQueue");
         }else if (strcmp(m->comunication, "SH") == 0) {
             printLog("S1", "Message send by SharedMemory");
+            
         }
     }else{
         // Send to S2 by pipe
-        char * message = message2line(m);
-        write(pipeId, m, strlen(message));
+        char *message = message2line(m);
+        write(pipeId, message, MAX_MESSAGE_LENGTH);
         free(message);
 
         // Invio segnale a S2 di leggere dalla pipe
@@ -120,9 +137,6 @@ int main(int argc, char * argv[]) {
     sharedMemoryId = atoi(argv[2]);
 	char *filename = argv[3];
     S2pid = atoi(argv[4]);
-
-    // Open sender sem
-    senderSemId = createSenderSemaphore();
 
     openResource();
 
@@ -150,27 +164,20 @@ int main(int argc, char * argv[]) {
     trafficInfo *t;
 
     while(isSet(l)){
-        /*
-        printf("Message in list: ");
-        printList(l);
-        printf("\n");
-        */
         tmp = l;
         while(isSet(tmp)){
             t = tmp->trafficInfo;
-            if(t->message->delay1 <= 0){
+            if(t->message->delayS1 <= 0){
                 time(&departure);
                 sprintf(log, "Message %d can be send", t->message->id);
 		        printLog("S1", log);
-                
                 t->departure = departure;
-
 		        printTrafficInfo(SENDER_1_FILENAME, t);
                 sendMessage(t->message);
                 tmp = getNext(tmp);
                 l = rimuovi(l, t);
             }else{
-                t->message->delay1 -=1;
+                t->message->delayS1 -=1;
                 tmp = getNext(tmp);
             } 
         }
@@ -178,7 +185,9 @@ int main(int argc, char * argv[]) {
     }
 
     // Send to S2 that msg are end
-    // kill(?)
+    semOp(senderSemId, 4, -1);
+    kill(S2pid, SIGPIPE);
     
     return closeResource();
 }
+

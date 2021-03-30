@@ -38,9 +38,15 @@ int createSenderSemaphore(){
     return id;
 }
 
-void setSenderSemaphore(int semid){   
-    // ??, S1 have msgs, S2 have msgs, S3 have msgs, there's something on PIPES1S2, there's something on PIPES2S3
-    unsigned short semInitVal[] = {1, 1, 1, 1, 1, 1};
+void setSenderSemaphore(int semid){
+    unsigned short semInitVal[] = {
+        0,      // Not use
+        1,      // S1 is running
+        1,      // S2 is running
+        1,      // S3 is running
+        1,      // S1 have message to send
+        1       // S2 have message to send
+    };
     union semun arg;
     arg.array = semInitVal;
 
@@ -48,6 +54,27 @@ void setSenderSemaphore(int semid){
         ErrExit("semctl SETALL failed");
 }
 
+int createReceiverSemaphore(){
+    key_t key = generateKey(KEY_RECEIVER_SEM);
+    int id = generateSemaphore(key, 6, S_IRUSR | S_IWUSR | IPC_CREAT);
+    return id;
+}
+
+void setReceiverSemaphore(int semid){
+    unsigned short semInitVal[] = {
+        0,      // Not use
+        1,      // R1 is running
+        1,      // R2 is running
+        1,      // R3 is running
+        1,      // R2 have message to send
+        1       // R3 have message to send
+    };
+    union semun arg;
+    arg.array = semInitVal;
+
+    if (semctl(semid, 0, SETALL, arg) == 1)
+        ErrExit("semctl SETALL failed");
+}
 
 void removeSemaphore(int semid){
     if (semctl(semid, 0, IPC_RMID, 0) == -1)
@@ -64,6 +91,13 @@ void semOp (int semid, unsigned short sem_num, short sem_op) {
     if (semop(semid, &sop, 1) == -1){
         ErrExit("semop failed");
     }
+}
+
+int getValue(int semid, int sem_num){
+    int value = semctl(semid, sem_num, GETVAL, 0/*ignored*/);
+    if (value == -1)
+        ErrExit("semctl GETVAL failed");
+    return value;
 }
 
 void printSemaphoresValue (int semid) {

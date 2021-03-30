@@ -29,3 +29,15 @@ int openReceiverFIFO(){
     }
     return fd;
 }
+
+void writeFIFO(int fd, char * msg){
+    if(write(fd, msg, MAX_MESSAGE_LENGTH) == -1){
+        ErrExit("Impossible scrivere sulla FIFO");
+    }
+}
+
+void readFIFO(int fd, char msg[MAX_MESSAGE_LENGTH]){
+    if(read(fd, msg, MAX_MESSAGE_LENGTH) == -1){
+        ErrExit("Impossible leggere sulla FIFO");
+    }
+}

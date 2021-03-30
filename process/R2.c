@@ -11,6 +11,51 @@
 #include <stdio.h>
 #include <unistd.h>
 
+node * l;
+int receiverSemId;
+int sharedMemoryId;
+int thereIsMessage = 1;
+int messageQueueId;
+int pipeR1R2Id;
+int pipeR2R3Id;
+message *sharedMemoryData;
+
+void openResource(){
+    // Open receiver sem
+    receiverSemId = createReceiverSemaphore();
+
+    // Open SHM
+    sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
+    // Open MSGQ
+    messageQueueId = getMessageQueue();
+}
+
+int closeResource(){
+    // Close SHM
+    detachSharedMemory(sharedMemoryData);
+    printLog("R2", "detachSharedMemory");
+    
+    // Close MSGQ
+    // Not need to be close
+
+    // Wait S3 end
+    printLog("S2", "Wait S1");
+    semOp(receiverSemId, 1, 0);
+    
+    // Close PIPE R1 R2
+    closePipe(pipeId);
+
+    // Set this process as end
+    semOp(receiverSemId, 1, -1);
+
+	// Wait for 1 second befor end
+    printLog("R1", "Process End");
+	sleep(1);
+	printLog("R1", "Process Exit");
+	return 1;
+}
+
+
 int main(int argc, char * argv[]) {
 
 	printLog("R2", "Process start with exec");

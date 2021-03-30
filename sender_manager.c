@@ -168,7 +168,7 @@ int main(int argc, char * argv[]) {
 	// Wait the end of all child
 	pid_t child;
 	int status;
-	while ((child = wait( & status)) != -1) {
+	while ((child = wait( &status)) != -1) {
 		//printf("returned child %d with status %d\n", child, status);
 	}
 
