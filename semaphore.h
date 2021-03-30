@@ -23,4 +23,6 @@ void removeSemaphore(int semid);
 
 void semOp (int semid, unsigned short sem_num, short sem_op);
 
+int getValue(int semid, int sem_num);
+
 void printSemaphoresValue (int semid);

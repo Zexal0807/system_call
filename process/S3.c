@@ -3,6 +3,7 @@
 
 #include "../err_exit.h"
 #include "../defines.h"
+#include "../struct/message.h"
 #include "../shared_memory.h"
 #include "../message_queue.h"
 #include "../semaphore.h"
@@ -16,21 +17,33 @@
 node * l;
 int initSemId;
 int senderSemId;
-int sharedMemoryId ;
+int sharedMemoryId;
 message * sharedMemoryData;
 int messageQueueId;
 int pipeId ;
 int fifoId ;
+int thereIsMessage = 1;
 
 // SIGPIPE del S2
-void hacklerReadFromPipe(int sig){
-/*
-    message *m  = read(pipeS1S2Id,....);
-    time_t arrival;
-    time(&arrival);
-    trafficInfo *t = createTrafficInfo(m, arrival, departure);
-    aggiungiInCoda(l, t); 
-*/
+void readFromPipeHandle(int sig){
+    int s2HaveMsg = getValue(senderSemId, 5);
+    if(s2HaveMsg == 0){
+        thereIsMessage = 0;
+    }else{
+        char msg [150]; 
+        read(pipeId, msg, 150);
+
+        time_t arrival;
+        message *m = line2message(msg);
+
+        char log[50];
+        sprintf(log, "Receive %d from PIPE S2S3", m->id);
+        printLog("S3", log);
+
+        time(&arrival);
+        trafficInfo *t = createTrafficInfo(m, arrival, arrival);
+        inserisciInCoda(l, t);
+    }
 }
 
 void openResource(){
@@ -44,7 +57,7 @@ void openResource(){
     fifoId = openSenderFIFO();
 
     // Seti signal for read from PIPE
-    signal(SIGPIPE, hacklerReadFromPipe);
+    signal(SIGPIPE, readFromPipeHandle);
 }
 
 int closeResource(){
@@ -112,7 +125,7 @@ int main(int argc, char * argv[]) {
     node *tmp;
 	trafficInfo *t;
 
-	while(isSet(l)){
+	while(thereIsMessage || isSet(l)){
         /*
         printf("Message in list: ");
         printList(l);

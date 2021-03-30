@@ -21,13 +21,28 @@ message * sharedMemoryData;
 int messageQueueId;
 int pipeS1S2Id;
 int pipeS2S3Id;
+int thereIsMessage = 1;
 
 // SIGPIPE del S1
-void hacklerReadFromPipe(int sig){
-/*
-    message *m  = read(pipeS1S2Id,....);
-    aggiungiInCoda(l, m); 
-*/
+void readFromPipeHandle(int sig){
+    int s1HaveMsg = getValue(senderSemId, 4);
+    if(s1HaveMsg == 0){
+        thereIsMessage = 0;
+    }else{
+        char msg [150]; 
+        read(pipeS1S2Id, msg, 150);
+
+        time_t arrival;
+        message *m = line2message(msg);
+
+        char log[50];
+        sprintf(log, "Receive %d from PIPE S1S2", m->id);
+        printLog("S2", log);
+
+        time(&arrival);
+        trafficInfo *t = createTrafficInfo(m, arrival, arrival);
+        inserisciInCoda(l, t);
+    }
 }
 
 void openResource(){
@@ -38,7 +53,7 @@ void openResource(){
     messageQueueId = getMessageQueue();
 
     // Set signal for read form pipe
-    signal(SIGPIPE, hacklerReadFromPipe);
+    signal(SIGPIPE, readFromPipeHandle);
 }
 
 int closeResource(){
@@ -109,17 +124,10 @@ int main(int argc, char * argv[]) {
 	time_t departure;
 
 	char log[50];
-    int thereMessage = 0;
 
-	while(thereMessage || isSet(l)){
+	while(thereIsMessage || isSet(l)){
 		
 /*
-
-
-			// Read message
-			//m = ...
-
-			
 
 			//Send
 			// sendMessage(m);
@@ -137,6 +145,10 @@ int main(int argc, char * argv[]) {
         */
 
 	}
+
+    // Send to S3 that msg are end
+    semOp(senderSemId, 5, -1);
+    kill(S3pid, SIGPIPE);
 
     return closeResource();
 }
