@@ -4,6 +4,7 @@
 #include <math.h>
 
 #include "message.h"
+#include "../defines.h"
 #include "../err_exit.h"
 
 message *createMessage(int id,
@@ -85,7 +86,7 @@ message* line2message(
 }
 
 char* message2line(message *m){
-    char * message = (char*) malloc(sizeof(char) * 150);
+    char * message = (char*) malloc(sizeof(char) * MAX_MESSAGE_LENGTH);
     sprintf(
         message, 
         "%d;%s;%s;%s;%d;%d;%d;%s",

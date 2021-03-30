@@ -28,6 +28,8 @@
 #define HACKLER_FILENAME "output/F7_out.csv"
 #define MAX_HACKLER_ACTION 10
 
+#define MAX_MESSAGE_LENGTH 150
+
 #define IPC_HISTORY_FILENAME "output/F10.csv"
 
 #define KEY_INIT_SEM 01110011       //115
