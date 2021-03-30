@@ -21,6 +21,7 @@ void * attachSharedMemory(int shmid, int shmflg) {
     void *ptr_sh = shmat(shmid, NULL, shmflg);
     if (ptr_sh == (void *)-1)
         ErrExit("shmat failed");
+    return ptr_sh;
 }
 
 void detachSharedMemory(void *ptr_sh) {

@@ -25,8 +25,13 @@ int pipeS2S3Id;
 // SIGPIPE del S1
 void hacklerReadFromPipe(int sig){
 /*
-    message *m  = read(pipeS1S2Id,....);
-    aggiungiInCoda(l, m); 
+    char message [150]; 
+    read(pipeS1S2Id, message, 150);
+    time_t arrival;
+    message * m = line2message(message);
+    time(&arrival);
+    trafficInfo *t = createTrafficInfo(m, arrival, arrival);
+    aggiungiInCoda(l, t); 
 */
 }
 
@@ -114,12 +119,6 @@ int main(int argc, char * argv[]) {
 	while(thereMessage || isSet(l)){
 		
 /*
-
-
-			// Read message
-			//m = ...
-
-			
 
 			//Send
 			// sendMessage(m);

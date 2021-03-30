@@ -110,7 +110,8 @@ node* createTrafficInfoList(
 		if(firstline != 1){
 			message *m = line2message(line);
             time(&arrival);
-            trafficInfo *t = createTrafficInfo(m, arrival, NULL);
+            // Set the departure time ad arrival for not have warning
+            trafficInfo *t = createTrafficInfo(m, arrival, arrival);
 
 			list = inserisciInCoda(list, t);
 		}

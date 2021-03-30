@@ -104,7 +104,7 @@ void sendMessage(message* m){
         free(message);
 
         // Invio segnale a S2 di leggere dalla pipe
-        //kill(S2pid, SIGPIPE);
+        kill(S2pid, SIGPIPE);
 
         printLog("S1", "Message send by PIPE S1S2");
     }
