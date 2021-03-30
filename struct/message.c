@@ -40,7 +40,7 @@ message* line2message(
 	int delay1, 
 		delay2,
 		delay3;
-	char *communication;
+	char *comunication;
 	
 	char *field = strtok(buffer, ";");
 	
@@ -70,7 +70,7 @@ message* line2message(
 				delay3 = atoi(field);
 				break;
 			case 7:
-				communication = strdup(field);
+				comunication = strdup(field);
 				break;
 			default:
 				break;
@@ -81,5 +81,22 @@ message* line2message(
 	}
 
 	//creo il messaggio
-	return createMessage(id, content, sender, receiver, delay1, delay2, delay3, communication);
+	return createMessage(id, content, sender, receiver, delay1, delay2, delay3, comunication);
+}
+
+char* message2line(message *m){
+    char message[150];
+    sprintf(
+        message, 
+        "%d;%s;%s;%s;%d;%d;%d;%s",
+        m->id,
+        m->content,
+        process2string(m->sender),
+        process2string(m->receiver),
+        m->delay1,
+        m->delay2,
+        m->delay3,
+        m->comunication
+    );
+    return message;
 }

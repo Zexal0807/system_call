@@ -33,3 +33,6 @@ message *createMessage(int id, char* content, process* sender, process* receiver
 	Funzione per creare un messaggio partendo da una riga
 */
 message* line2message(char *buffer);
+
+
+char* message2line(message *m);
