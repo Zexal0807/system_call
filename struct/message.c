@@ -85,7 +85,7 @@ message* line2message(
 }
 
 char* message2line(message *m){
-    char message[150];
+    char * message = (char*) malloc(sizeof(char) * 150);
     sprintf(
         message, 
         "%d;%s;%s;%s;%d;%d;%d;%s",

@@ -99,7 +99,9 @@ void sendMessage(message* m){
         }
     }else{
         // Send to S2 by pipe
-        //write(pipeId, )
+        char * message = message2line(m);
+        write(pipeId, m, strlen(message));
+        free(message);
 
         // Invio segnale a S2 di leggere dalla pipe
         //kill(S2pid, SIGPIPE);

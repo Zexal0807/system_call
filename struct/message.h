@@ -34,5 +34,7 @@ message *createMessage(int id, char* content, process* sender, process* receiver
 */
 message* line2message(char *buffer);
 
-
+/*
+	Funzione per creare un messaggio in csv partendo da una struct messaggio
+*/
 char* message2line(message *m);
