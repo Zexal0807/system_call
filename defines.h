@@ -28,16 +28,18 @@
 #define HACKLER_FILENAME "output/F7_out.csv"
 #define MAX_HACKLER_ACTION 10
 
-#define KEY_INIT_SEM 1
+#define IPC_HISTORY_FILENAME "output/F10.csv"
+
+#define KEY_INIT_SEM 01110011       //115
 #define KEY_SENDER_SEM 2
 #define KEY_PIPE_S1_S2 3
 #define KEY_PIPE_S2_S3 4
 #define KEY_RECEIVER_SEM 5
 #define KEY_PIPE_R1_R2 6
 #define KEY_PIPE_R2_R3 7
-#define KEY_SHARED_MEMORY 8
-#define KEY_MESSAGE_QUEUE 9
-#define KEY_FIFO "fifo.dat"
+#define KEY_SHARED_MEMORY 01101101  //109
+#define KEY_MESSAGE_QUEUE 01110001  //113
+#define KEY_FIFO "tmp/my_fifo.txt"
 
 #endif
 
