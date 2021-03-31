@@ -30,9 +30,8 @@ void readFromPipeHandle(int sig){
     if(s2HaveMsg == 0){
         thereIsMessage = 0;
     }else{
-        char msg [150]; 
-        read(pipeId, msg, 150);
-
+        char msg [MAX_MESSAGE_LENGTH];
+        read(pipeId, msg, MAX_MESSAGE_LENGTH);
 
         time_t arrival;
         message *m = line2message(msg);
@@ -43,7 +42,8 @@ void readFromPipeHandle(int sig){
 
         time(&arrival);
         trafficInfo *t = createTrafficInfo(m, arrival, arrival);
-        inserisciInCoda(l, t);
+        
+        l = inserisciInCoda(l, t);
     }
 }
 

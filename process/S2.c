@@ -13,7 +13,7 @@
 #include <unistd.h>
 #include <signal.h>
 
-node *l;
+node *l = NULL;
 int initSemId;
 int senderSemId;
 int sharedMemoryId;
@@ -29,8 +29,8 @@ void readFromPipeHandle(int sig){
     if(s1HaveMsg == 0){
         thereIsMessage = 0;
     }else{
-        char msg [150]; 
-        read(pipeS1S2Id, msg, 150);
+        char msg [MAX_MESSAGE_LENGTH];
+        read(pipeS1S2Id, msg, MAX_MESSAGE_LENGTH);
 
         time_t arrival;
         message *m = line2message(msg);
@@ -41,7 +41,8 @@ void readFromPipeHandle(int sig){
 
         time(&arrival);
         trafficInfo *t = createTrafficInfo(m, arrival, arrival);
-        inserisciInCoda(l, t);
+        
+        l = inserisciInCoda(l, t);
     }
 }
 
@@ -126,7 +127,9 @@ int main(int argc, char * argv[]) {
 	char log[50];
 
 	while(thereIsMessage || isSet(l)){
-		
+		/*printf("S2 list: ");
+        printList(l);
+        printf("\n");*/
 
 	}
 

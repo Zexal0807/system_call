@@ -87,6 +87,7 @@ message* line2message(
 
 char* message2line(message *m){
     char * message = (char*) malloc(sizeof(char) * MAX_MESSAGE_LENGTH);
+    strncpy(message, "", strlen(message));
     sprintf(
         message, 
         "%d;%s;%s;%s;%d;%d;%d;%s",

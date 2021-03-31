@@ -97,13 +97,15 @@ void sendMessage(message* m){
     if(m->sender->number == 1){
         if (strcmp(m->comunication, "Q") == 0) {
             printLog("S1", "Message send by MessageQueue");
+
         }else if (strcmp(m->comunication, "SH") == 0) {
             printLog("S1", "Message send by SharedMemory");
+            
         }
     }else{
         // Send to S2 by pipe
-        char * message = message2line(m);
-        write(pipeId, m, strlen(message));
+        char *message = message2line(m);
+        write(pipeId, message, MAX_MESSAGE_LENGTH);
         free(message);
 
         // Invio segnale a S2 di leggere dalla pipe
