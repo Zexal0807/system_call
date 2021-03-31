@@ -23,6 +23,9 @@ int pipeId;
 int S2pid;
 
 void openResource(){
+    // Open sender sem
+    senderSemId = createSenderSemaphore();
+
     // Open SHM
     sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
     // Open MSGQ
@@ -121,9 +124,6 @@ int main(int argc, char * argv[]) {
 	char *filename = argv[3];
     S2pid = atoi(argv[4]);
 
-    // Open sender sem
-    senderSemId = createSenderSemaphore();
-
     openResource();
 
 	l = createTrafficInfoList(filename);
@@ -150,11 +150,6 @@ int main(int argc, char * argv[]) {
     trafficInfo *t;
 
     while(isSet(l)){
-        /*
-        printf("Message in list: ");
-        printList(l);
-        printf("\n");
-        */
         tmp = l;
         while(isSet(tmp)){
             t = tmp->trafficInfo;
@@ -162,9 +157,7 @@ int main(int argc, char * argv[]) {
                 time(&departure);
                 sprintf(log, "Message %d can be send", t->message->id);
 		        printLog("S1", log);
-                
                 t->departure = departure;
-
 		        printTrafficInfo(SENDER_1_FILENAME, t);
                 sendMessage(t->message);
                 tmp = getNext(tmp);

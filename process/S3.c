@@ -33,6 +33,7 @@ void readFromPipeHandle(int sig){
         char msg [150]; 
         read(pipeId, msg, 150);
 
+
         time_t arrival;
         message *m = line2message(msg);
 
@@ -47,6 +48,9 @@ void readFromPipeHandle(int sig){
 }
 
 void openResource(){
+    // Open sender sem
+    senderSemId = createSenderSemaphore();
+
     // Open SHM
     sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
 
@@ -85,10 +89,13 @@ void sendMessage(message* m){
     printLog("S3", "Message can be send");
     if (strcmp(m->comunication, "Q") == 0) {
         printLog("S3", "Message send by MessageQueue");
+
     }else if (strcmp(m->comunication, "SH") == 0) {
         printLog("S3", "Message send by SharedMemory");
+
     }else if (strcmp(m->comunication, "FIFO") == 0) {
         printLog("S3", "Message send by FIFO");
+
     }
 }
 
@@ -100,9 +107,6 @@ int main(int argc, char * argv[]) {
     int initSemId = atoi(argv[0]);
     pipeId = atoi(argv[1]);
     sharedMemoryId = atoi(argv[2]);
-
-    // Open sender sem
-    senderSemId = createSenderSemaphore();
 
 	openResource();
 /*
@@ -126,11 +130,6 @@ int main(int argc, char * argv[]) {
 	trafficInfo *t;
 
 	while(thereIsMessage || isSet(l)){
-        /*
-        printf("Message in list: ");
-        printList(l);
-        printf("\n");
-        */
         tmp = l;
         while(isSet(tmp)){
             t = tmp->trafficInfo;
@@ -138,9 +137,7 @@ int main(int argc, char * argv[]) {
                 time(&departure);
                 sprintf(log, "Message %d can be send", t->message->id);
 		        printLog("S3", log);
-                
                 t->departure = departure;
-
 		        printTrafficInfo(SENDER_3_FILENAME, t);
                 sendMessage(t->message);
                 tmp = getNext(tmp);

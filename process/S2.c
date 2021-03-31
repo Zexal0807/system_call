@@ -46,6 +46,10 @@ void readFromPipeHandle(int sig){
 }
 
 void openResource(){
+    
+    // Open sender sem
+    senderSemId = createSenderSemaphore();
+
     // Open SHM
     sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
     
@@ -107,9 +111,6 @@ int main(int argc, char * argv[]) {
     sharedMemoryId = atoi(argv[3]);
     int S3pid = atoi(argv[4]);
 
-    // Open sender sem
-    senderSemId = createSenderSemaphore();
-
 	openResource();
     
     // Set this process as end init 
@@ -120,29 +121,12 @@ int main(int argc, char * argv[]) {
     
     printLog("S2", "End init start");
 
-	time_t arrival;
 	time_t departure;
 
 	char log[50];
 
 	while(thereIsMessage || isSet(l)){
 		
-/*
-
-			//Send
-			// sendMessage(m);
-		
-			//sprintf(log, "Elaborated message: %d", m->id);
-			//printLog("S2", log);
-		
-			time(&departure);
-
-			//t = createTrafficInfo(m, arrival, departure);
-			//printTrafficInfo(SENDER_2_FILENAME, t);
-		}else{
-			return closeResource();
-		}
-        */
 
 	}
 
