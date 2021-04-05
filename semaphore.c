@@ -54,6 +54,27 @@ void setSenderSemaphore(int semid){
         ErrExit("semctl SETALL failed");
 }
 
+int createReceiverSemaphore(){
+    key_t key = generateKey(KEY_RECEIVER_SEM);
+    int id = generateSemaphore(key, 6, S_IRUSR | S_IWUSR | IPC_CREAT);
+    return id;
+}
+
+void setReceiverSemaphore(int semid){
+    unsigned short semInitVal[] = {
+        0,      // Not use
+        1,      // R1 is running
+        1,      // R2 is running
+        1,      // R3 is running
+        1,      // R2 have message to send
+        1       // R3 have message to send
+    };
+    union semun arg;
+    arg.array = semInitVal;
+
+    if (semctl(semid, 0, SETALL, arg) == 1)
+        ErrExit("semctl SETALL failed");
+}
 
 void removeSemaphore(int semid){
     if (semctl(semid, 0, IPC_RMID, 0) == -1)

@@ -60,7 +60,7 @@ void openResource(){
     // OPEN FIFO
     fifoId = openSenderFIFO();
 
-    // Seti signal for read from PIPE
+    // Set signal for read from PIPE
     signal(SIGPIPE, readFromPipeHandle);
 }
 
@@ -88,8 +88,8 @@ int closeResource(){
 void sendMessage(message* m){
     printLog("S3", "Message can be send");
     if (strcmp(m->comunication, "Q") == 0) {
+        sendToR1(messageQueueId, m);
         printLog("S3", "Message send by MessageQueue");
-
     }else if (strcmp(m->comunication, "SH") == 0) {
         printLog("S3", "Message send by SharedMemory");
 
@@ -133,7 +133,7 @@ int main(int argc, char * argv[]) {
         tmp = l;
         while(isSet(tmp)){
             t = tmp->trafficInfo;
-            if(t->message->delay3 <= 0){
+            if(t->message->delayS3 <= 0){
                 time(&departure);
                 sprintf(log, "Message %d can be send", t->message->id);
 		        printLog("S3", log);
@@ -143,7 +143,7 @@ int main(int argc, char * argv[]) {
                 tmp = getNext(tmp);
                 l = rimuovi(l, t);
             }else{
-                t->message->delay3 -=1;
+                t->message->delayS3 -=1;
                 tmp = getNext(tmp);
             } 
         }

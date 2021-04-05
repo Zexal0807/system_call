@@ -8,3 +8,7 @@ void createFIFO();
 int openSenderFIFO();
 
 int openReceiverFIFO();
+
+void writeFIFO(int fd, char * msg);
+
+void readFIFO(int fd, char * msg);

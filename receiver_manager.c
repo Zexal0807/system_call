@@ -28,6 +28,13 @@ int main(int argc, char * argv[]) {
     // Wait all process open sem
     semOp(initSemId, 0, 0);
 
+    int pipeR1R2[2];
+    int pipeR2R3[2];
+    createPipe(pipeR1R2);
+    createPipe(pipeR2R3);
+
+    int shmid = createSharedMemory();
+
 	// Define the 3 struct process
 	child * R1 = NULL;
 	child * R2 = NULL;
@@ -38,10 +45,22 @@ int main(int argc, char * argv[]) {
 	if (pid == -1) {
 		ErrExit("Receiver Manager not fork R1");
 	} else if (pid == 0) {
-		char string_initSemId[5];
+        char string_initSemId[5];
         sprintf(string_initSemId, "%d", initSemId);
+
+        char string_piper1r2[5];
+        sprintf(string_piper1r2, "%d", pipeR1R2[0]);
+        closePipe(pipeR1R2[1]);
+        closePipe(pipeR2R3[0]);
+        closePipe(pipeR2R3[1]);
+
+        char string_shmId[5];
+        sprintf(string_shmId, "%d", shmid);
+
         char * argv[] = {
 			string_initSemId,
+            string_piper1r2,
+            string_shmId,
             NULL
 		};
 		execvp("./R1", argv);
@@ -89,6 +108,9 @@ int main(int argc, char * argv[]) {
 
     // Wait all child init end
     semOp(initSemId, 2, 0);
+
+    int receiverSemId = createReceiverSemaphore();
+    setReceiverSemaphore(receiverSemId);
 
     // Set this process as end init     
     semOp(initSemId, 4, -1);

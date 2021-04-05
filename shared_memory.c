@@ -30,7 +30,6 @@ void detachSharedMemory(void *ptr_sh) {
     }
 }
 
-
 void removeSharedMemory(int shmid) {
     if(shmctl(shmid, IPC_RMID, NULL) == -1){
         ErrExit("shmctl failed");

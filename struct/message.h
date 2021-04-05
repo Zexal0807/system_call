@@ -17,9 +17,12 @@ typedef struct {
 	char *content;
 	process *sender;
 	process *receiver;
-	int delay1;
-	int delay2;
-	int delay3;
+	int delayS1;
+	int delayS2;
+	int delayS3;
+    int delayR1;
+	int delayR2;
+	int delayR3;
 	char* comunication;
 } message;
 

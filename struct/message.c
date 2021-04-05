@@ -23,9 +23,12 @@ message *createMessage(int id,
 	m->content = strdup(content);
 	m->sender = sender;
 	m->receiver = receiver;
-	m->delay1 = delay1;
-	m->delay2 = delay2;
-	m->delay3 = delay3;
+	m->delayS1 = delay1;
+	m->delayS2 = delay2;
+	m->delayS3 = delay3;
+    m->delayR1 = delay1;
+	m->delayR2 = delay2;
+	m->delayR3 = delay3;
 	m->comunication = comunication;
 
 	return m;
@@ -95,9 +98,9 @@ char* message2line(message *m){
         m->content,
         process2string(m->sender),
         process2string(m->receiver),
-        m->delay1,
-        m->delay2,
-        m->delay3,
+        m->delayR1,
+        m->delayR2,
+        m->delayR3,
         m->comunication
     );
     return message;

@@ -96,8 +96,8 @@ void hacklerShutDownHandle(int sig){
 void sendMessage(message* m){
     if(m->sender->number == 1){
         if (strcmp(m->comunication, "Q") == 0) {
+            sendToR1(messageQueueId, m);
             printLog("S1", "Message send by MessageQueue");
-
         }else if (strcmp(m->comunication, "SH") == 0) {
             printLog("S1", "Message send by SharedMemory");
             
@@ -155,7 +155,7 @@ int main(int argc, char * argv[]) {
         tmp = l;
         while(isSet(tmp)){
             t = tmp->trafficInfo;
-            if(t->message->delay1 <= 0){
+            if(t->message->delayS1 <= 0){
                 time(&departure);
                 sprintf(log, "Message %d can be send", t->message->id);
 		        printLog("S1", log);
@@ -165,7 +165,7 @@ int main(int argc, char * argv[]) {
                 tmp = getNext(tmp);
                 l = rimuovi(l, t);
             }else{
-                t->message->delay1 -=1;
+                t->message->delayS1 -=1;
                 tmp = getNext(tmp);
             } 
         }
@@ -178,3 +178,4 @@ int main(int argc, char * argv[]) {
     
     return closeResource();
 }
+
