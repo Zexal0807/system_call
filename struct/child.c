@@ -10,7 +10,7 @@
 #include "../err_exit.h"
 
 #ifndef CHILD_FILE_HEADER
-#define CHILD_FILE_HEADER "Id;Pid\n"
+#define CHILD_FILE_HEADER "ID;PID\n"
 #endif
 
 child *createChild(
