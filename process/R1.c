@@ -55,13 +55,27 @@ int closeResource(){
 	return 1;
 }
 
+void sendMessage(message* m){
+    char log[50];
+
+    printf("..%s...\n", message2line(m));
+
+    if(m->receiver->number == 1){
+        sprintf(log, "Message %d arrive", m->id);
+        printLog("R1", log);
+    }else{
+        sprintf(log, "Error with message %d", m->id);
+        printLog("R1", log);
+    }
+}
+
 void tryReadMSQ(){
     message * m =  readR1(messageQueueId);
     if(m != NULL){
         time_t arrival;
 
         char log[50];
-        sprintf(log, "Receive %d from Message Queue", m->id);
+        sprintf(log, "Receive %d from MessageQueue", m->id);
         printLog("R1", log);
 
         time(&arrival);
@@ -113,6 +127,7 @@ int main(int argc, char * argv[]) {
 		        printLog("R1", log);
                 t->departure = departure;
 		        printTrafficInfo(RECEIVER_1_FILENAME, t);
+                sendMessage(t->message);
                 tmp = getNext(tmp);
                 l = rimuovi(l, t);
             }else{

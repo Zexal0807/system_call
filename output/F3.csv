@@ -1,0 +1,3 @@
+ID;Message;IDSender;IDReceiver;TimeArrival;TimeDeparture
+3;MyMsg;S3;R3;08:16:35;08:16:38
+1;Ciao;S3;R2;08:16:37;08:16:40

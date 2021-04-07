@@ -70,23 +70,45 @@ int main(int argc, char * argv[]) {
 	R1 = createChild(RECEIVER_1(), pid);
 	printChild(RECEIVER_FILENAME, R1);
 
+    char string_R1pid[5];
+    sprintf(string_R1pid, "%d", pid);
+
 	// Try to create a child, in each child functione must me an exit
 	pid = fork();
 	if (pid == -1) {
 		ErrExit("Receiver Manager not fork R2");
 	} else if (pid == 0) {
-		char string_initSemId[5];
+        char string_initSemId[5];
         sprintf(string_initSemId, "%d", initSemId);
+
+        char string_piper1r2[5];
+        sprintf(string_piper1r2, "%d", pipeR1R2[1]);
+        closePipe(pipeR1R2[0]);
+        char string_piper2r3[5];
+        sprintf(string_piper2r3, "%d", pipeR2R3[0]);
+        closePipe(pipeR2R3[1]);
+
+        char string_shmId[5];
+        sprintf(string_shmId, "%d", shmid);
+
         char * argv[] = {
 			string_initSemId,
+            string_piper1r2,
+            string_piper2r3,
+            string_shmId,
+            string_R1pid,
             NULL
 		};
+
 		execvp("./R2", argv);
 		ErrExit("R2 not start");
 	}
 	printLog("RM", "R2 start");
 	R2 = createChild(RECEIVER_2(), pid);
 	printChild(RECEIVER_FILENAME, R2);
+
+    char string_R2pid[5];
+    sprintf(string_R2pid, "%d", pid);
 
 	// Try to create a child, in each child functione must me an exit
 	pid = fork();
@@ -95,8 +117,21 @@ int main(int argc, char * argv[]) {
 	} else if (pid == 0) {
 		char string_initSemId[5];
         sprintf(string_initSemId, "%d", initSemId);
+        
+        char string_piper2r3[5];
+        sprintf(string_piper2r3, "%d", pipeR2R3[1]);
+        closePipe(pipeR1R2[0]);
+        closePipe(pipeR1R2[1]);
+        closePipe(pipeR2R3[0]);
+
+        char string_shmId[5];
+        sprintf(string_shmId, "%d", shmid);
+
         char * argv[] = {
 			string_initSemId,
+            string_piper2r3,
+            string_shmId,
+            string_R2pid,
             NULL
 		};
 		execvp("./R3", argv);
