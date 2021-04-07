@@ -35,3 +35,5 @@ void removeSharedMemory(int shmid) {
         ErrExit("shmctl failed");
     }
 }
+
+

@@ -94,10 +94,23 @@ void sendMessage(message* m){
     printLog("S2", "Message can be send");
     if(m->sender->number == 2){
         if (strcmp(m->comunication, "Q") == 0) {
-            sendToR1(messageQueueId, m);
+            switch(m->receiver->number){
+                case 1:
+                    sendToR1(messageQueueId, m);
+                    break;
+                case 2:
+                    sendToR1(messageQueueId, m);
+                    break;
+                case 3:
+                    sendToR1(messageQueueId, m);
+                    break;
+                default:
+                    ErrExit("receiver not exist");
+            }
             printLog("S2", "Message send by MessageQueue");
         }else if (strcmp(m->comunication, "SH") == 0) {
             printLog("S2", "Message send by SharedMemory");
+            
         }
     }else{
         // Send to S3 by pipe

@@ -55,6 +55,22 @@ int closeResource(){
 	return 1;
 }
 
+void tryReadMSQ(){
+    message * m =  readR1(messageQueueId);
+    if(m != NULL){
+        time_t arrival;
+
+        char log[50];
+        sprintf(log, "Receive %d from Message Queue", m->id);
+        printLog("R1", log);
+
+        time(&arrival);
+        trafficInfo *t = createTrafficInfo(m, arrival, arrival);
+        
+        l = inserisciInCoda(l, t);
+    }
+}
+
 int main(int argc, char * argv[]) {
 
 	printLog("R1", "Process start with exec");
@@ -83,7 +99,11 @@ int main(int argc, char * argv[]) {
 
     while(thereIsMessage || isSet(l)){
         // Try to read form msgqueue
+        tryReadMSQ();
+
         // Try to read form shared memory
+
+
         tmp = l;
         while(isSet(tmp)){
             t = tmp->trafficInfo;
@@ -104,31 +124,4 @@ int main(int argc, char * argv[]) {
 	}
     
     return closeResource();
-/*
-	// Messaggio di test
-	message *m = createMessage(
-		1, 
-		"Ciao come va?",
-		SENDER_1(),
-		RECEIVER_1(),
-		1,
-		1,
-		1,
-		"H"
-	);
-	time(&arrival);
-
-	char log[50];
-	sprintf(log, "Elaborated message: %d", m->id);
-	//printLog("R1", log);
-		
-	time(&departure);
-
-	trafficInfo *t = createTrafficInfo(m, arrival, departure);
-	printTrafficInfo(RECEIVER_1_FILENAME, t);
-
-	// Wait for 1 second befor end
-	sleep(1);
-	printLog("R1", "Process End");
-	return 1;*/
 }

@@ -96,7 +96,19 @@ void hacklerShutDownHandle(int sig){
 void sendMessage(message* m){
     if(m->sender->number == 1){
         if (strcmp(m->comunication, "Q") == 0) {
-            sendToR1(messageQueueId, m);
+            switch(m->receiver->number){
+                case 1:
+                    sendToR1(messageQueueId, m);
+                    break;
+                case 2:
+                    sendToR1(messageQueueId, m);
+                    break;
+                case 3:
+                    sendToR1(messageQueueId, m);
+                    break;
+                default:
+                    ErrExit("receiver not exist");
+            }
             printLog("S1", "Message send by MessageQueue");
         }else if (strcmp(m->comunication, "SH") == 0) {
             printLog("S1", "Message send by SharedMemory");

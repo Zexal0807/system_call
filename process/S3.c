@@ -88,11 +88,23 @@ int closeResource(){
 void sendMessage(message* m){
     printLog("S3", "Message can be send");
     if (strcmp(m->comunication, "Q") == 0) {
-        sendToR1(messageQueueId, m);
+        switch(m->receiver->number){
+            case 1:
+                sendToR1(messageQueueId, m);
+                break;
+            case 2:
+                sendToR1(messageQueueId, m);
+                break;
+            case 3:
+                sendToR1(messageQueueId, m);
+                break;
+            default:
+                ErrExit("receiver not exist");
+        }
         printLog("S3", "Message send by MessageQueue");
     }else if (strcmp(m->comunication, "SH") == 0) {
         printLog("S3", "Message send by SharedMemory");
-
+            
     }else if (strcmp(m->comunication, "FIFO") == 0) {
         printLog("S3", "Message send by FIFO");
 

@@ -6,6 +6,8 @@
 #include <sys/stat.h>
 #include <errno.h>
 
+size_t queueMsgSize = sizeof(queueMsg) - sizeof(long);
+
 int getMessageQueue(){
     int id = msgget(KEY_MESSAGE_QUEUE, IPC_CREAT | S_IRUSR | S_IWUSR);
     if(id == -1)
@@ -21,9 +23,7 @@ void sendToR1(int msqid, message *m){
     char * textMessage = message2line(m);
     memcpy(msg.message, textMessage, strlen(textMessage) + 1);
 
-    size_t size = sizeof(queueMsg) - sizeof(long);
-
-    if(msgsnd(msqid, &msg, size, 0) == -1){
+    if(msgsnd(msqid, &msg, queueMsgSize, 0) == -1){
         ErrExit("Impossible inviare sulla message queue");
     }
 }
@@ -35,9 +35,7 @@ void sendToR2(int msqid, message *m){
     char * textMessage = message2line(m);
     memcpy(msg.message, textMessage, strlen(textMessage) + 1);
 
-    size_t size = sizeof(queueMsg) - sizeof(long);
-
-    if(msgsnd(msqid, &msg, size, 0) == -1){
+    if(msgsnd(msqid, &msg, queueMsgSize, 0) == -1){
         ErrExit("Impossible inviare sulla message queue");
     }
 }
@@ -49,29 +47,46 @@ void sendToR3(int msqid, message *m){
     char * textMessage = message2line(m);
     memcpy(msg.message, textMessage, strlen(textMessage) + 1);
 
-    size_t size = sizeof(queueMsg) - sizeof(long);
-
-    if(msgsnd(msqid, &msg, size, 0) == -1){
+    if(msgsnd(msqid, &msg, queueMsgSize, 0) == -1){
         ErrExit("Impossible inviare sulla message queue");
     }
 }
 
-char * readR1(int msqid){
+message * readR1(int msqid){
     queueMsg msg;
-    if (msgrcv(msqid, &msg, 0, 1, IPC_NOWAIT) == -1) {
-        if (errno == ENOMSG) {
-            printf("No message with type 1 in the queue\n");
-        } else {
+    if (msgrcv(msqid, &msg, queueMsgSize, 1, IPC_NOWAIT) == -1) {
+        if (errno != ENOMSG) {
             ErrExit("msgrcv failed");
         }
     } else {
-        return msg.message;
+        return line2message(msg.message);
     }
-    return "";
+    return NULL;
 }
 
+message * readR2(int msqid){
+    queueMsg msg;
+    if (msgrcv(msqid, &msg, queueMsgSize, 2, IPC_NOWAIT) == -1) {
+        if (errno != ENOMSG) {
+            ErrExit("msgrcv failed");
+        }
+    } else {
+        return line2message(msg.message);
+    }
+    return NULL;
+}
 
-
+message * readR3(int msqid){
+    queueMsg msg;
+    if (msgrcv(msqid, &msg, queueMsgSize, 3, IPC_NOWAIT) == -1) {
+        if (errno != ENOMSG) {
+            ErrExit("msgrcv failed");
+        }
+    } else {
+        return line2message(msg.message);
+    }
+    return NULL;
+}
 
 void deleteMessageQueue(int id){
     if (msgctl(id, IPC_RMID, NULL) == -1)
