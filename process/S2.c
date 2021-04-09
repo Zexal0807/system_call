@@ -67,7 +67,7 @@ int closeResource(){
     
     // Wait S3 end
     printLog("S2", "Wait S3");
-    semOp(initSemId, SEM_S3_IS_RUNNNING, 0);
+    semOp(initSemId, SEM_S3_IS_RUNNING, 0);
 
 	// Close PIPE S2 S3
     closePipe(pipeS2S3Id);
@@ -76,7 +76,7 @@ int closeResource(){
     closePipe(pipeS1S2Id);
 
     // Set this process as end
-    semOp(initSemId, SEM_S2_IS_RUNNNING, -1);
+    semOp(initSemId, SEM_S2_IS_RUNNING, -1);
 
 	// Wait for 2 second befor end
 	printLog("S2", "Process End");

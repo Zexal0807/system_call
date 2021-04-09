@@ -41,7 +41,7 @@ int closeResource(){
 
     // Wait R3 end
     printLog("R2", "Wait R3");
-    semOp(initSemId, SEM_R3_IS_RUNNNING, 0);
+    semOp(initSemId, SEM_R3_IS_RUNNING, 0);
     
     // Close PIPE R1 R2
     closePipe(pipeR1R2Id);
@@ -49,13 +49,20 @@ int closeResource(){
     closePipe(pipeR2R3Id);
 
     // Set this process as end
-    semOp(initSemId, SEM_R2_IS_RUNNNING, -1);
+    semOp(initSemId, SEM_R2_IS_RUNNING, -1);
 
 	// Wait for 1 second befor end
     printLog("R2", "Process End");
 	sleep(2);
 	printLog("R2", "Process Exit");
 	return 1;
+}
+
+void testShutDown(){
+    int s1IsRunning = getValue(initSemId, SEM_S1_IS_RUNNING);
+    if(s1IsRunning == 0){
+        thereIsMessage = 0;
+    }
 }
 
 void tryReadMSQ(){
@@ -120,6 +127,9 @@ int main(int argc, char * argv[]) {
     trafficInfo *t;
 
     while(thereIsMessage || isSet(l)){
+        // Check if the sender are still running
+        testShutDown();
+
         // Try to read form msgqueue
         tryReadMSQ();
 

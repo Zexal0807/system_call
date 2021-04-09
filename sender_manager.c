@@ -25,9 +25,6 @@ int main(int argc, char * argv[]) {
 	printLog("SM", "Process start");
 
     int initSemId = createSemaphore();
-    setSemaphore(initSemId);
-    printSemaphoresValue(initSemId);
-
 
     semOp(initSemId, SEM_START, -1);
 

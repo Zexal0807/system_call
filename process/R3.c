@@ -39,13 +39,13 @@ int closeResource(){
 
     // Wait S3 end
     printLog("R3", "Wait R2");
-    semOp(initSemId, SEM_R2_IS_RUNNNING, 0);
+    semOp(initSemId, SEM_R2_IS_RUNNING, 0);
     
     // Close PIPE R2 R3
     closePipe(pipeId);
 
     // Set this process as end
-    semOp(initSemId, SEM_R3_IS_RUNNNING, -1);
+    semOp(initSemId, SEM_R3_IS_RUNNING, -1);
 
 	// Wait for 1 second befor end
     printLog("R3", "Process End");
@@ -54,6 +54,36 @@ int closeResource(){
 	return 1;
 }
 
+
+void testShutDown(){
+    int s1IsRunning = getValue(initSemId, SEM_S1_IS_RUNNING);
+    if(s1IsRunning == 0){
+        thereIsMessage = 0;
+    }
+}
+/*
+void tryReadFIFO(){
+    int s1HaveMsg = getValue(initSemId, SEM_S1_HAVE_MESSAGE_TO_SEND_BY_PIPE);
+    if(s1HaveMsg == 0){
+        thereIsMessage = 0;
+    }else{
+        char msg [MAX_MESSAGE_LENGTH];
+        read(pipeS1S2Id, msg, MAX_MESSAGE_LENGTH);
+
+        time_t arrival;
+        message *m = line2message(msg);
+
+        char log[50];
+        sprintf(log, "Receive %d from PIPE S1S2", m->id);
+        printLog("S2", log);
+
+        time(&arrival);
+        trafficInfo *t = createTrafficInfo(m, arrival, arrival);
+        
+        l = inserisciInCoda(l, t);
+    }
+}
+*/
 void tryReadMSQ(){
     message * m =  readR3(messageQueueId);
     if(m != NULL){
@@ -115,6 +145,9 @@ int main(int argc, char * argv[]) {
     trafficInfo *t;
 
     while(thereIsMessage || isSet(l)){
+        // Check if the sender are still running
+        testShutDown();
+
         // Try to read form msgqueue
         tryReadMSQ();
 

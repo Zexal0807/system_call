@@ -72,7 +72,7 @@ int closeResource(){
     close(fifoId);
 
 	// Set this process as end
-	semOp(initSemId, SEM_S3_IS_RUNNNING, -1);
+	semOp(initSemId, SEM_S3_IS_RUNNING, -1);
 
 	// Wait for 3 second befor end
 	printLog("S3", "Process End");

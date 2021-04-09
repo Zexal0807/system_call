@@ -37,13 +37,13 @@ int closeResource(){
 
     // Wait S2 end
     printLog("S1", "Wait S2");
-    semOp(initSemId, SEM_R2_IS_RUNNNING, 0);
+    semOp(initSemId, SEM_R2_IS_RUNNING, 0);
     
     // Close PIPE R1 R2
     closePipe(pipeId);
 
     // Set this process as end
-    semOp(initSemId, SEM_R1_IS_RUNNNING, -1);
+    semOp(initSemId, SEM_R1_IS_RUNNING, -1);
 
 	// Wait for 1 second befor end
     printLog("R1", "Process End");
@@ -63,6 +63,13 @@ void sendMessage(message* m){
     }else{
         sprintf(log, "Error with message %d", m->id);
         printLog("R1", log);
+    }
+}
+
+void testShutDown(){
+    int s1IsRunning = getValue(initSemId, SEM_S1_IS_RUNNING);
+    if(s1IsRunning == 0){
+        thereIsMessage = 0;
     }
 }
 
@@ -109,11 +116,13 @@ int main(int argc, char * argv[]) {
     trafficInfo *t;
 
     while(thereIsMessage || isSet(l)){
+        // Check if the sender are still running
+        testShutDown();
+
         // Try to read form msgqueue
         tryReadMSQ();
 
         // Try to read form shared memory
-
 
         tmp = l;
         while(isSet(tmp)){
