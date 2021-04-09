@@ -14,7 +14,7 @@
 #include <signal.h>
 
 node * l;
-int receiverSemId;
+int initSemId;
 int sharedMemoryId;
 int thereIsMessage = 1;
 int messageQueueId;
@@ -24,8 +24,6 @@ int R1pid;
 message *sharedMemoryData;
 
 void openResource(){
-    // Open receiver sem
-    receiverSemId = createReceiverSemaphore();
 
     // Open SHM
     sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
@@ -41,9 +39,9 @@ int closeResource(){
     // Close MSGQ
     // Not need to be close
 
-    // Wait S3 end
-    printLog("S2", "Wait S1");
-    semOp(receiverSemId, 1, 0);
+    // Wait R3 end
+    printLog("R2", "Wait R3");
+    semOp(initSemId, SEM_R3_IS_RUNNNING, 0);
     
     // Close PIPE R1 R2
     closePipe(pipeR1R2Id);
@@ -51,12 +49,12 @@ int closeResource(){
     closePipe(pipeR2R3Id);
 
     // Set this process as end
-    semOp(receiverSemId, 1, -1);
+    semOp(initSemId, SEM_R2_IS_RUNNNING, -1);
 
 	// Wait for 1 second befor end
-    printLog("R1", "Process End");
-	sleep(1);
-	printLog("R1", "Process Exit");
+    printLog("R2", "Process End");
+	sleep(2);
+	printLog("R2", "Process Exit");
 	return 1;
 }
 

@@ -26,6 +26,8 @@ int main(int argc, char * argv[]) {
 
     int initSemId = createSemaphore();
     setSemaphore(initSemId);
+    printSemaphoresValue(initSemId);
+
 
     semOp(initSemId, SEM_START, -1);
 
@@ -154,9 +156,6 @@ int main(int argc, char * argv[]) {
 	// Wait all child init end
     semOp(initSemId, SEM_INIT_SENDER, 0);
 
-    int senderSemId = createSenderSemaphore();
-    setSenderSemaphore(senderSemId);
-
     // Set this process as end init     
     semOp(initSemId, SEM_END_INIT, -1);
 
@@ -171,10 +170,6 @@ int main(int argc, char * argv[]) {
 	while ((child = wait( &status)) != -1) {
 		//printf("returned child %d with status %d\n", child, status);
 	}
-
-    // Remove used IPC
-    removeSemaphore(initSemId);
-    removeSemaphore(senderSemId);
 
 	printLog("SM", "Process End");
 	return 0;

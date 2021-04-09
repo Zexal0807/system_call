@@ -144,9 +144,6 @@ int main(int argc, char * argv[]) {
     // Wait all child init end
     semOp(initSemId, SEM_INIT_RECEIVER, 0);
 
-    int receiverSemId = createReceiverSemaphore();
-    setReceiverSemaphore(receiverSemId);
-
     // Set this process as end init     
     semOp(initSemId, SEM_END_INIT, -1);
 

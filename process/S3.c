@@ -16,7 +16,6 @@
 
 node * l;
 int initSemId;
-int senderSemId;
 int sharedMemoryId;
 message * sharedMemoryData;
 int messageQueueId;
@@ -26,7 +25,7 @@ int thereIsMessage = 1;
 
 // SIGPIPE del S2
 void readFromPipeHandle(int sig){
-    int s2HaveMsg = getValue(senderSemId, 5);
+    int s2HaveMsg = getValue(initSemId, SEM_S2_HAVE_MESSAGE_TO_SEND_BY_PIPE);
     if(s2HaveMsg == 0){
         thereIsMessage = 0;
     }else{
@@ -48,9 +47,6 @@ void readFromPipeHandle(int sig){
 }
 
 void openResource(){
-    // Open sender sem
-    senderSemId = createSenderSemaphore();
-
     // Open SHM
     sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
 
@@ -76,7 +72,7 @@ int closeResource(){
     close(fifoId);
 
 	// Set this process as end
-	semOp(senderSemId, 3, -1);
+	semOp(initSemId, SEM_S3_IS_RUNNNING, -1);
 
 	// Wait for 3 second befor end
 	printLog("S3", "Process End");
@@ -116,7 +112,7 @@ int main(int argc, char * argv[]) {
 	printLog("S3", "Process start with exec");
 
     // ARGV: initSemId, PIPE_S2S3
-    int initSemId = atoi(argv[0]);
+    initSemId = atoi(argv[0]);
     pipeId = atoi(argv[1]);
     sharedMemoryId = atoi(argv[2]);
 

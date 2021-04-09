@@ -18,7 +18,7 @@ int generateSemaphore(key_t key, int n, int flags){
 
 int createSemaphore(){
     key_t key = generateKey(KEY_INIT_SEM);
-    int id = generateSemaphore(key, 4, S_IRUSR | S_IWUSR | IPC_CREAT);
+    int id = generateSemaphore(key, 14, S_IRUSR | S_IWUSR | IPC_CREAT);
     return id;
 }
 
@@ -28,7 +28,17 @@ void setSemaphore(int semid){
         3,      // START
         3,      // SM child
         3,      // RM child
-        3       // END INIT
+        3,      // END INIT
+        1,      //S1 is running
+        1,      //S2 is running
+        1,      //S3 is running
+        1,      //R1 is running
+        1,      //R2 is running
+        1,      //R3 is running
+        1,      // S1 have message to send by PIPE
+        1,      // S2 have message to send by PIPE
+        1,      // R2 have message to send by PIPE
+        1       // R3 have message to send by PIPE
     };
     union semun arg;
     arg.array = semInitVal;
@@ -36,6 +46,10 @@ void setSemaphore(int semid){
     if (semctl(semid, 0, SETALL, arg) == 1)
         ErrExit("semctl SETALL failed");
 }
+
+/*
+
+
 
 int createSenderSemaphore(){
     key_t key = generateKey(KEY_SENDER_SEM);
@@ -59,6 +73,8 @@ void setSenderSemaphore(int semid){
         ErrExit("semctl SETALL failed");
 }
 
+
+
 int createReceiverSemaphore(){
     key_t key = generateKey(KEY_RECEIVER_SEM);
     int id = generateSemaphore(key, 6, S_IRUSR | S_IWUSR | IPC_CREAT);
@@ -80,7 +96,7 @@ void setReceiverSemaphore(int semid){
     if (semctl(semid, 0, SETALL, arg) == 1)
         ErrExit("semctl SETALL failed");
 }
-
+*/
 void removeSemaphore(int semid){
     if (semctl(semid, 0, IPC_RMID, 0) == -1)
         ErrExit("semctl failed");
@@ -106,7 +122,7 @@ int getValue(int semid, int sem_num){
 }
 
 void printSemaphoresValue (int semid) {
-    unsigned short semVal[6];
+    unsigned short semVal[14];
     union semun arg;
     arg.array = semVal;
 
@@ -116,6 +132,6 @@ void printSemaphoresValue (int semid) {
 
     // print the semaphore's value
     printf("semaphore set state:\n");
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 14; i++)
         printf("id: %d --> %d\n", i, semVal[i]);
 }

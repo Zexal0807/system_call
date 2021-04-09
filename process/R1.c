@@ -13,7 +13,7 @@
 #include <unistd.h>
 
 node * l;
-int receiverSemId;
+int initSemId;
 int sharedMemoryId;
 int thereIsMessage = 1;
 int messageQueueId;
@@ -21,9 +21,6 @@ int pipeId;
 message *sharedMemoryData;
 
 void openResource(){
-    // Open receiver sem
-    receiverSemId = createReceiverSemaphore();
-
     // Open SHM
     sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
     // Open MSGQ
@@ -40,13 +37,13 @@ int closeResource(){
 
     // Wait S2 end
     printLog("S1", "Wait S2");
-    semOp(receiverSemId, 2, 0);
+    semOp(initSemId, SEM_R2_IS_RUNNNING, 0);
     
     // Close PIPE R1 R2
     closePipe(pipeId);
 
     // Set this process as end
-    semOp(receiverSemId, 1, -1);
+    semOp(initSemId, SEM_R1_IS_RUNNNING, -1);
 
 	// Wait for 1 second befor end
     printLog("R1", "Process End");
@@ -90,7 +87,7 @@ int main(int argc, char * argv[]) {
 	printLog("R1", "Process start with exec");
 
     // ARGV: initSemId, pipeR1R2, sharedMemoryId
-    int initSemId = atoi(argv[0]);
+    initSemId = atoi(argv[0]);
     pipeId = atoi(argv[1]);
     sharedMemoryId = atoi(argv[2]);
 

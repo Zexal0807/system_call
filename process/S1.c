@@ -15,7 +15,6 @@
 node *l;
 
 int initSemId;
-int senderSemId;
 int sharedMemoryId;
 message * sharedMemoryData;
 int messageQueueId;
@@ -23,8 +22,6 @@ int pipeId;
 int S2pid;
 
 void openResource(){
-    // Open sender sem
-    senderSemId = createSenderSemaphore();
 
     // Open SHM
     sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
@@ -42,13 +39,13 @@ int closeResource(){
 
     // Wait S2 end
     printLog("S1", "Wait S2");
-    semOp(senderSemId, 2, 0);
+    semOp(initSemId, SEM_S2_IS_RUNNNING, 0);
     
     // Close PIPE S1 S2
     closePipe(pipeId);
 
     // Set this process as end
-    semOp(senderSemId, 1, -1);
+    semOp(initSemId, SEM_S1_IS_RUNNNING, -1);
 
 	// Wait for 1 second befor end
     printLog("S1", "Process End");
@@ -185,7 +182,7 @@ int main(int argc, char * argv[]) {
     }
 
     // Send to S2 that msg are end
-    semOp(senderSemId, 4, -1);
+    semOp(initSemId, SEM_S1_HAVE_MESSAGE_TO_SEND_BY_PIPE, -1);
     kill(S2pid, SIGPIPE);
     
     return closeResource();
