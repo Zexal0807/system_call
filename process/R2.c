@@ -103,7 +103,7 @@ int main(int argc, char * argv[]) {
 	printLog("R2", "Process start with exec");
 	
     // ARGV: initSemId, pipeR1R2, pipeR2R3, SHMid, R1Pid
-    int initSemId = atoi(argv[0]);
+    initSemId = atoi(argv[0]);
     pipeR1R2Id = atoi(argv[1]);
     pipeR2R3Id = atoi(argv[2]);
     sharedMemoryId = atoi(argv[3]);

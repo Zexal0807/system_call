@@ -26,6 +26,8 @@ int main(int argc, char * argv[]) {
 
     int initSemId = createSemaphore();
 
+    setSemaphore(initSemId);
+
     semOp(initSemId, SEM_START, -1);
 
     // Wait all process open sem

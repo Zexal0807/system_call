@@ -36,10 +36,6 @@ int closeResource(){
     
     // Close MSGQ
     // Not need to be close
-
-    // Wait S3 end
-    printLog("R3", "Wait R2");
-    semOp(initSemId, SEM_R2_IS_RUNNING, 0);
     
     // Close PIPE R2 R3
     closePipe(pipeId);

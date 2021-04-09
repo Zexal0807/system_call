@@ -32,9 +32,9 @@
 
 #define IPC_HISTORY_FILENAME "output/F10.csv"
 
-#define KEY_INIT_SEM 01110011       //115
-#define KEY_SHARED_MEMORY 01101101  //109
-#define KEY_MESSAGE_QUEUE 01110001  //113
+#define KEY_INIT_SEM 01110011       // S
+#define KEY_SHARED_MEMORY 01101101  // M
+#define KEY_MESSAGE_QUEUE 01110001  // Q
 #define KEY_FIFO "tmp/my_fifo.txt"
 
 #define SEM_START 0

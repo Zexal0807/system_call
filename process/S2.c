@@ -94,10 +94,10 @@ void sendMessage(message* m){
                     sendToR1(messageQueueId, m);
                     break;
                 case 2:
-                    sendToR1(messageQueueId, m);
+                    sendToR2(messageQueueId, m);
                     break;
                 case 3:
-                    sendToR1(messageQueueId, m);
+                    sendToR3(messageQueueId, m);
                     break;
                 default:
                     ErrExit("receiver not exist");
