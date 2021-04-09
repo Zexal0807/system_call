@@ -23,11 +23,11 @@ int main(int argc, char *argv[]) {
 	// Start process
 	printLog("HK", "Process start");
 
-    int initSemId = createInitSemaphore();
-    semOp(initSemId, 0, -1);
+    int initSemId = createSemaphore();
+    semOp(initSemId, SEM_START, -1);
 
     // Wait all process open sem
-    semOp(initSemId, 0, 0);
+    semOp(initSemId, SEM_START, 0);
     
 	char *filename = argv[1];
 
@@ -58,13 +58,10 @@ int main(int argc, char *argv[]) {
 	printLog("HK", "End file");
 	
     // Set this process as end init     
-    semOp(initSemId, 3, -1);
-
-    // Set this process as end init     
-    semOp(initSemId, 4, -1);
+    semOp(initSemId, SEM_END_INIT, -1);
 
     // Wait all init end 
-    semOp(initSemId, 4, 0);
+    semOp(initSemId, SEM_END_INIT, 0);
 
     printLog("HK", "End init start");
 

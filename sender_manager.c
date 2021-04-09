@@ -24,13 +24,13 @@ int main(int argc, char * argv[]) {
 
 	printLog("SM", "Process start");
 
-    int initSemId = createInitSemaphore();
-    setInitSemaphore(initSemId);
+    int initSemId = createSemaphore();
+    setSemaphore(initSemId);
 
-    semOp(initSemId, 0, -1);
+    semOp(initSemId, SEM_START, -1);
 
     // Wait all process open sem
-    semOp(initSemId, 0, 0);
+    semOp(initSemId, SEM_START, 0);
 
     int pipeS1S2[2];
     int pipeS2S3[2];
@@ -152,16 +152,16 @@ int main(int argc, char * argv[]) {
 	printChild(SENDER_FILENAME, S3);
 
 	// Wait all child init end
-    semOp(initSemId, 1, 0);
+    semOp(initSemId, SEM_INIT_SENDER, 0);
 
     int senderSemId = createSenderSemaphore();
     setSenderSemaphore(senderSemId);
 
     // Set this process as end init     
-    semOp(initSemId, 4, -1);
+    semOp(initSemId, SEM_END_INIT, -1);
 
     // Wait all init end
-    semOp(initSemId, 4, 0);
+    semOp(initSemId, SEM_END_INIT, 0);
 
     printLog("SM", "End init start");
 

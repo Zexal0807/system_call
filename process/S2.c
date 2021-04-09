@@ -147,10 +147,10 @@ int main(int argc, char * argv[]) {
 */
 
     // Set this process as end init 
-    semOp(initSemId, 1, -1);
+    semOp(initSemId, SEM_INIT_SENDER, -1);
 
     // Wait all init end
-    semOp(initSemId, 4, 0);
+    semOp(initSemId, SEM_END_INIT, 0);
     
     printLog("S2", "End init start");
 

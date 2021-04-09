@@ -22,11 +22,11 @@ int main(int argc, char * argv[]) {
 
 	printLog("RM", "Process start");
 
-    int initSemId = createInitSemaphore();
-    semOp(initSemId, 0, -1);
+    int initSemId = createSemaphore();
+    semOp(initSemId, SEM_START, -1);
     
     // Wait all process open sem
-    semOp(initSemId, 0, 0);
+    semOp(initSemId, SEM_START, 0);
 
     int pipeR1R2[2];
     int pipeR2R3[2];
@@ -142,16 +142,16 @@ int main(int argc, char * argv[]) {
 	printChild(RECEIVER_FILENAME, R3);
 
     // Wait all child init end
-    semOp(initSemId, 2, 0);
+    semOp(initSemId, SEM_INIT_RECEIVER, 0);
 
     int receiverSemId = createReceiverSemaphore();
     setReceiverSemaphore(receiverSemId);
 
     // Set this process as end init     
-    semOp(initSemId, 4, -1);
+    semOp(initSemId, SEM_END_INIT, -1);
 
     // Wait all init end
-    semOp(initSemId, 4, 0);
+    semOp(initSemId, SEM_END_INIT, 0);
 
     printLog("RM", "End init start");
 

@@ -11,9 +11,11 @@ union semun {
 
 int generateSemaphore(key_t key, int n, int flags);
 
-int createInitSemaphore();
+int createSemaphore();
 
-void setInitSemaphore(int semid);
+void setSemaphore(int semid);
+
+//------------
 
 int createSenderSemaphore();
 
@@ -22,6 +24,8 @@ void setSenderSemaphore(int semid);
 int createReceiverSemaphore();
 
 void setReceiverSemaphore(int semid);
+
+//----------------
 
 void removeSemaphore(int semid);
 

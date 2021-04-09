@@ -107,10 +107,10 @@ int main(int argc, char * argv[]) {
     openResource();
 
     // Set this process as end init
-    semOp(initSemId, 2, -1);
+    semOp(initSemId, SEM_INIT_RECEIVER, -1);
 
     // Wait all init end
-    semOp(initSemId, 4, 0);
+    semOp(initSemId, SEM_END_INIT, 0);
 
     printLog("R2", "End init start");
 
