@@ -119,6 +119,9 @@ clean:
 	@rm -vf output/*
 	@echo "Removed object files and executables"
 
+	@rm -vf tmp/*
+	@echo "Removed fifo file"
+
 	@ipcrm -a
 	@echo "Removed all active IPC"
 

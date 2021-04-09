@@ -54,6 +54,7 @@ void openResource(){
     messageQueueId = getMessageQueue();
 
     // OPEN FIFO
+    createFIFO();
     fifoId = openSenderFIFO();
 
     // Set signal for read from PIPE

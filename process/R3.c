@@ -21,12 +21,17 @@ int messageQueueId;
 int pipeId;
 message *sharedMemoryData;
 int R2pid;
+int fifoId;
 
 void openResource(){
     // Open SHM
     sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
+    
     // Open MSGQ
     messageQueueId = getMessageQueue();
+
+    // Open FIFO
+    fifoId = openReceiverFIFO();
 }
 
 int closeResource(){
@@ -57,29 +62,30 @@ void testShutDown(){
         thereIsMessage = 0;
     }
 }
-/*
+
 void tryReadFIFO(){
-    int s1HaveMsg = getValue(initSemId, SEM_S1_HAVE_MESSAGE_TO_SEND_BY_PIPE);
-    if(s1HaveMsg == 0){
-        thereIsMessage = 0;
-    }else{
+    int thereMessageInFIFO = getValue(initSemId, SEM_MESSAGE_IN_FIFO);
+    if(thereMessageInFIFO == 0){
         char msg [MAX_MESSAGE_LENGTH];
-        read(pipeS1S2Id, msg, MAX_MESSAGE_LENGTH);
+        readFIFO(fifoId, msg);
+
+        // Free the fifo
+        semOp(initSemId, SEM_MESSAGE_IN_FIFO, 1);
 
         time_t arrival;
         message *m = line2message(msg);
 
         char log[50];
-        sprintf(log, "Receive %d from PIPE S1S2", m->id);
-        printLog("S2", log);
+        sprintf(log, "Receive %d from FIFO", m->id);
+        printLog("R3", log);
 
         time(&arrival);
         trafficInfo *t = createTrafficInfo(m, arrival, arrival);
         
         l = inserisciInCoda(l, t);
-    }
+    } 
 }
-*/
+
 void tryReadMSQ(){
     message * m =  readR3(messageQueueId);
     if(m != NULL){
@@ -148,6 +154,9 @@ int main(int argc, char * argv[]) {
         tryReadMSQ();
 
         // Try to read form shared memory
+
+        // Try to read from FIFO
+        tryReadFIFO();
 
         tmp = l;
         while(isSet(tmp)){

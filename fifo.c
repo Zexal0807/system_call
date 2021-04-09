@@ -37,7 +37,7 @@ void writeFIFO(int fd, char * msg){
     }
 }
 
-void readFIFO(int fd, char msg[MAX_MESSAGE_LENGTH]){
+void readFIFO(int fd, char * msg){
     if(read(fd, msg, MAX_MESSAGE_LENGTH) == -1){
         ErrExit("Impossible leggere sulla FIFO");
     }

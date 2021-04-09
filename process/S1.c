@@ -22,7 +22,6 @@ int pipeId;
 int S2pid;
 
 void openResource(){
-
     // Open SHM
     sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
     // Open MSGQ

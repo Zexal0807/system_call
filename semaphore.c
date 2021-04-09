@@ -18,7 +18,7 @@ int generateSemaphore(key_t key, int n, int flags){
 
 int createSemaphore(){
     key_t key = generateKey(KEY_INIT_SEM);
-    int id = generateSemaphore(key, 14, S_IRUSR | S_IWUSR | IPC_CREAT);
+    int id = generateSemaphore(key, 15, S_IRUSR | S_IWUSR | IPC_CREAT);
     return id;
 }
 
@@ -37,7 +37,8 @@ void setSemaphore(int semid){
         1,      // S1 have message to send by PIPE
         1,      // S2 have message to send by PIPE
         1,      // R2 have message to send by PIPE
-        1       // R3 have message to send by PIPE
+        1,      // R3 have message to send by PIPE
+        1       // Can write on FIFO
     };
     union semun arg;
     arg.array = semInitVal;
@@ -73,7 +74,7 @@ int getValue(int semid, int sem_num){
 }
 
 void printSemaphoresValue (int semid) {
-    unsigned short semVal[14];
+    unsigned short semVal[15];
     union semun arg;
     arg.array = semVal;
 
@@ -83,6 +84,6 @@ void printSemaphoresValue (int semid) {
 
     // print the semaphore's value
     printf("semaphore set state:\n");
-    for (int i = 0; i < 14; i++)
+    for (int i = 0; i < 15; i++)
         printf("id: %d --> %d\n", i, semVal[i]);
 }

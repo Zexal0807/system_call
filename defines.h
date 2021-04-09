@@ -55,6 +55,11 @@
 #define SEM_R2_HAVE_MESSAGE_TO_SEND_BY_PIPE 12
 #define SEM_R3_HAVE_MESSAGE_TO_SEND_BY_PIPE 13
 
+#define SEM_MESSAGE_IN_FIFO 14
+
+
+
+
 #endif
 
 /*
