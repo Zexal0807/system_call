@@ -100,7 +100,7 @@ void sendMessage(message* m){
             
     }else if (strcmp(m->comunication, "FIFO") == 0) {
         printLog("S3", "Message send by FIFO");
-        /*
+        
         char * msg = message2line(m);
         writeFIFO(fifoId, msg);
 
@@ -110,7 +110,6 @@ void sendMessage(message* m){
         
         // Set that FIFO have a message
         semOp(initSemId, SEM_MESSAGE_IN_FIFO, -1);
-        */
     }
 }
 
