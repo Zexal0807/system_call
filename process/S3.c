@@ -49,14 +49,11 @@ void readFromPipeHandle(int sig){
 void openResource(){
     // Open SHM
     sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
-
     // Open MSGQ
     messageQueueId = getMessageQueue();
-
     // OPEN FIFO
     createFIFO();
     fifoId = openSenderFIFO();
-
     // Set signal for read from PIPE
     signal(SIGPIPE, readFromPipeHandle);
 }
@@ -64,7 +61,7 @@ void openResource(){
 int closeResource(){
 	// Close SHM
     detachSharedMemory(sharedMemoryData);
-    printLog("S3", "detachSharedMemory");
+    printLog("S3", "Detach shared memory");
     
 	// Close MSGQ
     // Not need to be close
@@ -104,7 +101,17 @@ void sendMessage(message* m){
             
     }else if (strcmp(m->comunication, "FIFO") == 0) {
         printLog("S3", "Message send by FIFO");
+        /*
+        char * msg = message2line(m);
+        writeFIFO(fifoId, msg);
 
+        char log[50];
+        sprintf(log, "Send %d by FIFO", m->id);
+        printLog("S3", log);
+        
+        // Set that FIFO have a message
+        semOp(initSemId, SEM_MESSAGE_IN_FIFO, -1);
+        */
     }
 }
 
@@ -127,10 +134,10 @@ int main(int argc, char * argv[]) {
     // Set this process as end init 
     semOp(initSemId, SEM_INIT_SENDER, -1);
 
+    printLog("S3", "End init");
+
     // Wait all init end
     semOp(initSemId, SEM_END_INIT, 0);
-    
-    printLog("S3", "End init start");
 
 	time_t departure;
 

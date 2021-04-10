@@ -29,15 +29,18 @@ void openResource(){
     
     // Open MSGQ
     messageQueueId = getMessageQueue();
+/*
+    // Wait the sender create the FIFO
+    semOp(initSemId, SEM_INIT_SENDER, 0);*/
 
     // Open FIFO
-    fifoId = openReceiverFIFO();
+    //fifoId = openReceiverFIFO();
 }
 
 int closeResource(){
     // Close SHM
     detachSharedMemory(sharedMemoryData);
-    printLog("R3", "detachSharedMemory");
+    printLog("R3", "Detach shared memory");
     
     // Close MSGQ
     // Not need to be close
@@ -54,7 +57,6 @@ int closeResource(){
 	printLog("R3", "Process Exit");
 	return 1;
 }
-
 
 void testShutDown(){
     int s1IsRunning = getValue(initSemId, SEM_S1_IS_RUNNING);
@@ -131,13 +133,14 @@ int main(int argc, char * argv[]) {
     R2pid = atoi(argv[3]);
 
     openResource();
+
     // Set this process as end init
     semOp(initSemId, SEM_INIT_RECEIVER, -1);
 
+    printLog("R3", "End init");
+
     // Wait all init end
     semOp(initSemId, SEM_END_INIT, 0);
-
-    printLog("R3", "End init start");
 
     time_t departure;
     

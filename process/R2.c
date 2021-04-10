@@ -34,7 +34,7 @@ void openResource(){
 int closeResource(){
     // Close SHM
     detachSharedMemory(sharedMemoryData);
-    printLog("R2", "detachSharedMemory");
+    printLog("R2", "Detach shared memory");
     
     // Close MSGQ
     // Not need to be close
@@ -114,10 +114,10 @@ int main(int argc, char * argv[]) {
     // Set this process as end init
     semOp(initSemId, SEM_INIT_RECEIVER, -1);
 
+    printLog("R2", "End init");
+
     // Wait all init end
     semOp(initSemId, SEM_END_INIT, 0);
-
-    printLog("R2", "End init start");
 
     time_t departure;
     

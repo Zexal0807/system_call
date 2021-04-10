@@ -15,27 +15,27 @@
 #ifndef CONSTANT
 #define CONSTANT
 
-#define SENDER_FILENAME "output/F8.csv"
-#define SENDER_1_FILENAME "output/F1.csv"
-#define SENDER_2_FILENAME "output/F2.csv"
-#define SENDER_3_FILENAME "output/F3.csv"
+#define SENDER_FILENAME "OutputFiles/F8.csv"
+#define SENDER_1_FILENAME "OutputFiles/F1.csv"
+#define SENDER_2_FILENAME "OutputFiles/F2.csv"
+#define SENDER_3_FILENAME "OutputFiles/F3.csv"
 
-#define RECEIVER_FILENAME "output/F9.csv"
-#define RECEIVER_1_FILENAME "output/F4.csv"
-#define RECEIVER_2_FILENAME "output/F5.csv"
-#define RECEIVER_3_FILENAME "output/F6.csv"
+#define RECEIVER_FILENAME "OutputFiles/F9.csv"
+#define RECEIVER_1_FILENAME "OutputFiles/F4.csv"
+#define RECEIVER_2_FILENAME "OutputFiles/F5.csv"
+#define RECEIVER_3_FILENAME "OutputFiles/F6.csv"
 
-#define HACKLER_FILENAME "output/F7_out.csv"
+#define HACKLER_FILENAME "OutputFiles/F7_out.csv"
 #define MAX_HACKLER_ACTION 10
 
 #define MAX_MESSAGE_LENGTH 150
 
-#define IPC_HISTORY_FILENAME "output/F10.csv"
+#define IPC_HISTORY_FILENAME "OutputFiles/F10.csv"
 
 #define KEY_INIT_SEM 01110011       // S
 #define KEY_SHARED_MEMORY 01101101  // M
 #define KEY_MESSAGE_QUEUE 01110001  // Q
-#define KEY_FIFO "tmp/my_fifo.txt"
+#define KEY_FIFO "OutputFiles/my_fifo.txt"
 
 #define SEM_START 0
 #define SEM_INIT_SENDER 1
@@ -56,9 +56,6 @@
 #define SEM_R3_HAVE_MESSAGE_TO_SEND_BY_PIPE 13
 
 #define SEM_MESSAGE_IN_FIFO 14
-
-
-
 
 #endif
 

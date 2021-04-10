@@ -31,7 +31,7 @@ void openResource(){
 int closeResource(){
     // Close SHM
     detachSharedMemory(sharedMemoryData);
-    printLog("S1", "detachSharedMemory");
+    printLog("S1", "Detach shared memory");
     
     // Close MSGQ
     // Not need to be close
@@ -148,14 +148,15 @@ int main(int argc, char * argv[]) {
     signal(SIGCONT, hacklerSendMsgHandle);
     signal(SIGTERM, hacklerShutDownHandle);
 */
+    
     // Set this process as end init
     semOp(initSemId, SEM_INIT_SENDER, -1);
+
+    printLog("S1", "End init");
 
     // Wait all init end
     semOp(initSemId, SEM_END_INIT, 0);
     
-    printLog("S1", "End init start");
-
     node *tmp;
     trafficInfo *t;
 

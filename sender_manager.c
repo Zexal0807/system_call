@@ -155,13 +155,15 @@ int main(int argc, char * argv[]) {
 	// Wait all child init end
     semOp(initSemId, SEM_INIT_SENDER, 0);
 
+    printLog("SM", "End init of all child");
+
     // Set this process as end init     
     semOp(initSemId, SEM_END_INIT, -1);
 
+    printLog("SM", "End init start");
+
     // Wait all init end
     semOp(initSemId, SEM_END_INIT, 0);
-
-    printLog("SM", "End init start");
 
 	// Wait the end of all child
 	pid_t child;
