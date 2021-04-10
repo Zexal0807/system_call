@@ -39,6 +39,7 @@ int main(int argc, char * argv[]) {
     createPipe(pipeS2S3);
 
     int shmid = createSharedMemory();
+    createFIFO();
 
 	// Define the 3 struct process
 	child *S1 = NULL;

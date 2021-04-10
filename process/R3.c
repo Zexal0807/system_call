@@ -29,19 +29,16 @@ void openResource(){
     
     // Open MSGQ
     messageQueueId = getMessageQueue();
-/*
-    // Wait the sender create the FIFO
-    semOp(initSemId, SEM_INIT_SENDER, 0);*/
 
     // Open FIFO
-    //fifoId = openReceiverFIFO();
+    fifoId = openReceiverFIFO();
 }
 
 int closeResource(){
     // Close SHM
     detachSharedMemory(sharedMemoryData);
     printLog("R3", "Detach shared memory");
-    
+
     // Close MSGQ
     // Not need to be close
     
