@@ -34,7 +34,7 @@ void openResource(){
     fifoId = openReceiverFIFO();
 }
 
-int closeResource(){
+void closeResource(){
     // Close SHM
     detachSharedMemory(sharedMemoryData);
     printLog("R3", "Detach shared memory");
@@ -48,16 +48,14 @@ int closeResource(){
     // Set this process as end
     semOp(initSemId, SEM_R3_IS_RUNNING, -1);
 
-	// Wait for 1 second befor end
     printLog("R3", "Process End");
-	sleep(3);
-	printLog("R3", "Process Exit");
-	return 1;
 }
 
 void testShutDown(){
     int s1IsRunning = getValue(initSemId, SEM_S1_IS_RUNNING);
-    if(s1IsRunning == 0){
+    int s2IsRunning = getValue(initSemId, SEM_S2_IS_RUNNING);
+    int s3IsRunning = getValue(initSemId, SEM_S3_IS_RUNNING);
+    if(s1IsRunning == 0 && s2IsRunning == 0 && s3IsRunning == 0){
         thereIsMessage = 0;
     }
 }
@@ -102,21 +100,18 @@ void tryReadMSQ(){
 }
 
 void sendMessage(message* m){
-    if(m->receiver->number == 3){
-        char log[50];
-        sprintf(log, "Message %d arrive", m->id);
-        printLog("R3", log);
-    }else{
-        // Send to R2 by pipe
-        char *message = message2line(m);
-        write(pipeId, message, MAX_MESSAGE_LENGTH);
-        free(message);
+    char log[50];
+    sprintf(log, "Message %d send by PIPE R2R3", m->id);
 
-        // Invio segnale a R1 di leggere dalla pipe
-        kill(R2pid, SIGPIPE);
+    // Send to R2 by pipe
+    char *message = message2line(m);
+    write(pipeId, message, MAX_MESSAGE_LENGTH);
+    free(message);
 
-        printLog("R3", "Message send by PIPE R2R3");
-    }
+    // Invio segnale a R2 di leggere dalla pipe
+    kill(R2pid, SIGPIPE);
+
+    printLog("R3", log);
 }
 
 int main(int argc, char * argv[]) {
@@ -178,5 +173,10 @@ int main(int argc, char * argv[]) {
         sleep(1);
 	}
     
-    return closeResource();
+    // Close all resource
+    closeResource();
+
+    // Wait ShutDown from HK
+    pause();
+    return 1;
 }

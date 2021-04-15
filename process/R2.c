@@ -23,15 +23,34 @@ int pipeR2R3Id;
 int R1pid;
 message *sharedMemoryData;
 
-void openResource(){
+// SIGPIPE del R3
+void readFromPipeHandle(int sig){
+    char msg [MAX_MESSAGE_LENGTH];
+    read(pipeR2R3Id, msg, MAX_MESSAGE_LENGTH);
 
+    time_t arrival;
+    message *m = line2message(msg);
+
+    char log[50];
+    sprintf(log, "Receive %d from PIPE R2R3", m->id);
+    printLog("R2", log);
+    time(&arrival);
+    trafficInfo *t = createTrafficInfo(m, arrival, arrival);
+    
+    l = inserisciInCoda(l, t);
+}
+
+void openResource(){
     // Open SHM
     sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
     // Open MSGQ
     messageQueueId = getMessageQueue();
+
+    // Set signal for read form pipe
+    signal(SIGPIPE, readFromPipeHandle);
 }
 
-int closeResource(){
+void closeResource(){
     // Close SHM
     detachSharedMemory(sharedMemoryData);
     printLog("R2", "Detach shared memory");
@@ -39,10 +58,6 @@ int closeResource(){
     // Close MSGQ
     // Not need to be close
 
-    // Wait R3 end
-    printLog("R2", "Wait R3");
-    semOp(initSemId, SEM_R3_IS_RUNNING, 0);
-    
     // Close PIPE R1 R2
     closePipe(pipeR1R2Id);
     // Close PIPE R2 R3
@@ -51,16 +66,15 @@ int closeResource(){
     // Set this process as end
     semOp(initSemId, SEM_R2_IS_RUNNING, -1);
 
-	// Wait for 1 second befor end
     printLog("R2", "Process End");
-	sleep(2);
-	printLog("R2", "Process Exit");
-	return 1;
 }
 
 void testShutDown(){
     int s1IsRunning = getValue(initSemId, SEM_S1_IS_RUNNING);
-    if(s1IsRunning == 0){
+    int s2IsRunning = getValue(initSemId, SEM_S2_IS_RUNNING);
+    int s3IsRunning = getValue(initSemId, SEM_S3_IS_RUNNING);
+    int r3IsRunning = getValue(initSemId, SEM_R3_IS_RUNNING);
+    if(s1IsRunning == 0 && s2IsRunning == 0 && s3IsRunning == 0 && r3IsRunning == 0){
         thereIsMessage = 0;
     }
 }
@@ -82,21 +96,18 @@ void tryReadMSQ(){
 }
 
 void sendMessage(message* m){
-    if(m->receiver->number == 2){
-        char log[50];
-        sprintf(log, "Message %d arrive", m->id);
-        printLog("R2", log);
-    }else{
-        // Send to R1 by pipe
-        char *message = message2line(m);
-        write(pipeR1R2Id, message, MAX_MESSAGE_LENGTH);
-        free(message);
+    char log[50];
+    sprintf(log, "Message %d send by PIPE R1R2", m->id);
 
-        // Invio segnale a R1 di leggere dalla pipe
-        kill(R1pid, SIGPIPE);
+    // Send to R1 by pipe
+    char *message = message2line(m);
+    write(pipeR1R2Id, message, MAX_MESSAGE_LENGTH);
+    free(message);
 
-        printLog("R2", "Message send by PIPE R1R2");
-    }
+    // Invio segnale a R1 di leggere dalla pipe
+    kill(R1pid, SIGPIPE);
+
+    printLog("R2", log);
 }
 
 int main(int argc, char * argv[]) {
@@ -154,6 +165,12 @@ int main(int argc, char * argv[]) {
         }
         sleep(1);
 	}
+    printf("R2 Exit\n");
     
-    return closeResource();
+    // Close all resource
+    closeResource();
+
+    // Wait ShutDown from HK
+    pause();
+    return 1;
 }

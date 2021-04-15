@@ -57,17 +57,13 @@ void openResource(){
     signal(SIGPIPE, readFromPipeHandle);
 }
 
-int closeResource(){
+void closeResource(){
     // Close SHM
     detachSharedMemory(sharedMemoryData);
     printLog("S2", "Detach shared memory");
     
     // Close MSGQ
     // Not need to be close
-    
-    // Wait S3 end
-    printLog("S2", "Wait S3");
-    semOp(initSemId, SEM_S3_IS_RUNNING, 0);
 
 	// Close PIPE S2 S3
     closePipe(pipeS2S3Id);
@@ -78,15 +74,11 @@ int closeResource(){
     // Set this process as end
     semOp(initSemId, SEM_S2_IS_RUNNING, -1);
 
-	// Wait for 2 second befor end
 	printLog("S2", "Process End");
-	sleep(2);
-	printLog("S2", "Process Exit");
-	return 1;
 }
 
 void sendMessage(message* m){
-    printLog("S2", "Message can be send");
+    char log[50];
     if(m->sender->number == 2){
         if (strcmp(m->comunication, "Q") == 0) {
             switch(m->receiver->number){
@@ -102,10 +94,9 @@ void sendMessage(message* m){
                 default:
                     ErrExit("receiver not exist");
             }
-            printLog("S2", "Message send by MessageQueue");
+            sprintf(log, "Message %d send by MessageQueue", m->id);
         }else if (strcmp(m->comunication, "SH") == 0) {
-            printLog("S2", "Message send by SharedMemory");
-            
+            sprintf(log, "Message %d send by SharedMemory", m->id);
         }
     }else{
         // Send to S3 by pipe
@@ -116,9 +107,9 @@ void sendMessage(message* m){
         // Invio segnale a S3 di leggere dalla pipe
         kill(S3pid, SIGPIPE);
 
-        printLog("S2", "Message send by PIPE S2S3");
-        
+        sprintf(log, "Message %d send by PIPE S2S3", m->id);
     }
+    printLog("S2", log);
 }
 
 int main(int argc, char * argv[]) {
@@ -179,5 +170,10 @@ int main(int argc, char * argv[]) {
     semOp(initSemId, SEM_S2_HAVE_MESSAGE_TO_SEND_BY_PIPE, -1);
     kill(S3pid, SIGPIPE);
 
-    return closeResource();
+    // Close all resource
+    closeResource();
+
+    // Wait ShutDown from HK
+    pause();
+    return 1;
 }

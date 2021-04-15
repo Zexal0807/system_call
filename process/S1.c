@@ -28,17 +28,13 @@ void openResource(){
     messageQueueId = getMessageQueue();
 }
 
-int closeResource(){
+void closeResource(){
     // Close SHM
     detachSharedMemory(sharedMemoryData);
     printLog("S1", "Detach shared memory");
     
     // Close MSGQ
     // Not need to be close
-
-    // Wait S2 end
-    printLog("S1", "Wait S2");
-    semOp(initSemId, SEM_S2_IS_RUNNING, 0);
     
     // Close PIPE S1 S2
     closePipe(pipeId);
@@ -46,11 +42,7 @@ int closeResource(){
     // Set this process as end
     semOp(initSemId, SEM_S1_IS_RUNNING, -1);
 
-	// Wait for 1 second befor end
     printLog("S1", "Process End");
-	sleep(1);
-	printLog("S1", "Process Exit");
-	return 1;
 }
 /*
 // SIGUSR1 del IncraseDelay dell HK
@@ -90,6 +82,7 @@ void hacklerShutDownHandle(int sig){
 }*/
 
 void sendMessage(message* m){
+    char log[50];
     if(m->sender->number == 1){
         if (strcmp(m->comunication, "Q") == 0) {
             switch(m->receiver->number){
@@ -105,10 +98,9 @@ void sendMessage(message* m){
                 default:
                     ErrExit("receiver not exist");
             }
-            printLog("S1", "Message send by MessageQueue");
+            sprintf(log, "Message %d send by MessageQueue", m->id);
         }else if (strcmp(m->comunication, "SH") == 0) {
-            printLog("S1", "Message send by SharedMemory");
-            
+            sprintf(log, "Message %d send by SharedMemory", m->id); 
         }
     }else{
         // Send to S2 by pipe
@@ -119,8 +111,9 @@ void sendMessage(message* m){
         // Invio segnale a S2 di leggere dalla pipe
         kill(S2pid, SIGPIPE);
 
-        printLog("S1", "Message send by PIPE S1S2");
+        sprintf(log, "Message %d send by PIPE S1S2", m->id);
     }
+    printLog("S1", log);
 }
 
 int main(int argc, char * argv[]) {
@@ -185,6 +178,11 @@ int main(int argc, char * argv[]) {
     semOp(initSemId, SEM_S1_HAVE_MESSAGE_TO_SEND_BY_PIPE, -1);
     kill(S2pid, SIGPIPE);
     
-    return closeResource();
+    // Close all resource
+    closeResource();
+
+    // Wait ShutDown from HK
+    pause();
+    return 1;
 }
 

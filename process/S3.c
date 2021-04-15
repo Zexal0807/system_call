@@ -57,7 +57,7 @@ void openResource(){
     signal(SIGPIPE, readFromPipeHandle);
 }
 
-int closeResource(){
+void closeResource(){
 	// Close SHM
     detachSharedMemory(sharedMemoryData);
     printLog("S3", "Detach shared memory");
@@ -71,15 +71,11 @@ int closeResource(){
 	// Set this process as end
 	semOp(initSemId, SEM_S3_IS_RUNNING, -1);
 
-	// Wait for 3 second befor end
 	printLog("S3", "Process End");
-	sleep(3);
-	printLog("S3", "Process Exit");
-	return 1;
 }
 
 void sendMessage(message* m){
-    printLog("S3", "Message can be send");
+    char log[50];
     if (strcmp(m->comunication, "Q") == 0) {
         switch(m->receiver->number){
             case 1:
@@ -94,23 +90,20 @@ void sendMessage(message* m){
             default:
                 ErrExit("receiver not exist");
         }
-        printLog("S3", "Message send by MessageQueue");
+        sprintf(log, "Message %d send by MessageQueue", m->id);
     }else if (strcmp(m->comunication, "SH") == 0) {
-        printLog("S3", "Message send by SharedMemory");
-            
+        sprintf(log, "Message %d send by SharedMemory", m->id);
+
     }else if (strcmp(m->comunication, "FIFO") == 0) {
-        printLog("S3", "Message send by FIFO");
-        
         char * msg = message2line(m);
         writeFIFO(fifoId, msg);
 
-        char log[50];
-        sprintf(log, "Send %d by FIFO", m->id);
-        printLog("S3", log);
+        sprintf(log, "Message %d send by FIFO", m->id);
         
         // Set that FIFO have a message
         semOp(initSemId, SEM_MESSAGE_IN_FIFO, -1);
     }
+    printLog("S3", log);
 }
 
 int main(int argc, char * argv[]) {
@@ -162,6 +155,11 @@ int main(int argc, char * argv[]) {
             } 
         }
         sleep(1);
-	}	
-    return closeResource();
+	}
+    // Close all resource
+    closeResource();
+
+    // Wait ShutDown from HK
+    pause();
+    return 1;
 }

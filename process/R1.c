@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <unistd.h>
+#include <signal.h>
 
 node * l;
 int initSemId;
@@ -20,14 +21,34 @@ int messageQueueId;
 int pipeId;
 message *sharedMemoryData;
 
+// SIGPIPE del R2
+void readFromPipeHandle(int sig){
+    char msg [MAX_MESSAGE_LENGTH];
+    read(pipeId, msg, MAX_MESSAGE_LENGTH);
+
+    time_t arrival;
+    message *m = line2message(msg);
+
+    char log[50];
+    sprintf(log, "Receive %d from PIPE R1R2", m->id);
+    printLog("R1", log);
+    time(&arrival);
+    trafficInfo *t = createTrafficInfo(m, arrival, arrival);
+    
+    l = inserisciInCoda(l, t);
+}
+
 void openResource(){
     // Open SHM
     sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
     // Open MSGQ
     messageQueueId = getMessageQueue();
+
+    // Set signal for read form pipe
+    signal(SIGPIPE, readFromPipeHandle);
 }
 
-int closeResource(){
+void closeResource(){
     // Close SHM
     detachSharedMemory(sharedMemoryData);
     printLog("R1", "Detach shared memory");
@@ -35,40 +56,28 @@ int closeResource(){
     // Close MSGQ
     // Not need to be close
 
-    // Wait R2 end
-    printLog("R1", "Wait R2");
-    semOp(initSemId, SEM_R2_IS_RUNNING, 0);
-    
     // Close PIPE R1 R2
     closePipe(pipeId);
 
     // Set this process as end
     semOp(initSemId, SEM_R1_IS_RUNNING, -1);
 
-	// Wait for 1 second befor end
     printLog("R1", "Process End");
-	sleep(1);
-	printLog("R1", "Process Exit");
-	return 1;
 }
 
 void sendMessage(message* m){
     char log[50];
-
-    printf("..%s...\n", message2line(m));
-
-    if(m->receiver->number == 1){
-        sprintf(log, "Message %d arrive", m->id);
-        printLog("R1", log);
-    }else{
-        sprintf(log, "Error with message %d", m->id);
-        printLog("R1", log);
-    }
+    sprintf(log, "Message %d arrive", m->id);
+    printLog("R1", log);
 }
 
 void testShutDown(){
     int s1IsRunning = getValue(initSemId, SEM_S1_IS_RUNNING);
-    if(s1IsRunning == 0){
+    int s2IsRunning = getValue(initSemId, SEM_S2_IS_RUNNING);
+    int s3IsRunning = getValue(initSemId, SEM_S3_IS_RUNNING);
+    int r3IsRunning = getValue(initSemId, SEM_R3_IS_RUNNING);
+    int r2IsRunning = getValue(initSemId, SEM_R2_IS_RUNNING);
+    if(s1IsRunning == 0 && s2IsRunning == 0 && s3IsRunning == 0 && r3IsRunning == 0 && r2IsRunning == 0){
         thereIsMessage = 0;
     }
 }
@@ -144,5 +153,10 @@ int main(int argc, char * argv[]) {
         sleep(1);
 	}
     
-    return closeResource();
+    // Close all resource
+    closeResource();
+
+    // Wait ShutDown from HK
+    pause();
+    return 1;
 }
