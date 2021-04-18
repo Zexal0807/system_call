@@ -165,7 +165,6 @@ int main(int argc, char * argv[]) {
         }
         sleep(1);
 	}
-    printf("R2 Exit\n");
     
     // Close all resource
     closeResource();

@@ -138,8 +138,6 @@ int main(int argc, char * argv[]) {
             t = tmp->trafficInfo;
             if(t->message->delayR1 <= 0){
                 time(&departure);
-                sprintf(log, "Message %d can be send", t->message->id);
-		        printLog("R1", log);
                 t->departure = departure;
 		        printTrafficInfo(RECEIVER_1_FILENAME, t);
                 sendMessage(t->message);

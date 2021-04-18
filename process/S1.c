@@ -154,6 +154,9 @@ int main(int argc, char * argv[]) {
     trafficInfo *t;
 
     while(isSet(l)){
+
+        // try to read from file
+
         tmp = l;
         while(isSet(tmp)){
             t = tmp->trafficInfo;

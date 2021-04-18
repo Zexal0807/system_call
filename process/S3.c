@@ -49,10 +49,13 @@ void readFromPipeHandle(int sig){
 void openResource(){
     // Open SHM
     sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
+    
     // Open MSGQ
     messageQueueId = getMessageQueue();
+
     // OPEN FIFO
     fifoId = openSenderFIFO();
+
     // Set signal for read from PIPE
     signal(SIGPIPE, readFromPipeHandle);
 }
