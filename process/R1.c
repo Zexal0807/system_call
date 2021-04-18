@@ -119,8 +119,6 @@ int main(int argc, char * argv[]) {
 
 	time_t departure;
     
-    char log[50];
-
     node *tmp;
     trafficInfo *t;
 

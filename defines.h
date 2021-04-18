@@ -67,3 +67,5 @@
 void printLog(char *p, char *text);
 
 key_t generateKey(int id);
+
+int openFile(char * filename);

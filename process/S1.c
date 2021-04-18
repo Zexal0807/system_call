@@ -116,6 +116,39 @@ void sendMessage(message* m){
     printLog("S1", log);
 }
 
+int file;
+int cursor = 0L;
+int filesize = 0;
+
+int tryReadFromFile(int convert){
+    char log[50];
+    lseek(file, cursor, SEEK_SET);
+    char buffer[MAX_MESSAGE_LENGTH];
+    if(read(file, buffer, MAX_MESSAGE_LENGTH) == -1){
+        ErrExit("Impossibile leggere dal file");
+    }
+
+    char * line = strtok(buffer, "\n");
+    int length = strlen(line);
+    cursor += length + 1;
+
+    if(convert){
+        message *m = line2message(line);                
+        sprintf(log, "Read %d from file", m->id);
+        printLog("S1", log);
+        time_t arrival;
+        time(&arrival);
+        trafficInfo *t = createTrafficInfo(m, arrival, arrival);
+        l = inserisciInCoda(l, t);
+    }
+
+    if(cursor >= filesize){
+        return 0;
+    }
+
+    return 1;
+}
+
 int main(int argc, char * argv[]) {
 
 	printLog("S1", "Process start with exec");
@@ -127,13 +160,40 @@ int main(int argc, char * argv[]) {
 	char *filename = argv[3];
     S2pid = atoi(argv[4]);
 
+    char log[50];
+
     openResource();
 
+    file = openFile(filename);
+    filesize = lseek(file, 0L, SEEK_END);
+    tryReadFromFile(0);
+ 
+/*
+    line = readLine(file, &cursor);
+    printf("%s\n", line);
+
+    line = readLine(file, &cursor);
+    printf("%s\n", line);
+
+    line = readLine(file, &cursor);
+    printf("%s\n", line);
+
+    line = readLine(file, &cursor);
+    printf("%s\n", line);
+    line = readLine(file, &cursor);
+    printf("%s\n", line);
+    line = readLine(file, &cursor);
+    printf("%s\n", line);
+    line = readLine(file, &cursor);
+    printf("%s\n", line);
+    line = readLine(file, &cursor);
+    printf("%s\n", line);*/
+/*
 	l = createTrafficInfoList(filename);
-    char log[50];
+    
 	sprintf(log, "Loaded message from file %s", filename);
 	printLog("S1", log);
-	
+*/
 	time_t departure;
 /*
     signal(SIGUSR1, hacklerIncraseDelayHandle);
@@ -153,10 +213,19 @@ int main(int argc, char * argv[]) {
     node *tmp;
     trafficInfo *t;
 
-    while(isSet(l)){
+    int eof = 1;
+
+    while(eof || isSet(l)){
+        /*
+        printf("S1 ");
+        printList(l);
+        printf("\n");
+        */
 
         // try to read from file
-
+        if(eof== 1){
+            eof = tryReadFromFile(1);
+        }
         tmp = l;
         while(isSet(tmp)){
             t = tmp->trafficInfo;

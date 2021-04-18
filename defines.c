@@ -4,6 +4,10 @@
 #include "defines.h"
 
 #include <stdio.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <string.h>
+#include <fcntl.h>
 #include <sys/ipc.h>
 
 void printLog(char *p, char *text){
@@ -42,4 +46,12 @@ key_t generateKey(int idProject){
         ErrExit("Can't create key");
     }
     return key;
+}
+
+int openFile(char * filename){
+    int file = open(filename, O_RDONLY);
+    if(file == -1){
+        ErrExit("Impossibile aprire il file");
+    }
+    return file;
 }
