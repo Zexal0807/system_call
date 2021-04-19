@@ -36,4 +36,14 @@ void removeSharedMemory(int shmid) {
     }
 }
 
+void SHtoR1(void *ptr_sh, message *m){
+    ptr_sh=m;
+}
 
+void SHtoR2(void *ptr_sh, message *m){
+    ptr_sh=m;
+}
+
+void SHtoR3(void *ptr_sh, message *m){
+    ptr_sh=m;
+}
