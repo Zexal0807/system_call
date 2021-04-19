@@ -8,6 +8,7 @@
 #include "err_exit.h"
 #include "defines.h"
 #include "shared_memory.h"
+#include "message_queue.h"
 #include "semaphore.h"
 #include "fifo.h"
 #include "pipe.h"
@@ -28,12 +29,17 @@ int main(int argc, char * argv[]) {
     // Wait all process open sem
     semOp(initSemId, SEM_START, 0);
 
+    // Create PIPEs
     int pipeR1R2[2];
     int pipeR2R3[2];
     createPipe(pipeR1R2);
     createPipe(pipeR2R3);
 
+    // Create SH
     int shmid = createSharedMemory();
+
+    // Create MSGQueue
+    int messageQueueId = getMessageQueue();
 
 	// Define the 3 struct process
 	child * R1 = NULL;
@@ -57,10 +63,14 @@ int main(int argc, char * argv[]) {
         char string_shmId[5];
         sprintf(string_shmId, "%d", shmid);
 
+        char string_messageQueueId[5];
+        sprintf(string_messageQueueId, "%d", messageQueueId);
+
         char * argv[] = {
 			string_initSemId,
             string_piper1r2,
             string_shmId,
+            string_messageQueueId,
             NULL
 		};
 		execvp("./R1", argv);
@@ -91,12 +101,16 @@ int main(int argc, char * argv[]) {
         char string_shmId[5];
         sprintf(string_shmId, "%d", shmid);
 
+        char string_messageQueueId[5];
+        sprintf(string_messageQueueId, "%d", messageQueueId);
+
         char * argv[] = {
 			string_initSemId,
             string_piper1r2,
             string_piper2r3,
             string_shmId,
             string_R1pid,
+            string_messageQueueId,
             NULL
 		};
 
@@ -126,12 +140,16 @@ int main(int argc, char * argv[]) {
 
         char string_shmId[5];
         sprintf(string_shmId, "%d", shmid);
+        
+        char string_messageQueueId[5];
+        sprintf(string_messageQueueId, "%d", messageQueueId);
 
         char * argv[] = {
 			string_initSemId,
             string_piper2r3,
             string_shmId,
             string_R2pid,
+            string_messageQueueId,
             NULL
 		};
 		execvp("./R3", argv);

@@ -50,9 +50,6 @@ void openResource(){
     // Open SHM
     sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
     
-    // Open MSGQ
-    messageQueueId = getMessageQueue();
-
     // OPEN FIFO
     fifoId = openSenderFIFO();
 
@@ -113,10 +110,11 @@ int main(int argc, char * argv[]) {
 
 	printLog("S3", "Process start with exec");
 
-    // ARGV: initSemId, PIPE_S2S3
+    // ARGV: initSemId, PIPE_S2S3, messageQueueId
     initSemId = atoi(argv[0]);
     pipeId = atoi(argv[1]);
     sharedMemoryId = atoi(argv[2]);
+    messageQueueId = atoi(argv[3]);
 
 	openResource();
 /*
