@@ -43,14 +43,14 @@ void SHtoR1(message *ptr_sh, message *m, int semid){
     ptr_sh=m;
 }
 
-void SHtoR2(void *ptr_sh, message *m, int semid){
+void SHtoR2(message *ptr_sh, message *m, int semid){
     //Avverto R2 della presenza del messaggio
     semOp(semid, SEM_R2_SH, 1);
     //salvo il messaggio nel segmento
     ptr_sh=m;
 }
 
-void SHtoR3(void *ptr_sh, message *m, int semid){
+void SHtoR3(message *ptr_sh, message *m, int semid){
     //Avverto R3 della presenza del messaggio
     semOp(semid, SEM_R3_SH, 1);
     //salvo il messaggio nel segmento
