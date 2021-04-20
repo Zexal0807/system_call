@@ -48,7 +48,7 @@ void readFromPipeHandle(int sig){
 
 void openResource(){
     // Open SHM
-    sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
+    //sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
     
     // OPEN FIFO
     fifoId = openSenderFIFO();
@@ -92,23 +92,20 @@ void sendMessage(message* m){
         }
         sprintf(log, "Message %d send by MessageQueue", m->id);
     }else if (strcmp(m->comunication, "SH") == 0) {
-        //fermo finché il segmento non è vuoto
         /*
-        semOp(initSemId, SEM_SH, -1);
-
-            switch(m->receiver->number){
-                case 1:
-                    SHtoR1(sharedMemoryData, m, initSemId);
-                    break;
-                case 2:
-                    SHtoR2(sharedMemoryData, m, initSemId);
-                    break;
-                case 3:
-                    SHtoR3(sharedMemoryData, m, initSemId);
-                    break;
-                default:
-                    ErrExit("receiver not exist");
-            }
+        switch(m->receiver->number){
+            case 1:
+                SHtoR1(sharedMemoryData, m, initSemId);
+                break;
+            case 2:
+                SHtoR2(sharedMemoryData, m, initSemId);
+                break;
+            case 3:
+                SHtoR3(sharedMemoryData, m, initSemId);
+                break;
+            default:
+                ErrExit("receiver not exist");
+        }
         sprintf(log, "Message %d send by SharedMemory", m->id);
         */
     }else if (strcmp(m->comunication, "FIFO") == 0) {

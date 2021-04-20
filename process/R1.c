@@ -19,7 +19,7 @@ int sharedMemoryId;
 int thereIsMessage = 1;
 int messageQueueId;
 int pipeId;
-message *sharedMemoryData;
+char *sharedMemoryData;
 
 // SIGPIPE del R2
 void readFromPipeHandle(int sig){
@@ -40,7 +40,7 @@ void readFromPipeHandle(int sig){
 
 void openResource(){
     // Open SHM
-    sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
+    sharedMemoryData = (char *) attachSharedMemory(sharedMemoryId, 0);
 
     // Set signal for read form pipe
     signal(SIGPIPE, readFromPipeHandle);
@@ -81,21 +81,26 @@ void testShutDown(){
 }
 
 void tryReadSH(){
+    int messageInSH = getValue(initSemId, SEM_SH);
+    int messageForMe = getValue(initSemId, SEM_R1_SH);
     
-    int messageinSH=getValue(initSemId, SEM_SH);
-    
-    if(messageinSH==0){
-        message *m;
-        m=sharedMemoryData;
+    if(messageInSH == 0 && messageForMe == 1){
 
-        //free the SH
+        printf("RCCCC\n");
+        
+        printf("R1: '%s'\n", sharedMemoryData);
+
+        message * m = line2message(sharedMemoryData);
+
+        printf("RC : '%s' \n", message2line(m));
+
+        // Free the SH
         semOp(initSemId, SEM_SH, 1);
-
         time_t arrival;
 
         char log[50];
-        sprintf(log, "Receive &ì%d from Shared Memory", m->id);
-        printLog("R3", log);
+        sprintf(log, "Receive %d from Shared Memory", m->id);
+        printLog("R1", log);
 
         time(&arrival);
         trafficInfo *t = createTrafficInfo(m, arrival, arrival);

@@ -42,7 +42,7 @@ void setSemaphore(int semid){
         0,      // R1 have message to read in SH
         0,      // R2 have message to read in SH
         0,      // R3 have message to read in SH
-        0,      // There is no message in SH
+        1,      // There is no message in SH
     };
     union semun arg;
     arg.array = semInitVal;

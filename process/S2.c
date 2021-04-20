@@ -16,7 +16,7 @@
 node *l = NULL;
 int initSemId;
 int sharedMemoryId;
-message * sharedMemoryData;
+//message * sharedMemoryData;
 int messageQueueId;
 int S3pid;
 int pipeS1S2Id;
@@ -48,7 +48,7 @@ void readFromPipeHandle(int sig){
 
 void openResource(){
     // Open SHM
-    sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
+    //sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
     
     // Set signal for read form pipe
     signal(SIGPIPE, readFromPipeHandle);
@@ -56,7 +56,7 @@ void openResource(){
 
 void closeResource(){
     // Close SHM
-    detachSharedMemory(sharedMemoryData);
+    //detachSharedMemory(sharedMemoryData);
     printLog("S2", "Detach shared memory");
     
     // Close MSGQ
@@ -93,10 +93,7 @@ void sendMessage(message* m){
             }
             sprintf(log, "Message %d send by MessageQueue", m->id);
         }else if (strcmp(m->comunication, "SH") == 0) {
-            //fermo finché il segmento non è vuoto
             /*
-            semOp(initSemId, SEM_SH, -1);
-
             switch(m->receiver->number){
                 case 1:
                     SHtoR1(sharedMemoryData, m, initSemId);
@@ -110,24 +107,10 @@ void sendMessage(message* m){
                 default:
                     ErrExit("receiver not exist");
             }
-            sprintf(log, "Message %d send by SharedMemory", m->id);
             */
+            sprintf(log, "Message %d send by SharedMemory", m->id);
         }
-    }else{semOp(initSemId, SEM_SH, -1);
-
-            switch(m->receiver->number){
-                case 1:
-                    SHtoR1(sharedMemoryData, m, initSemId);
-                    break;
-                case 2:
-                    SHtoR2(sharedMemoryData, m, initSemId);
-                    break;
-                case 3:
-                    SHtoR3(sharedMemoryData, m, initSemId);
-                    break;
-                default:
-                    ErrExit("receiver not exist");
-            }
+    }else{
         // Send to S3 by pipe
         char *message = message2line(m);
         write(pipeS2S3Id, message, MAX_MESSAGE_LENGTH);

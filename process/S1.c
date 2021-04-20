@@ -16,7 +16,7 @@ node *l;
 
 int initSemId;
 int sharedMemoryId;
-message * sharedMemoryData;
+char * sharedMemoryData;
 int messageQueueId;
 int pipeId;
 int S2pid;
@@ -59,7 +59,7 @@ void hacklerShutDownHandle(int sig){
 
 void openResource(){
     // Open SHM
-    sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
+    sharedMemoryData = (char *) attachSharedMemory(sharedMemoryId, 0);
     
     // Set signal for incrase delay of all message in list
     /*
@@ -108,13 +108,10 @@ void sendMessage(message* m){
             }
             sprintf(log, "Message %d send by MessageQueue", m->id);
         }else if (strcmp(m->comunication, "SH") == 0) {
-            //Controllo che il segmento sia libero
-            /*
-            semOp(initSemId, SEM_SH, -1);
-
             switch(m->receiver->number){
                 case 1:
                     SHtoR1(sharedMemoryData, m, initSemId);
+                    printf("S1: '%s'\n", sharedMemoryData);
                     break;
                 case 2:
                     SHtoR2(sharedMemoryData, m, initSemId);
@@ -126,7 +123,6 @@ void sendMessage(message* m){
                     ErrExit("receiver not exist");
             }
             sprintf(log, "Message %d send by SharedMemory", m->id); 
-            */
         }
     }else{
         // Send to S2 by pipe
