@@ -57,6 +57,30 @@ void testShutDown(){
     }
 }
 
+void tryReadSH(){
+    
+    int messageinSH=getValue(initSemId, SEM_SH);
+    
+    if(messageinSH==0){
+        message *m;
+        m=sharedMemoryData;
+
+        //free the SH
+        semOp(initSemId, SEM_SH, 1);
+
+        time_t arrival;
+
+        char log[50];
+        sprintf(log, "Receive &ì%d from Shared Memory", m->id);
+        printLog("R3", log);
+
+        time(&arrival);
+        trafficInfo *t = createTrafficInfo(m, arrival, arrival);
+    
+        l = inserisciInCoda(l, t);
+    }
+}
+
 void tryReadFIFO(){
     int thereMessageInFIFO = getValue(initSemId, SEM_MESSAGE_IN_FIFO);
     if(thereMessageInFIFO == 0){
@@ -147,7 +171,8 @@ int main(int argc, char * argv[]) {
         tryReadMSQ();
 
         // Try to read form shared memory
-
+        tryReadSH();
+        
         // Try to read from FIFO
         tryReadFIFO();
 
