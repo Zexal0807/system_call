@@ -155,13 +155,6 @@ int main(int argc, char * argv[]) {
 
 	openResource();
 
-/*
-	signal(SIGUSR1, hacklerIncraseDelayHandle);
-    signal(SIGUSR2, hacklerRemoveMsgHandle);
-    signal(SIGCONT, hacklerSendMsgHandle);
-    signal(SIGTERM, hacklerShutDownHandle);
-*/
-
     // Set this process as end init 
     semOp(initSemId, SEM_INIT_SENDER, -1);
 

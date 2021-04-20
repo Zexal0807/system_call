@@ -21,6 +21,7 @@ int messageQueueId;
 int pipeId;
 int S2pid;
 
+/*
 void hacklerIncraseDelayHandle(int sig){
     // Increase delay of each message in list
     node *tmp = l;
@@ -30,16 +31,41 @@ void hacklerIncraseDelayHandle(int sig){
     }
 }
 
+// SIGUSR2 del RemoveMsg del HK 
+void hacklerRemoveMsgHandle(int sig){
+    // Remove each message in list
+    node *tmp = l;
+    while(isSet(l)){
+        rimuovi(l, l->trafficInfo->message);
+        tmp = getNext(tmp);
+    }
+}
+
+// SIGCONT del SendMessage del HK
+void hacklerSendMsgHandle(int sig){
+    // ciclo su tutti i messaggi setta a 0 i tempi d'attesa in modo che vengano inviati a fine sleep
+    node *tmp = l;
+    while(isSet(tmp)){
+        tmp->trafficInfo->message->delayS1 = 0;
+        tmp = getNext(tmp);
+    }
+}
+
+// SIGTERM ShutDown del HK
+void hacklerShutDownHandle(int sig){
+    closeResource();
+}*/
+
+
 void openResource(){
     // Open SHM
     sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
     
     // Set signal for incrase delay of all message in list
+    /*
     if(signal(SIGUSR1, hacklerIncraseDelayHandle) == SIG_ERR){
         ErrExit("Impossibile settare signalIncraseDelayHandle of S1");
     }
-    
-    /*
     signal(SIGUSR2, hacklerRemoveMsgHandle);
     signal(SIGCONT, hacklerSendMsgHandle);
     signal(SIGTERM, hacklerShutDownHandle);
@@ -62,34 +88,6 @@ void closeResource(){
 
     printLog("S1", "Process End");
 }
-
-
-/*
-// SIGUSR2 del RemoveMsg del HK 
-void hacklerRemoveMsgHandle(int sig){
-    // ciclo su tutti i messaggi e rimuovo tutti eccetto il primo che verrà inviato a fine sleep
-    node *tmp = l;
-    tmp = getNext(tmp);
-    while(isSet(l)){
-        rimuovi(l, l->message);
-        tmp = getNext(tmp);
-    }
-}
-
-// SIGCONT del SendMessage del HK
-void hacklerSendMsgHandle(int sig){
-    //ciclo su tutti i messaggi setta a 0 i tempi d'attesa
-    node *tmp = l;
-    while(isSet(tmp)){
-        tmp->message->delay1 = 0;
-        tmp = getNext(tmp);
-    }
-}
-
-// SIGTERM ShutDown del HK
-void hacklerShutDownHandle(int sig){
-    closeResource();
-}*/
 
 void sendMessage(message* m){
     char log[50];
