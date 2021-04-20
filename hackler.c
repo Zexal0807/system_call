@@ -14,7 +14,14 @@ void readFrom(char * filename){
     openFile(filename);
 }
 
-void readPid(){
+int pidS1 = -1;
+int pidS2 = -2;
+int pidS3 = -3;
+int pidR1 = -4;
+int pidR2 = -5;
+int pidR3 = -6;
+
+void readPid(int initSemId){
     // Wait sender init end 
     semOp(initSemId, SEM_INIT_SENDER, 0);
 
@@ -28,7 +35,63 @@ void readPid(){
 }
 
 void executeAction(hacklerAction *h){
-    
+	char log[50];
+
+    process * target = h->target;
+
+    if(target->type == 'Z' && target->number == 0){
+        // All
+        h->target = SENDER_1();
+        executeAction(h);
+        h->target = SENDER_2();
+        executeAction(h);
+        h->target = SENDER_3();
+        executeAction(h);
+        h->target = RECEIVER_1();
+        executeAction(h);
+        h->target = RECEIVER_2();
+        executeAction(h);
+        h->target = RECEIVER_3();
+        executeAction(h);
+
+        sprintf(log, "Send action %d (%s) to ALL", 
+            h->id,
+            h->action
+        );
+        printLog("HK", log);
+    }else{
+        int targetPid = -1;
+
+        if(target->type == 'S' && target->number == 1){
+            targetPid = pidS1;
+        }else if(target->type == 'S' && target->number == 2){
+            targetPid = pidS2;
+        }else if(target->type == 'S' && target->number == 3){
+            targetPid = pidS3;
+        }else if(target->type == 'R' && target->number == 1){
+            targetPid = pidR1;
+        }else if(target->type == 'R' && target->number == 2){
+            targetPid = pidR2;
+        }else if(target->type == 'R' && target->number == 3){
+            targetPid = pidR3;
+        }
+/*
+        if(targetPid <= 0){
+            ErrExit("Impossibile inviare haction");
+        }
+*/
+        char * sig = "CIAO";
+
+        //kill(targetPid, sig);
+
+        sprintf(log, "Send action %d (%s) to %s (%d)", 
+            h->id,
+            h->action,
+            process2string(target), 
+            targetPid
+        );
+        printLog("HK", log);
+    }
 }
 
 int main(int argc, char *argv[]) {
@@ -55,7 +118,7 @@ int main(int argc, char *argv[]) {
 
 	char *buffer = openHackler(filename);
 	char *end_buffer;
-	char log[100];
+	char log[50];
 	// Divido la stringa al carattere \n
 	char *line = strtok_r(buffer, "\n", &end_buffer);
 	int firstLine = 1;
@@ -76,7 +139,7 @@ int main(int argc, char *argv[]) {
 	}
 	printLog("HK", "Read file");
 
-    readPid();
+    readPid(initSemId);
 
     // Set this process as end init     
     semOp(initSemId, SEM_END_INIT, -1);
