@@ -2,6 +2,7 @@
 /// @brief Contiene l'implementazione del hackler.
 #include <stdio.h>
 #include <unistd.h>
+#include <signal.h>
 
 #include "err_exit.h"
 #include "defines.h"
@@ -77,11 +78,26 @@ void executeAction(hacklerAction *h){
         }
 /*
         if(targetPid <= 0){
-            ErrExit("Impossibile inviare haction");
+            ErrExit("Impossibile inviare action");
         }
 */
-        char * sig = "CIAO";
 
+        int sig = -1;
+
+        if(strcmp(h->action, "IncreaseDelay") == 0){
+            sig = SIGUSR1;
+        }else if(strcmp(h->action, "RemoveMSG") == 0){
+            sig = SIGUSR2;
+        }else if(strcmp(h->action, "SendMSG") == 0){
+            sig = SIGCONT;
+        }else if(strcmp(h->action, "ShutDown") == 0){
+            sig = SIGTERM;
+        }
+/*
+        if(sig < 0){
+            ErrExit("Impossibile inviare action");
+        }
+*/
         //kill(targetPid, sig);
 
         sprintf(log, "Send action %d (%s) to %s (%d)", 
