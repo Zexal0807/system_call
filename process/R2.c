@@ -21,7 +21,7 @@ int messageQueueId;
 int pipeR1R2Id;
 int pipeR2R3Id;
 int R1pid;
-message *sharedMemoryData;
+char *sharedMemoryData;
 
 // SIGPIPE del R3
 void readFromPipeHandle(int sig){
@@ -42,7 +42,7 @@ void readFromPipeHandle(int sig){
 
 void openResource(){
     // Open SHM
-    //sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
+    sharedMemoryData = (char *) attachSharedMemory(sharedMemoryId, 0);
 
     // Set signal for read form pipe
     signal(SIGPIPE, readFromPipeHandle);
@@ -74,6 +74,27 @@ void testShutDown(){
     int r3IsRunning = getValue(initSemId, SEM_R3_IS_RUNNING);
     if(s1IsRunning == 0 && s2IsRunning == 0 && s3IsRunning == 0 && r3IsRunning == 0){
         thereIsMessage = 0;
+    }
+}
+
+void tryReadSH(){
+    int messageInSH = getValue(initSemId, SEM_SH);
+    int messageForMe = getValue(initSemId, SEM_R2_SH);
+    
+    if(messageInSH == 0 && messageForMe == 1){
+        message * m = line2message(sharedMemoryData);
+        // Free the SH
+        semOp(initSemId, SEM_SH, 1);
+        time_t arrival;
+
+        char log[50];
+        sprintf(log, "Receive %d from Shared Memory", m->id);
+        printLog("R2", log);
+
+        time(&arrival);
+        trafficInfo *t = createTrafficInfo(m, arrival, arrival);
+    
+        l = inserisciInCoda(l, t);
     }
 }
 
@@ -144,6 +165,7 @@ int main(int argc, char * argv[]) {
         tryReadMSQ();
 
         // Try to read form shared memory
+        tryReadSH();
 
         tmp = l;
         while(isSet(tmp)){

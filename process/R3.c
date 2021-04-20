@@ -19,13 +19,13 @@ int sharedMemoryId;
 int thereIsMessage = 1;
 int messageQueueId;
 int pipeId;
-message *sharedMemoryData;
+char *sharedMemoryData;
 int R2pid;
 int fifoId;
 
 void openResource(){
     // Open SHM
-    //sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
+    sharedMemoryData = (char *) attachSharedMemory(sharedMemoryId, 0);
     
     // Open FIFO
     fifoId = openReceiverFIFO();
@@ -78,6 +78,27 @@ void tryReadFIFO(){
         
         l = inserisciInCoda(l, t);
     } 
+}
+
+void tryReadSH(){
+    int messageInSH = getValue(initSemId, SEM_SH);
+    int messageForMe = getValue(initSemId, SEM_R3_SH);
+    
+    if(messageInSH == 0 && messageForMe == 1){
+        message * m = line2message(sharedMemoryData);
+        // Free the SH
+        semOp(initSemId, SEM_SH, 1);
+        time_t arrival;
+
+        char log[50];
+        sprintf(log, "Receive %d from Shared Memory", m->id);
+        printLog("R3", log);
+
+        time(&arrival);
+        trafficInfo *t = createTrafficInfo(m, arrival, arrival);
+    
+        l = inserisciInCoda(l, t);
+    }
 }
 
 void tryReadMSQ(){
@@ -147,7 +168,8 @@ int main(int argc, char * argv[]) {
         tryReadMSQ();
 
         // Try to read form shared memory
-    
+        tryReadSH();
+
         // Try to read from FIFO
         tryReadFIFO();
 

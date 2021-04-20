@@ -85,15 +85,7 @@ void tryReadSH(){
     int messageForMe = getValue(initSemId, SEM_R1_SH);
     
     if(messageInSH == 0 && messageForMe == 1){
-
-        printf("RCCCC\n");
-        
-        printf("R1: '%s'\n", sharedMemoryData);
-
         message * m = line2message(sharedMemoryData);
-
-        printf("RC : '%s' \n", message2line(m));
-
         // Free the SH
         semOp(initSemId, SEM_SH, 1);
         time_t arrival;

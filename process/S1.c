@@ -111,7 +111,6 @@ void sendMessage(message* m){
             switch(m->receiver->number){
                 case 1:
                     SHtoR1(sharedMemoryData, m, initSemId);
-                    printf("S1: '%s'\n", sharedMemoryData);
                     break;
                 case 2:
                     SHtoR2(sharedMemoryData, m, initSemId);
@@ -213,11 +212,11 @@ int main(int argc, char * argv[]) {
         if(eof== 1){
             eof = tryReadFromFile(1);
         }
-
+/*
         printf("S1 list: ");
         printList(l);
         printf("\n");
-
+*/
         tmp = l;
         while(isSet(tmp)){
             t = tmp->trafficInfo;

@@ -48,18 +48,20 @@ void SHtoR1(char *ptr_sh, message *m, int semid){
     memcpy(ptr_sh, msg, strlen(msg));
 }
 
-void SHtoR2(message *ptr_sh, message *m, int semid){
+void SHtoR2(char *ptr_sh, message *m, int semid){
     semOp(semid, SEM_SH, -1);
     //Avverto R2 della presenza del messaggio
     semOp(semid, SEM_R2_SH, 1);
     //salvo il messaggio nel segmento
-    ptr_sh = m;
+    char *msg = message2line(m);
+    memcpy(ptr_sh, msg, strlen(msg));
 }
 
-void SHtoR3(message *ptr_sh, message *m, int semid){
+void SHtoR3(char *ptr_sh, message *m, int semid){
     semOp(semid, SEM_SH, -1);
     //Avverto R3 della presenza del messaggio
     semOp(semid, SEM_R3_SH, 1);
     //salvo il messaggio nel segmento
-    ptr_sh = m;
+    char *msg = message2line(m);
+    memcpy(ptr_sh, msg, strlen(msg));
 }
