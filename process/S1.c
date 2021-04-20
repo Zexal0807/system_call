@@ -21,9 +21,29 @@ int messageQueueId;
 int pipeId;
 int S2pid;
 
+void hacklerIncraseDelayHandle(int sig){
+    // Increase delay of each message in list
+    node *tmp = l;
+    while(isSet(tmp)){
+        tmp->trafficInfo->message->delayS1 += 5;
+        tmp = getNext(tmp);
+    }
+}
+
 void openResource(){
     // Open SHM
     sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
+    
+    // Set signal for incrase delay of all message in list
+    if(signal(SIGUSR1, hacklerIncraseDelayHandle) == SIG_ERR){
+        ErrExit("Impossibile settare signalIncraseDelayHandle of S1");
+    }
+    
+    /*
+    signal(SIGUSR2, hacklerRemoveMsgHandle);
+    signal(SIGCONT, hacklerSendMsgHandle);
+    signal(SIGTERM, hacklerShutDownHandle);
+    */
 }
 
 void closeResource(){
@@ -42,17 +62,9 @@ void closeResource(){
 
     printLog("S1", "Process End");
 }
-/*
-// SIGUSR1 del IncraseDelay dell HK
-void hacklerIncraseDelayHandle(int sig){
-    // ciclo su tutti i messagi e aumenta il time
-    node *tmp = l;
-    while(isSet(tmp)){
-        tmp->message->delay1 += 5;
-        tmp = getNext(tmp);
-    }
-}
 
+
+/*
 // SIGUSR2 del RemoveMsg del HK 
 void hacklerRemoveMsgHandle(int sig){
     // ciclo su tutti i messaggi e rimuovo tutti eccetto il primo che verrà inviato a fine sleep
@@ -98,7 +110,25 @@ void sendMessage(message* m){
             }
             sprintf(log, "Message %d send by MessageQueue", m->id);
         }else if (strcmp(m->comunication, "SH") == 0) {
+            //Controllo che il segmento sia libero
+            /*
+            semOp(initSemId, SEM_SH, -1);
+
+            switch(m->receiver->number){
+                case 1:
+                    SHtoR1(sharedMemoryData, m, initSemId);
+                    break;
+                case 2:
+                    SHtoR2(sharedMemoryData, m, initSemId);
+                    break;
+                case 3:
+                    SHtoR3(sharedMemoryData, m, initSemId);
+                    break;
+                default:
+                    ErrExit("receiver not exist");
+            }
             sprintf(log, "Message %d send by SharedMemory", m->id); 
+            */
         }
     }else{
         // Send to S2 by pipe
@@ -168,14 +198,7 @@ int main(int argc, char * argv[]) {
     filesize = lseek(file, 0L, SEEK_END);
     tryReadFromFile(0);
 
-	time_t departure;
-/*
-    signal(SIGUSR1, hacklerIncraseDelayHandle);
-    signal(SIGUSR2, hacklerRemoveMsgHandle);
-    signal(SIGCONT, hacklerSendMsgHandle);
-    signal(SIGTERM, hacklerShutDownHandle);
-*/
-    
+
     // Set this process as end init
     semOp(initSemId, SEM_INIT_SENDER, -1);
 
@@ -186,6 +209,7 @@ int main(int argc, char * argv[]) {
     
     node *tmp;
     trafficInfo *t;
+	time_t departure;
 
     int eof = 1;
 
@@ -195,6 +219,11 @@ int main(int argc, char * argv[]) {
         if(eof== 1){
             eof = tryReadFromFile(1);
         }
+
+        printf("S1 list: ");
+        printList(l);
+        printf("\n");
+
         tmp = l;
         while(isSet(tmp)){
             t = tmp->trafficInfo;

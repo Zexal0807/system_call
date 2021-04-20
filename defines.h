@@ -26,7 +26,7 @@
 #define RECEIVER_3_FILENAME "OutputFiles/F6.csv"
 
 #define HACKLER_FILENAME "OutputFiles/F7_out.csv"
-#define MAX_HACKLER_ACTION 10
+#define MAX_HACKLER_ACTION 20
 
 #define MAX_MESSAGE_LENGTH 150
 
@@ -37,7 +37,7 @@
 #define KEY_MESSAGE_QUEUE 01110001  // Q
 #define KEY_FIFO "OutputFiles/my_fifo.txt"
 
-#define SEM_NUMBER 15
+#define SEM_NUMBER 19
 
 #define SEM_START 0
 #define SEM_INIT_SENDER 1
@@ -58,6 +58,12 @@
 #define SEM_R3_HAVE_MESSAGE_TO_SEND_BY_PIPE 13
 
 #define SEM_MESSAGE_IN_FIFO 14
+
+#define SEM_R1_SH 15
+#define SEM_R2_SH 16
+#define SEM_R3_SH 17
+
+#define SEM_SH 18
 
 #endif
 

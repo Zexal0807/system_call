@@ -38,7 +38,11 @@ void setSemaphore(int semid){
         1,      // S2 have message to send by PIPE
         1,      // R2 have message to send by PIPE
         1,      // R3 have message to send by PIPE
-        1       // Can write on FIFO
+        1,      // Can write on FIFO
+        0,      // R1 have message to read in SH
+        0,      // R2 have message to read in SH
+        0,      // R3 have message to read in SH
+        0,      // There is no message in SH
     };
     union semun arg;
     arg.array = semInitVal;
