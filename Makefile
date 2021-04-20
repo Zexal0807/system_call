@@ -39,7 +39,7 @@ R3: $(RECEIVER_3_OBJS)
 	@$(CC) $^ -o $@  -lm
 
 # Define and create Receiver Manager
-RECEIVER_SRCS = $(DEFINES_SRCS) err_exit.c shared_memory.c  semaphore.c pipe.c fifo.c receiver_manager.c
+RECEIVER_SRCS = $(DEFINES_SRCS) err_exit.c shared_memory.c  message_queue.c semaphore.c pipe.c fifo.c receiver_manager.c
 RECEIVER_OBJS = $(addprefix $(OBJDIR)/, $(RECEIVER_SRCS:.c=.o))
 
 receiver_manager: $(RECEIVER_OBJS)
@@ -71,7 +71,7 @@ S3: $(SENDER_3_OBJS)
 	@$(CC) $^ -o $@  -lm
 
 # Define and create Sender Manager
-SENDER_SRCS = $(DEFINES_SRCS) err_exit.c shared_memory.c semaphore.c pipe.c fifo.c sender_manager.c
+SENDER_SRCS = $(DEFINES_SRCS) err_exit.c shared_memory.c message_queue.c semaphore.c pipe.c fifo.c sender_manager.c
 SENDER_OBJS = $(addprefix $(OBJDIR)/, $(SENDER_SRCS:.c=.o))
 
 sender_manager: $(SENDER_OBJS)

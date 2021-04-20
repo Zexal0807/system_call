@@ -24,8 +24,6 @@ int S2pid;
 void openResource(){
     // Open SHM
     sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
-    // Open MSGQ
-    messageQueueId = getMessageQueue();
 }
 
 void closeResource(){
@@ -153,12 +151,14 @@ int main(int argc, char * argv[]) {
 
 	printLog("S1", "Process start with exec");
 
-    // ARGV: initSemId, PIPE_S1S2, shmId, inputFile, S2pid
+    // ARGV: initSemId, PIPE_S1S2, shmId, S2pid, messageQueueId, inputFile
+
     initSemId = atoi(argv[0]);
     pipeId = atoi(argv[1]);
     sharedMemoryId = atoi(argv[2]);
-	char *filename = argv[3];
-    S2pid = atoi(argv[4]);
+    S2pid = atoi(argv[3]);
+    messageQueueId = atoi(argv[4]);
+	char *filename = argv[5];
 
     char log[50];
 

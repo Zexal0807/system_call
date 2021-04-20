@@ -4,6 +4,7 @@
 #include "err_exit.h"
 #include "defines.h"
 #include "shared_memory.h"
+#include "message_queue.h"
 #include "semaphore.h"
 #include "fifo.h"
 #include "pipe.h"
@@ -32,13 +33,20 @@ int main(int argc, char * argv[]) {
     // Wait all process open sem
     semOp(initSemId, SEM_START, 0);
 
+    // Create PIPEs
     int pipeS1S2[2];
     int pipeS2S3[2];
     createPipe(pipeS1S2);
     createPipe(pipeS2S3);
 
+    // Create SH
     int shmid = createSharedMemory();
+
+    // Create FIFO
     createFIFO();
+
+    // Create MSGQueue
+    int messageQueueId = getMessageQueue();
 
 	// Define the 3 struct process
 	child *S1 = NULL;
@@ -64,10 +72,14 @@ int main(int argc, char * argv[]) {
         char string_shmId[5];
         sprintf(string_shmId, "%d", shmid);
 
+        char string_messageQueueId[5];
+        sprintf(string_messageQueueId, "%d", messageQueueId);
+
         char * argv[] = {
 			string_initSemId,
             string_pipes2s3,
             string_shmId,
+            string_messageQueueId,
             NULL
 		};
 		execvp("./S3", argv);
@@ -98,12 +110,16 @@ int main(int argc, char * argv[]) {
         char string_shmId[5];
         sprintf(string_shmId, "%d", shmid);
 
+        char string_messageQueueId[5];
+        sprintf(string_messageQueueId, "%d", messageQueueId);
+
         char * argv[] = {
 			string_initSemId,
             string_pipes1s2,
             string_pipes2s3,
             string_shmId,
             string_S3pid,
+            string_messageQueueId,
             NULL
 		};
 		execvp("./S2", argv);
@@ -131,6 +147,9 @@ int main(int argc, char * argv[]) {
 
         char string_shmId[5];
         sprintf(string_shmId, "%d", shmid);
+        
+        char string_messageQueueId[5];
+        sprintf(string_messageQueueId, "%d", messageQueueId);
 
         char string_inputFile[50];
         sprintf(string_inputFile, "%s", argv[1]);
@@ -138,8 +157,9 @@ int main(int argc, char * argv[]) {
 			string_initSemId,
             string_pipes1s2,
             string_shmId,
-            string_inputFile,
             string_S2pid,
+            string_messageQueueId,
+            string_inputFile,
             NULL
 		};
 		execvp("./S1", argv);
@@ -171,6 +191,15 @@ int main(int argc, char * argv[]) {
 	while ((child = wait( &status)) != -1) {
 		//printf("returned child %d with status %d\n", child, status);
 	}
+
+    // Remove IPC
+    removeSemaphore(initSemId);
+    deleteMessageQueue(messageQueueId);
+    removeSharedMemory(shmid);
+    closePipe(pipeS1S2[0]);
+    closePipe(pipeS1S2[1]);
+    closePipe(pipeS2S3[0]);
+    closePipe(pipeS2S3[1]);
 
 	printLog("SM", "Process End");
 	return 0;

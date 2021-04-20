@@ -43,8 +43,6 @@ void readFromPipeHandle(int sig){
 void openResource(){
     // Open SHM
     sharedMemoryData = (message *) attachSharedMemory(sharedMemoryId, 0);
-    // Open MSGQ
-    messageQueueId = getMessageQueue();
 
     // Set signal for read form pipe
     signal(SIGPIPE, readFromPipeHandle);
@@ -113,12 +111,13 @@ void sendMessage(message* m){
 int main(int argc, char * argv[]) {
 	printLog("R2", "Process start with exec");
 	
-    // ARGV: initSemId, pipeR1R2, pipeR2R3, SHMid, R1Pid
+    // ARGV: initSemId, pipeR1R2, pipeR2R3, SHMid, R1Pid, messageQueueId
     initSemId = atoi(argv[0]);
     pipeR1R2Id = atoi(argv[1]);
     pipeR2R3Id = atoi(argv[2]);
     sharedMemoryId = atoi(argv[3]);
     R1pid = atoi(argv[4]);
+    messageQueueId = atoi(argv[5]);
 
     openResource();
 
