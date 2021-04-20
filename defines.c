@@ -11,6 +11,9 @@
 #include <sys/ipc.h>
 
 void printLog(char *p, char *text){
+    time_t logtime;
+    time(&logtime);
+    printf("[%s] ", time_t2string(logtime)); 
 	switch(p[0]){
 		case 'S':
 			if(p[1] == 'M'){
@@ -37,6 +40,8 @@ void printLog(char *p, char *text){
 	}
 	printf("%s", p);
 	printf("\033[0m");
+
+    
 	printf(" : %s\n", text);
 }
 
