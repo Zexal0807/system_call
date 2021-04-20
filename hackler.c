@@ -11,7 +11,24 @@
 #include "pipe.h"
 
 void readFrom(char * filename){
+    openFile(filename);
+}
 
+void readPid(){
+    // Wait sender init end 
+    semOp(initSemId, SEM_INIT_SENDER, 0);
+
+    // Read PID form sender file
+    
+    // Wait receiver init end 
+    semOp(initSemId, SEM_INIT_RECEIVER, 0);
+
+    // Read PID form receiver file
+	
+}
+
+void executeAction(hacklerAction *h){
+    
 }
 
 int main(int argc, char *argv[]) {
@@ -34,6 +51,8 @@ int main(int argc, char *argv[]) {
 	hacklerAction *data[MAX_HACKLER_ACTION];
 	int index = 0;
 
+    // TODO : use dynamic read as S1
+
 	char *buffer = openHackler(filename);
 	char *end_buffer;
 	char log[100];
@@ -55,8 +74,10 @@ int main(int argc, char *argv[]) {
 		// Divido la stringa al carattere \n, uso NULL in modo che parta dall'ultima posizione in cui aveva diviso 
 		line = strtok_r(NULL, "\n", &end_buffer);
 	}
-	printLog("HK", "End file");
-	
+	printLog("HK", "Read file");
+
+    readPid();
+
     // Set this process as end init     
     semOp(initSemId, SEM_END_INIT, -1);
 
@@ -68,12 +89,17 @@ int main(int argc, char *argv[]) {
 	//Esecuzione delle azioni
 	printLog("HK", "Start execution of the action");
     
-	for(int j = index - 1; j >= 0; j--){
-		hacklerAction *h = data[j];
+	for(int i = 0; i < index; i++){
+		hacklerAction *h = data[i];
+
+        //Wait delay
+        sleep(h->delay);
 
         // Exec action h
+        executeAction(h);
 
-		printHacklerAction(HACKLER_FILENAME, data[j]);
+        // Print action
+		printHacklerAction(HACKLER_FILENAME, h);
 	}
 	printLog("HK", "End action");
 

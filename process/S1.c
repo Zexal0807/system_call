@@ -167,33 +167,7 @@ int main(int argc, char * argv[]) {
     file = openFile(filename);
     filesize = lseek(file, 0L, SEEK_END);
     tryReadFromFile(0);
- 
-/*
-    line = readLine(file, &cursor);
-    printf("%s\n", line);
 
-    line = readLine(file, &cursor);
-    printf("%s\n", line);
-
-    line = readLine(file, &cursor);
-    printf("%s\n", line);
-
-    line = readLine(file, &cursor);
-    printf("%s\n", line);
-    line = readLine(file, &cursor);
-    printf("%s\n", line);
-    line = readLine(file, &cursor);
-    printf("%s\n", line);
-    line = readLine(file, &cursor);
-    printf("%s\n", line);
-    line = readLine(file, &cursor);
-    printf("%s\n", line);*/
-/*
-	l = createTrafficInfoList(filename);
-    
-	sprintf(log, "Loaded message from file %s", filename);
-	printLog("S1", log);
-*/
 	time_t departure;
 /*
     signal(SIGUSR1, hacklerIncraseDelayHandle);
@@ -216,13 +190,8 @@ int main(int argc, char * argv[]) {
     int eof = 1;
 
     while(eof || isSet(l)){
-        /*
-        printf("S1 ");
-        printList(l);
-        printf("\n");
-        */
-
         // try to read from file
+        // TODO: aggiungere un max message in list
         if(eof== 1){
             eof = tryReadFromFile(1);
         }
