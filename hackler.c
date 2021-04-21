@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <signal.h>
+#include <sys/types.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "err_exit.h"
 #include "defines.h"
@@ -11,27 +14,103 @@
 #include "fifo.h"
 #include "pipe.h"
 
-void readFrom(char * filename){
-    openFile(filename);
-}
+int pidS1 = 0;
+int pidS2 = 0;
+int pidS3 = 0;
+int pidR1 = 0;
+int pidR2 = 0;
+int pidR3 = 0;
 
-int pidS1 = -1;
-int pidS2 = -2;
-int pidS3 = -3;
-int pidR1 = -4;
-int pidR2 = -5;
-int pidR3 = -6;
+void string2pid(char *line, char *type){
+    printf("LINE: '%s'\n", line);
+    char *process = strtok(line, ";");
+    char *pid = strtok(NULL, ";");
+    printf("LINE: '%s, %s'\n", process, pid);
+
+    if(strcmp(process,"S1") == 0){
+        pidS1=atoi(pid);
+    }else if(strcmp(process,"S2") == 0){
+        pidS2=atoi(pid);
+    }
+    // E così via, fare pure te che devo staccare
+    
+
+
+/*
+    if(strcmp(type,"SENDER") == 0){
+        switch (token[0]){
+            case '1':
+                token=strtok(NULL,"\n");
+                pidS1=atoi(token);
+                break;
+            case '2':
+                token=strtok(NULL,"\n");
+                pidS2=atoi(token);
+                break;
+            case '3':
+                token=strtok(NULL,"\n");
+                pidS3=atoi(token);
+                break;
+            default:
+                ErrExit("Error in Sender File");
+        }
+        
+    }
+    else if(strcmp(type,"RECEIVER") == 0){
+        switch (token[0]){
+            case '1':
+                token=strtok(NULL,"\n");
+                pidR1=atoi(token);
+                break;
+            case '2':
+                token=strtok(NULL,"\n");
+                pidR2=atoi(token);
+                break;
+            case '3':
+                token=strtok(NULL,"\n");
+                pidR3=atoi(token);
+                break;
+            default:
+                ErrExit("Error in Receiver File");
+        }
+    }
+    else
+        ErrExit("Error in document's type");
+        */
+};
+
+void readFrom(char * filename, char *type){
+    char *saveptr;
+    int file = openFile(filename);
+    int dim=lseek(file, 0L, SEEK_END);
+    lseek(file, 0L, SEEK_SET);
+    
+    char *buffer = (char*) malloc((dim)*sizeof(char));
+
+    read(file, buffer, dim);
+
+    char *token=strtok(buffer,"\n");
+    //salto la prima riga
+    token=strtok(NULL,"\n");
+    //analizzo il resto del testo
+    while(token!=NULL){
+        string2pid(token, type);
+        token=strtok(NULL,"\n");
+    }
+}
 
 void readPid(int initSemId){
     // Wait sender init end 
     semOp(initSemId, SEM_INIT_SENDER, 0);
 
     // Read PID form sender file
+    readFrom(SENDER_FILENAME, "SENDER");
     
     // Wait receiver init end 
     semOp(initSemId, SEM_INIT_RECEIVER, 0);
 
     // Read PID form receiver file
+    readFrom(RECEIVER_FILENAME, "RECEIVER");
 	
 }
 
@@ -156,6 +235,8 @@ int main(int argc, char *argv[]) {
 	printLog("HK", "Read file");
 
     readPid(initSemId);
+
+    printf("PID: %d, %d, %d, %d, %d, %d\n", pidS1, pidS2, pidS3, pidR1, pidR2, pidR3);
 
     // Set this process as end init     
     semOp(initSemId, SEM_END_INIT, -1);
