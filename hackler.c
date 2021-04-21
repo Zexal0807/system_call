@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <signal.h>
+#include <sys/types.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "err_exit.h"
 #include "defines.h"
@@ -11,27 +14,69 @@
 #include "fifo.h"
 #include "pipe.h"
 
-void readFrom(char * filename){
-    openFile(filename);
-}
+int pidS1 = 0;
+int pidS2 = 0;
+int pidS3 = 0;
+int pidR1 = 0;
+int pidR2 = 0;
+int pidR3 = 0;
 
-int pidS1 = -1;
-int pidS2 = -2;
-int pidS3 = -3;
-int pidR1 = -4;
-int pidR2 = -5;
-int pidR3 = -6;
+void string2pid(char *line){
+    char *saveptr1;
+    char *process = strtok_r(line, ";",&saveptr1);
+    char *pid = strtok_r(NULL, ";",&saveptr1);
+
+    if(strcmp(process,"S1") == 0){
+        pidS1=atoi(pid);
+    }else if(strcmp(process,"S2") == 0){
+        pidS2=atoi(pid);
+    }else if(strcmp(process,"S3") == 0){
+        pidS3=atoi(pid);
+    }else if(strcmp(process,"R1") == 0){
+        pidR1=atoi(pid);
+    }else if(strcmp(process,"R2") == 0){
+        pidR2=atoi(pid);
+    }else if(strcmp(process,"R3") == 0){
+        pidR3=atoi(pid);
+    }else{
+        ErrExit("Error in File");
+    }
+};
+
+void readFrom(char * filename){
+    int file = openFile(filename);
+    ErrOpen(file);
+    
+    int dim=lseek(file, 0L, SEEK_END);
+    lseek(file, 0L, SEEK_SET);
+    
+    char *buffer = (char*) malloc((dim)*sizeof(char));
+
+    read(file, buffer, dim);
+
+    char *saveptr;
+    char *token=strtok_r(buffer,"\n",&saveptr);
+    //salto la prima riga
+    token = strtok_r(NULL,"\n", &saveptr);
+    //analizzo il resto del testo
+    while(token != NULL){
+        string2pid(token);
+        token=strtok_r(NULL,"\n", &saveptr);
+    }
+}
 
 void readPid(int initSemId){
     // Wait sender init end 
     semOp(initSemId, SEM_INIT_SENDER, 0);
 
     // Read PID form sender file
+    readFrom(SENDER_FILENAME);
     
     // Wait receiver init end 
     semOp(initSemId, SEM_INIT_RECEIVER, 0);
 
     // Read PID form receiver file
+    readFrom(RECEIVER_FILENAME);
 	
 }
 
@@ -156,6 +201,8 @@ int main(int argc, char *argv[]) {
 	printLog("HK", "Read file");
 
     readPid(initSemId);
+
+    printf("PID: %d, %d, %d, %d, %d, %d\n", pidS1, pidS2, pidS3, pidR1, pidR2, pidR3);
 
     // Set this process as end init     
     semOp(initSemId, SEM_END_INIT, -1);
