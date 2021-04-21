@@ -80,13 +80,13 @@ void sendMessage(message* m){
         if (strcmp(m->comunication, "Q") == 0) {
             switch(m->receiver->number){
                 case 1:
-                    sendToR1(messageQueueId, m);
+                    Q_writeForR1(messageQueueId, m);
                     break;
                 case 2:
-                    sendToR2(messageQueueId, m);
+                    Q_writeForR2(messageQueueId, m);
                     break;
                 case 3:
-                    sendToR3(messageQueueId, m);
+                    Q_writeForR3(messageQueueId, m);
                     break;
                 default:
                     ErrExit("receiver not exist");
@@ -95,13 +95,13 @@ void sendMessage(message* m){
         }else if (strcmp(m->comunication, "SH") == 0) {
             switch(m->receiver->number){
                 case 1:
-                    SHtoR1(sharedMemoryData, m, initSemId);
+                    SH_writeForR1(sharedMemoryData, m, initSemId);
                     break;
                 case 2:
-                    SHtoR2(sharedMemoryData, m, initSemId);
+                    SH_writeForR2(sharedMemoryData, m, initSemId);
                     break;
                 case 3:
-                    SHtoR3(sharedMemoryData, m, initSemId);
+                    SH_writeForR3(sharedMemoryData, m, initSemId);
                     break;
                 default:
                     ErrExit("receiver not exist");

@@ -2,12 +2,13 @@
 /// @brief Contiene l'implementazione delle funzioni
 ///         specifiche per la gestione delle FIFO.
 
-#include "err_exit.h"
-#include "fifo.h"
-#include "defines.h"
 #include <unistd.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+
+#include "err_exit.h"
+#include "fifo.h"
+#include "defines.h"
 
 void createFIFO(){
     if(mkfifo(KEY_FIFO, S_IRUSR|S_IWUSR) == -1){

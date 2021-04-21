@@ -17,7 +17,7 @@ int getMessageQueue(){
     return id;
 }
 
-void sendToR1(int msqid, message *m){
+void Q_writeForR1(int msqid, message *m){
     queueMsg msg;
     msg.mtype = 1;
 
@@ -29,7 +29,7 @@ void sendToR1(int msqid, message *m){
     }
 }
 
-void sendToR2(int msqid, message *m){
+void Q_writeForR2(int msqid, message *m){
     queueMsg msg;
     msg.mtype = 2;
 
@@ -41,7 +41,7 @@ void sendToR2(int msqid, message *m){
     }
 }
 
-void sendToR3(int msqid, message *m){
+void Q_writeForR3(int msqid, message *m){
     queueMsg msg;
     msg.mtype = 3;
 

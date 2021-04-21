@@ -1,16 +1,16 @@
 /// @file shared_memory.c
 /// @brief Contiene l'implementazione delle funzioni specifiche per la gestione della MEMORIA CONDIVISA.
 
+#include <sys/shm.h>
+#include <sys/stat.h>
+#include <stdio.h>
+#include <string.h>
+
 #include "err_exit.h"
 #include "defines.h"
 #include "shared_memory.h"
 #include "semaphore.h"
 #include "struct/message.h"
-
-#include <sys/shm.h>
-#include <sys/stat.h>
-#include <stdio.h>
-#include <string.h>
 
 int createSharedMemory(){
     int shmid = shmget(KEY_SHARED_MEMORY, sizeof(char)*MAX_MESSAGE_LENGTH, IPC_CREAT | S_IRUSR | S_IWUSR);
@@ -21,14 +21,14 @@ int createSharedMemory(){
 }
 
 void * attachSharedMemory(int shmid, int shmflg) {
-    void *ptr_sh = shmat(shmid, NULL, shmflg);
-    if (ptr_sh == (void *)-1)
+    void *sharedMemory = shmat(shmid, NULL, shmflg);
+    if (sharedMemory == (void *)-1)
         ErrExit("shmat failed");
-    return ptr_sh;
+    return sharedMemory;
 }
 
-void detachSharedMemory(void *ptr_sh) {
-    if(shmdt(ptr_sh) == -1){
+void detachSharedMemory(void *sharedMemory) {
+    if(shmdt(sharedMemory) == -1){
         ErrExit("shmdt failed");
     }
 }
@@ -39,29 +39,38 @@ void removeSharedMemory(int shmid) {
     }
 }
 
-void SHtoR1(char *ptr_sh, message *m, int semid){
+void SH_writeForR1(char *sharedMemory, message *m, int semid){
+    // Aspetto che la SH sia libera per occuparla
     semOp(semid, SEM_SH, -1);
-    //Avverto R1 della presenza del messaggio
+
+    // Scrivo il messaggio nella shared memory
+    char *msg = message2line(m);
+    memcpy(sharedMemory, msg, strlen(msg));
+
+    // Avverto R1 della presenza del messaggio
     semOp(semid, SEM_R1_SH, 1);
-    //salvo il messaggio nel segmento
-    char *msg = message2line(m);
-    memcpy(ptr_sh, msg, strlen(msg));
 }
 
-void SHtoR2(char *ptr_sh, message *m, int semid){
+void SH_writeForR2(char *sharedMemory, message *m, int semid){
+    // Aspetto che la SH sia libera per occuparla
     semOp(semid, SEM_SH, -1);
-    //Avverto R2 della presenza del messaggio
+
+    // Scrivo il messaggio nella shared memory
+    char *msg = message2line(m);
+    memcpy(sharedMemory, msg, strlen(msg));
+
+    // Avverto R2 della presenza del messaggio
     semOp(semid, SEM_R2_SH, 1);
-    //salvo il messaggio nel segmento
-    char *msg = message2line(m);
-    memcpy(ptr_sh, msg, strlen(msg));
 }
 
-void SHtoR3(char *ptr_sh, message *m, int semid){
+void SH_writeForR3(char *sharedMemory, message *m, int semid){
+    // Aspetto che la SH sia libera per occuparla
     semOp(semid, SEM_SH, -1);
-    //Avverto R3 della presenza del messaggio
-    semOp(semid, SEM_R3_SH, 1);
-    //salvo il messaggio nel segmento
+
+    // Scrivo il messaggio nella shared memory
     char *msg = message2line(m);
-    memcpy(ptr_sh, msg, strlen(msg));
+    memcpy(sharedMemory, msg, strlen(msg));
+
+    // Avverto R3 della presenza del messaggio
+    semOp(semid, SEM_R3_SH, 1);
 }

@@ -7,10 +7,10 @@ int createSharedMemory();
 
 void * attachSharedMemory(int shmid, int shmflg);
 
-void detachSharedMemory(void *ptr_sh);
+void detachSharedMemory(void *sharedMemory);
 
 void removeSharedMemory(int shmid);
 
-void SHtoR1(char *ptr_sh, message *m, int semid);
-void SHtoR2(char *ptr_sh, message *m, int semid);
-void SHtoR3(char *ptr_sh, message *m, int semid);
+void SH_writeForR1(char *sharedMemory, message *m, int semid);
+void SH_writeForR2(char *sharedMemory, message *m, int semid);
+void SH_writeForR3(char *sharedMemory, message *m, int semid);

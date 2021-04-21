@@ -8,11 +8,15 @@ typedef struct {
 
 int getMessageQueue();
 
-void sendToR1(int msqid, message *m);
+void Q_writeForR1(int msqid, message *m);
 
-void sendToR2(int msqid, message *m);
+void Q_writeForR2(int msqid, message *m);
 
-void sendToR3(int msqid, message *m);
+void Q_writeForR3(int msqid, message *m);
+
+/*
+    Lettura della messageQueue i messaggi per il corrispondente receiver, return NULL se non trova niente
+*/
 
 message * readR1(int msqid);
 
