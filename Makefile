@@ -12,7 +12,7 @@ $(OBJDIR):
 	@mkdir -p $(OBJDIR)/process
 	@mkdir -p $(OBJDIR)/struct
 
-DEFINES_SRCS = defines.c struct/process.c struct/child.c struct/message.c struct/trafficInfo.c struct/hacklerAction.c struct/list.c
+DEFINES_SRCS = defines.c struct/process.c struct/child.c struct/message.c struct/trafficInfo.c struct/hacklerAction.c struct/list.c struct/history.c
 
 # Define and create R1 executable
 RECEIVER_1_SRCS = $(DEFINES_SRCS) err_exit.c shared_memory.c message_queue.c semaphore.c pipe.c fifo.c process/R1.c
