@@ -28,6 +28,8 @@
 #define HACKLER_FILENAME "OutputFiles/F7_out.csv"
 #define MAX_HACKLER_ACTION 20
 
+// TODO: set hackler action as const
+
 #define MAX_MESSAGE_LENGTH 150
 
 #define IPC_HISTORY_FILENAME "OutputFiles/F10.csv"

@@ -21,7 +21,7 @@ int messageQueueId;
 int pipeId;
 int S2pid;
 
-/*
+
 void hacklerIncraseDelayHandle(int sig){
     // Increase delay of each message in list
     node *tmp = l;
@@ -31,17 +31,14 @@ void hacklerIncraseDelayHandle(int sig){
     }
 }
 
-// SIGUSR2 del RemoveMsg del HK 
 void hacklerRemoveMsgHandle(int sig){
     // Remove each message in list
-    node *tmp = l;
     while(isSet(l)){
-        rimuovi(l, l->trafficInfo->message);
-        tmp = getNext(tmp);
+        l = rimuovi(l, l->trafficInfo);
+        l = getNext(l);
     }
 }
 
-// SIGCONT del SendMessage del HK
 void hacklerSendMsgHandle(int sig){
     // ciclo su tutti i messaggi setta a 0 i tempi d'attesa in modo che vengano inviati a fine sleep
     node *tmp = l;
@@ -51,25 +48,31 @@ void hacklerSendMsgHandle(int sig){
     }
 }
 
-// SIGTERM ShutDown del HK
+int shutDown = 0;
 void hacklerShutDownHandle(int sig){
-    closeResource();
-}*/
-
+    shutDown = 1;
+}
 
 void openResource(){
     // Open SHM
     sharedMemoryData = (char *) attachSharedMemory(sharedMemoryId, 0);
     
     // Set signal for incrase delay of all message in list
-    /*
     if(signal(SIGUSR1, hacklerIncraseDelayHandle) == SIG_ERR){
         ErrExit("Impossibile settare signalIncraseDelayHandle of S1");
     }
-    signal(SIGUSR2, hacklerRemoveMsgHandle);
-    signal(SIGCONT, hacklerSendMsgHandle);
-    signal(SIGTERM, hacklerShutDownHandle);
-    */
+    // Set signal for remove all message in list
+    if(signal(SIGUSR2, hacklerRemoveMsgHandle) == SIG_ERR){
+        ErrExit("Impossibile settare signalRemoveMsgHandle of S1");
+    }
+    // Set signal for send all message in list
+    if(signal(SIGCONT, hacklerSendMsgHandle) == SIG_ERR){
+        ErrExit("Impossibile settare signalSendMsgHandle of S1");
+    }
+    // Set signal for shut down the process
+    if(signal(SIGTERM, hacklerShutDownHandle) == SIG_ERR){
+        ErrExit("Impossibile settare signalShutDownHandle of S1");
+    }
 }
 
 void closeResource(){
@@ -191,7 +194,6 @@ int main(int argc, char * argv[]) {
     filesize = lseek(file, 0L, SEEK_END);
     tryReadFromFile(0);
 
-
     // Set this process as end init
     semOp(initSemId, SEM_INIT_SENDER, -1);
 
@@ -206,17 +208,17 @@ int main(int argc, char * argv[]) {
 
     int eof = 1;
 
-    while(eof || isSet(l)){
+    while((eof || isSet(l)) && shutDown == 0){
         // try to read from file
         // TODO: aggiungere un max message in list
         if(eof== 1){
             eof = tryReadFromFile(1);
         }
-/*
+
         printf("S1 list: ");
         printList(l);
         printf("\n");
-*/
+
         tmp = l;
         while(isSet(tmp)){
             t = tmp->trafficInfo;
@@ -241,11 +243,14 @@ int main(int argc, char * argv[]) {
     semOp(initSemId, SEM_S1_HAVE_MESSAGE_TO_SEND_BY_PIPE, -1);
     kill(S2pid, SIGPIPE);
     
+    // Wait ShutDown from HK
+    while(shutDown == 0){
+        printLog("S1", "Wait ShutDown signal");
+        pause();
+    }
+
     // Close all resource
     closeResource();
-
-    // Wait ShutDown from HK
-    pause();
     return 1;
 }
 

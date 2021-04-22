@@ -121,11 +121,10 @@ void executeAction(hacklerAction *h){
         }else if(target->type == 'R' && target->number == 3){
             targetPid = pidR3;
         }
-/*
+
         if(targetPid <= 0){
             ErrExit("Impossibile inviare action");
         }
-*/
 
         int sig = -1;
 
@@ -138,12 +137,12 @@ void executeAction(hacklerAction *h){
         }else if(strcmp(h->action, "ShutDown") == 0){
             sig = SIGTERM;
         }
-/*
+
         if(sig < 0){
             ErrExit("Impossibile inviare action");
         }
-*/
-        //kill(targetPid, sig);
+
+        kill(targetPid, sig);
 
         sprintf(log, "Send action %d (%s) to %s (%d)", 
             h->id,
@@ -187,6 +186,8 @@ int main(int argc, char *argv[]) {
 		if(firstLine != 1){
 			sprintf(log, "Analize line '%s'", line);
 			printLog("HK", log);
+
+            // TODO : attenzione se il file finisce con \n legge un ! che fa errore
 
 			hacklerAction *h = line2hacklerAction(line);
 
