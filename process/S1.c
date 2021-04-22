@@ -21,7 +21,6 @@ int messageQueueId;
 int pipeId;
 int S2pid;
 
-
 void hacklerIncraseDelayHandle(int sig){
     // Increase delay of each message in list
     node *tmp = l;
@@ -209,15 +208,12 @@ int main(int argc, char * argv[]) {
     int eof = 1;
 
     while((eof || isSet(l)) && shutDown == 0){
-        // try to read from file
         // TODO: aggiungere un max message in list
+        
+        // try to read from file
         if(eof== 1){
             eof = tryReadFromFile(1);
         }
-
-        printf("S1 list: ");
-        printList(l);
-        printf("\n");
 
         tmp = l;
         while(isSet(tmp)){

@@ -40,12 +40,60 @@ void readFromPipeHandle(int sig){
     l = inserisciInCoda(l, t);
 }
 
+void hacklerIncraseDelayHandle(int sig){
+    // Increase delay of each message in list
+    node *tmp = l;
+    while(isSet(tmp)){
+        tmp->trafficInfo->message->delayR2 += 5;
+        tmp = getNext(tmp);
+    }
+}
+
+void hacklerRemoveMsgHandle(int sig){
+    // Remove each message in list
+    while(isSet(l)){
+        l = rimuovi(l, l->trafficInfo);
+        l = getNext(l);
+    }
+}
+
+void hacklerSendMsgHandle(int sig){
+    // ciclo su tutti i messaggi setta a 0 i tempi d'attesa in modo che vengano inviati a fine sleep
+    node *tmp = l;
+    while(isSet(tmp)){
+        tmp->trafficInfo->message->delayR2 = 0;
+        tmp = getNext(tmp);
+    }
+}
+
+int shutDown = 0;
+void hacklerShutDownHandle(int sig){
+    shutDown = 1;
+}
+
 void openResource(){
     // Open SHM
     sharedMemoryData = (char *) attachSharedMemory(sharedMemoryId, 0);
-
+    
     // Set signal for read form pipe
     signal(SIGPIPE, readFromPipeHandle);
+
+    // Set signal for incrase delay of all message in list
+    if(signal(SIGUSR1, hacklerIncraseDelayHandle) == SIG_ERR){
+        ErrExit("Impossibile settare signalIncraseDelayHandle of R2");
+    }
+    // Set signal for remove all message in list
+    if(signal(SIGUSR2, hacklerRemoveMsgHandle) == SIG_ERR){
+        ErrExit("Impossibile settare signalRemoveMsgHandle of R2");
+    }
+    // Set signal for send all message in list
+    if(signal(SIGCONT, hacklerSendMsgHandle) == SIG_ERR){
+        ErrExit("Impossibile settare signalSendMsgHandle of R2");
+    }
+    // Set signal for shut down the process
+    if(signal(SIGTERM, hacklerShutDownHandle) == SIG_ERR){
+        ErrExit("Impossibile settare signalShutDownHandle of R2");
+    }
 }
 
 void closeResource(){
@@ -157,7 +205,7 @@ int main(int argc, char * argv[]) {
     node *tmp;
     trafficInfo *t;
 
-    while(thereIsMessage || isSet(l)){
+    while((thereIsMessage || isSet(l)) && shutDown == 0){
         // Check if the sender are still running
         testShutDown();
 
@@ -187,10 +235,13 @@ int main(int argc, char * argv[]) {
         sleep(1);
 	}
     
+    // Wait ShutDown from HK
+    while(shutDown == 0){
+        printLog("R2", "Wait ShutDown signal");
+        pause();
+    }
+
     // Close all resource
     closeResource();
-
-    // Wait ShutDown from HK
-    pause();
     return 1;
 }
