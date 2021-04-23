@@ -14,3 +14,6 @@ typedef struct {
 
 history *createHistory(char * ipc, char * key,  char * creator, time_t creation, time_t distruction);
 
+int countHistoryChars(history *h);
+
+void printHistorychar *filename, history *data);
