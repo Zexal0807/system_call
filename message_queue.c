@@ -9,8 +9,8 @@
 
 size_t queueMsgSize = sizeof(queueMsg) - sizeof(long);
 
-int getMessageQueue(){
-    int id = msgget(KEY_MESSAGE_QUEUE, IPC_CREAT | S_IRUSR | S_IWUSR);
+int getMessageQueue(key_t key){
+    int id = msgget(key, IPC_CREAT | S_IRUSR | S_IWUSR);
     if(id == -1)
         ErrExit("Impossible create message queue");
 

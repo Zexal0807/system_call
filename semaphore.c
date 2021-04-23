@@ -16,8 +16,7 @@ int generateSemaphore(key_t key, int n, int flags){
     return id;
 }
 
-int createSemaphore(){
-    key_t key = generateKey(KEY_INIT_SEM);
+int createSemaphore(key_t key){
     int id = generateSemaphore(key, SEM_NUMBER, S_IRUSR | S_IWUSR | IPC_CREAT);
     return id;
 }

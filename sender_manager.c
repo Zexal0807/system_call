@@ -52,8 +52,9 @@ int main(int argc, char * argv[]) {
 	}
 
 	printLog("SM", "Process start");
-
-    int initSemId = createSemaphore();
+    
+    key_t key = generateKey(KEY_INIT_SEM);
+    int initSemId = createSemaphore(key);
     time(&timeIPC);
     SEM = createHistory("SEM", "-",  "SM", timeIPC, timeIPC);
 
@@ -66,16 +67,18 @@ int main(int argc, char * argv[]) {
 
     // Create PIPEs
     int pipeS1S2[2];
-    int pipeS2S3[2];
     createPipe(pipeS1S2);
     time(&timeIPC);
     PIPES1S2 = createHistory("PIPES1S2", "-",  "SM", timeIPC, timeIPC);
+    
+    int pipeS2S3[2];
     createPipe(pipeS2S3);
     time(&timeIPC);
     PIPES2S3 = createHistory("PIPES2S3", "-",  "SM", timeIPC, timeIPC);
 
     // Create SH
-    int shmid = createSharedMemory();
+    key = generateKey(KEY_SHARED_MEMORY);
+    int shmid = createSharedMemory(key);
     time(&timeIPC);
     SH = createHistory("SH", "-",  "SM", timeIPC, timeIPC);
 
@@ -85,7 +88,8 @@ int main(int argc, char * argv[]) {
     FIFO = createHistory("FIFO", "-",  "SM", timeIPC, timeIPC);
 
     // Create MSGQueue
-    int messageQueueId = getMessageQueue();
+    key = generateKey(KEY_MESSAGE_QUEUE);
+    int messageQueueId = getMessageQueue(key);
     time(&timeIPC);
     MSGQUEUE = createHistory("MQ", "-",  "SM", timeIPC, timeIPC);
 

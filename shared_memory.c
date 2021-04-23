@@ -12,8 +12,8 @@
 #include "semaphore.h"
 #include "struct/message.h"
 
-int createSharedMemory(){
-    int shmid = shmget(KEY_SHARED_MEMORY, sizeof(char)*MAX_MESSAGE_LENGTH, IPC_CREAT | S_IRUSR | S_IWUSR);
+int createSharedMemory(key_t key){
+    int shmid = shmget(key, sizeof(char)*MAX_MESSAGE_LENGTH, IPC_CREAT | S_IRUSR | S_IWUSR);
     if(shmid == -1){
         ErrExit("Impossible create shared memory");
     }

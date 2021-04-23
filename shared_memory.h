@@ -3,7 +3,7 @@
 
 #pragma once
 
-int createSharedMemory();
+int createSharedMemory(key_t key);
 
 void * attachSharedMemory(int shmid, int shmflg);
 

@@ -11,7 +11,7 @@ union semun {
 
 int generateSemaphore(key_t key, int n, int flags);
 
-int createSemaphore();
+int createSemaphore(key_t key);
 
 void setSemaphore(int semid);
 

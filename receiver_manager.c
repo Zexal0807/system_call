@@ -16,6 +16,9 @@
 
 history * PIPER1R2;
 history * PIPER2R3;
+history * SEM;
+history * SH;
+history * MSGQUEUE;
 
 int main(int argc, char * argv[]) {
 
@@ -29,7 +32,8 @@ int main(int argc, char * argv[]) {
 
 	printLog("RM", "Process start");
 
-    int initSemId = createSemaphore();
+    key_t key = generateKey(KEY_INIT_SEM);
+    int initSemId = createSemaphore(key);
     semOp(initSemId, SEM_START, -1);
     
     // Wait all process open sem
@@ -37,18 +41,26 @@ int main(int argc, char * argv[]) {
 
     // Create PIPEs
     int pipeR1R2[2];
-    int pipeR2R3[2];
     createPipe(pipeR1R2);
     time(&timeIPC);
     PIPER1R2 = createHistory("PIPER1R2", "-",  "RM", timeIPC, timeIPC);
+
+    int pipeR2R3[2];
     createPipe(pipeR2R3);
     time(&timeIPC);
     PIPER2R3 = createHistory("PIPER2R3", "-",  "RM", timeIPC, timeIPC);
+
     // Create SH
-    int shmid = createSharedMemory();
+    key = generateKey(KEY_SHARED_MEMORY);
+    int shmid = createSharedMemory(key);
+    time(&timeIPC);
+    SH = createHistory("SH", "-",  "SM", timeIPC, timeIPC);
 
     // Create MSGQueue
-    int messageQueueId = getMessageQueue();
+    key = generateKey(KEY_MESSAGE_QUEUE);
+    int messageQueueId = getMessageQueue(key);
+    time(&timeIPC);
+    MSGQUEUE = createHistory("MQ", "-",  "SM", timeIPC, timeIPC);
 
 	// Define the 3 struct process
 	child * R1 = NULL;
