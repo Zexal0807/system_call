@@ -8,6 +8,7 @@
 
 #include "trafficInfo.h"
 #include "../err_exit.h"
+#include "../defines.h"
 
 #ifndef TRAFFINC_INFO_FILE_HEADER
 #define TRAFFINC_INFO_FILE_HEADER "ID;Message;IDSender;IDReceiver;TimeArrival;TimeDeparture\n"
@@ -48,17 +49,6 @@ int countTrafficInfoChars(trafficInfo *t){
 	// Add \n
 	chars += 1;
 	return chars;
-}
-
-char *time_t2string(time_t time){
-	char *s = (char*) malloc(sizeof(char) * 9);
-	struct tm *info = localtime(&time);
-
-	// Fix legal hour
-	info->tm_hour = (info->tm_hour + 1) % 24;
-
-	strftime(s, 9, "%H:%M:%S", info);
-	return s;
 }
 
 void printTrafficInfo(char *filename, trafficInfo *data){

@@ -1,6 +1,11 @@
 #include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 #include "history.h"
+#include "../defines.h"
 
 #ifndef IPC_HISTORY_FILE_HEADER
 #define IPC_HISTORY_FILE_HEADER "IPC;IDKey;Creator;CreationTime;DestructionTime\n"
@@ -45,7 +50,7 @@ int countHistoryChars(history *h){
 	return chars;
 }
 
-void printHistorychar *filename, history *data){
+void printHistory(char *filename, history *data){
 	int file;
 	if(access(filename, F_OK) == 0){
 		// File exist, open in append mode
