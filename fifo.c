@@ -16,6 +16,12 @@ void createFIFO(){
     }
 }
 
+void removeFIFO(){
+    if(unlink(KEY_FIFO) == -1){
+        ErrExit("Impossible rimuovere fifo");
+    }
+}
+
 int openSenderFIFO(){
     int fd = open(KEY_FIFO, O_WRONLY);
     if(fd == -1){

@@ -6,6 +6,8 @@
 
 void createFIFO();
 
+void removeFIFO();
+
 int openSenderFIFO();
 
 int openReceiverFIFO();
