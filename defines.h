@@ -39,7 +39,7 @@
 #define KEY_MESSAGE_QUEUE 01110001  // Q
 #define KEY_FIFO "OutputFiles/my_fifo.txt"
 
-#define SEM_NUMBER 19
+#define SEM_NUMBER 20
 
 #define SEM_START 0
 #define SEM_INIT_SENDER 1
@@ -66,6 +66,8 @@
 #define SEM_R3_SH 17
 
 #define SEM_SH 18
+
+#define SEM_HISTORY_FILE 19
 
 #endif
 

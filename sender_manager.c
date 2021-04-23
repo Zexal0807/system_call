@@ -23,6 +23,24 @@ history * SH;
 history * MSGQUEUE;
 history * FIFO;
 
+void printIPCHistory(int semId, history *h){
+    
+    time_t timeIPC;
+
+    // Set distruction time
+    time(&timeIPC);
+    h->distruction = timeIPC;
+
+    // Wait can write on file
+    semOp(semId, SEM_HISTORY_FILE, -1);
+
+    // Write
+    printHistory(IPC_HISTORY_FILENAME, h);
+
+    // Free file
+    semOp(semId, SEM_HISTORY_FILE, 1);
+}
+
 int main(int argc, char * argv[]) {
 
     time_t timeIPC;
@@ -220,35 +238,25 @@ int main(int argc, char * argv[]) {
     semOp(initSemId, SEM_R2_IS_RUNNING, 0);
     semOp(initSemId, SEM_R3_IS_RUNNING, 0);
 
-    // Remove IPC
-    removeSemaphore(initSemId);
-    time(&timeIPC);
-    SEM->distruction = timeIPC;
-    
-    deleteMessageQueue(messageQueueId);
-    time(&timeIPC);
-    MSGQUEUE->distruction = timeIPC;
-
-    removeSharedMemory(shmid);
-    time(&timeIPC);
-    SH->distruction = timeIPC;
-
     // Close PIPEs
     closePipe(pipeS1S2[0]);
     closePipe(pipeS1S2[1]);
-    time(&timeIPC);
-    PIPES1S2->distruction = timeIPC;
+    printIPCHistory(initSemId, PIPES1S2);
 
     closePipe(pipeS2S3[0]);
     closePipe(pipeS2S3[1]);
-    time(&timeIPC);
-    PIPES2S3->distruction = timeIPC;
+    printIPCHistory(initSemId, PIPES2S3);
+    
+    // Remove IPC
+    deleteMessageQueue(messageQueueId);
+    printIPCHistory(initSemId, MSGQUEUE);
 
-    printHistory(IPC_HISTORY_FILENAME, SEM);
-    printHistory(IPC_HISTORY_FILENAME, MSGQUEUE);
-    printHistory(IPC_HISTORY_FILENAME, SH);
-    printHistory(IPC_HISTORY_FILENAME, PIPES1S2);
-    printHistory(IPC_HISTORY_FILENAME, PIPES2S3);
+    removeSharedMemory(shmid);
+    printIPCHistory(initSemId, SH);
+
+    // Print before write for use the same function
+    printIPCHistory(initSemId, SEM);
+    removeSemaphore(initSemId);
 
 	printLog("SM", "Process End");
 	return 0;
