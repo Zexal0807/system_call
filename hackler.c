@@ -171,7 +171,8 @@ int main(int argc, char *argv[]) {
 	// Start process
 	printLog("HK", "Process start");
 
-    int initSemId = createSemaphore();
+    key_t key = generateKey(KEY_INIT_SEM);
+    int initSemId = createSemaphore(key);
     semOp(initSemId, SEM_START, -1);
 
     // Wait all process open sem

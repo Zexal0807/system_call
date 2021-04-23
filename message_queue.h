@@ -6,7 +6,7 @@ typedef struct {
     char message[MAX_MESSAGE_LENGTH];
 } queueMsg;
 
-int getMessageQueue(key key_t);
+int getMessageQueue(key_t key);
 
 void Q_writeForR1(int msqid, message *m);
 
