@@ -1,6 +1,12 @@
 /// @file sender_manager.c
 /// @brief Contiene l'implementazione del sender_manager.
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
 #include "err_exit.h"
 #include "defines.h"
 #include "shared_memory.h"
@@ -8,14 +14,18 @@
 #include "semaphore.h"
 #include "fifo.h"
 #include "pipe.h"
+#include "struct/history.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <sys/wait.h>
+history * PIPES1S2;
+history * PIPES2S3;
+history * SEM;
+history * SH;
+history * MSGQUEUE;
+history * FIFO;
 
 int main(int argc, char * argv[]) {
+
+    time_t timeIPC;
 
 	// Check command line input arguments
 	if (argc != 2) {
@@ -26,6 +36,9 @@ int main(int argc, char * argv[]) {
 	printLog("SM", "Process start");
 
     int initSemId = createSemaphore();
+    time(&timeIPC);
+    SEM = createHistory("SEM", "-",  "SM", timeIPC, timeIPC);
+
     setSemaphore(initSemId);
 
     semOp(initSemId, SEM_START, -1);
@@ -37,16 +50,26 @@ int main(int argc, char * argv[]) {
     int pipeS1S2[2];
     int pipeS2S3[2];
     createPipe(pipeS1S2);
+    time(&timeIPC);
+    PIPES1S2 = createHistory("PIPES1S2", "-",  "SM", timeIPC, timeIPC);
     createPipe(pipeS2S3);
+    time(&timeIPC);
+    PIPES2S3 = createHistory("PIPES2S3", "-",  "SM", timeIPC, timeIPC);
 
     // Create SH
     int shmid = createSharedMemory();
+    time(&timeIPC);
+    SH = createHistory("SH", "-",  "SM", timeIPC, timeIPC);
 
     // Create FIFO
     createFIFO();
+    time(&timeIPC);
+    FIFO = createHistory("FIFO", "-",  "SM", timeIPC, timeIPC);
 
     // Create MSGQueue
     int messageQueueId = getMessageQueue();
+    time(&timeIPC);
+    MSGQUEUE = createHistory("MQ", "-",  "SM", timeIPC, timeIPC);
 
 	// Define the 3 struct process
 	child *S1 = NULL;
@@ -192,14 +215,40 @@ int main(int argc, char * argv[]) {
 		//printf("returned child %d with status %d\n", child, status);
 	}
 
+    // Wait RM end
+    semOp(initSemId, SEM_R1_IS_RUNNING, 0);
+    semOp(initSemId, SEM_R2_IS_RUNNING, 0);
+    semOp(initSemId, SEM_R3_IS_RUNNING, 0);
+
     // Remove IPC
     removeSemaphore(initSemId);
+    time(&timeIPC);
+    SEM->distruction = timeIPC;
+    
     deleteMessageQueue(messageQueueId);
+    time(&timeIPC);
+    MSGQUEUE->distruction = timeIPC;
+
     removeSharedMemory(shmid);
+    time(&timeIPC);
+    SH->distruction = timeIPC;
+
+    // Close PIPEs
     closePipe(pipeS1S2[0]);
     closePipe(pipeS1S2[1]);
+    time(&timeIPC);
+    PIPES1S2->distruction = timeIPC;
+
     closePipe(pipeS2S3[0]);
     closePipe(pipeS2S3[1]);
+    time(&timeIPC);
+    PIPES2S3->distruction = timeIPC;
+
+    printHistory(IPC_HISTORY_FILENAME, SEM);
+    printHistory(IPC_HISTORY_FILENAME, MSGQUEUE);
+    printHistory(IPC_HISTORY_FILENAME, SH);
+    printHistory(IPC_HISTORY_FILENAME, PIPES1S2);
+    printHistory(IPC_HISTORY_FILENAME, PIPES2S3);
 
 	printLog("SM", "Process End");
 	return 0;

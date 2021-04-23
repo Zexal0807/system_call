@@ -12,8 +12,14 @@
 #include "semaphore.h"
 #include "fifo.h"
 #include "pipe.h"
+#include "struct/history.h"
+
+history * PIPER1R2;
+history * PIPER2R3;
 
 int main(int argc, char * argv[]) {
+
+	time_t timeIPC;
 
 	// Check command line input arguments
 	if (argc != 1) {
@@ -33,8 +39,11 @@ int main(int argc, char * argv[]) {
     int pipeR1R2[2];
     int pipeR2R3[2];
     createPipe(pipeR1R2);
+    time(&timeIPC);
+    PIPER1R2 = createHistory("PIPER1R2", "-",  "RM", timeIPC, timeIPC);
     createPipe(pipeR2R3);
-
+    time(&timeIPC);
+    PIPER2R3 = createHistory("PIPER2R3", "-",  "RM", timeIPC, timeIPC);
     // Create SH
     int shmid = createSharedMemory();
 
@@ -178,6 +187,20 @@ int main(int argc, char * argv[]) {
 	while ((child = wait( & status)) != -1) {
 		//printf("returned child %d with status %d\n", child, status);
 	}
+
+    // Close PIPEs
+    closePipe(pipeR1R2[0]);
+    closePipe(pipeR1R2[1]);
+    time(&timeIPC);
+    PIPER1R2->distruction = timeIPC;
+
+    closePipe(pipeR2R3[0]);
+    closePipe(pipeR2R3[1]);
+    time(&timeIPC);
+    PIPER2R3->distruction = timeIPC;
+
+    printHistory(IPC_HISTORY_FILENAME, PIPER1R2);
+    printHistory(IPC_HISTORY_FILENAME, PIPER2R3);
 
 	printLog("RM", "Process End");
 	return 0;
