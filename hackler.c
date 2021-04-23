@@ -66,17 +66,25 @@ void readFrom(char * filename){
 }
 
 void readPid(int initSemId){
+    char log[50];
+
     // Wait sender init end 
     semOp(initSemId, SEM_INIT_SENDER, 0);
 
     // Read PID form sender file
     readFrom(SENDER_FILENAME);
     
+    sprintf(log, "Read pid: S1(%d), S2(%d), S3(%d)", pidS1, pidS2, pidS3);
+    printLog("HK", log);
+
     // Wait receiver init end 
     semOp(initSemId, SEM_INIT_RECEIVER, 0);
 
     // Read PID form receiver file
     readFrom(RECEIVER_FILENAME);
+
+    sprintf(log, "Read pid: R1(%d), R2(%d), R3(%d)", pidR1, pidR2, pidR3);
+    printLog("HK", log);
 	
 }
 
@@ -202,8 +210,6 @@ int main(int argc, char *argv[]) {
 	printLog("HK", "Read file");
 
     readPid(initSemId);
-
-    printf("PID: %d, %d, %d, %d, %d, %d\n", pidS1, pidS2, pidS3, pidR1, pidR2, pidR3);
 
     // Set this process as end init     
     semOp(initSemId, SEM_END_INIT, -1);

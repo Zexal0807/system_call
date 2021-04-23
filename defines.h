@@ -83,3 +83,5 @@ key_t generateKey(int id);
     Open a file like fopen
 */
 int openFile(char * filename);
+
+char *time_t2string(time_t time);

@@ -1,6 +1,5 @@
 #include <time.h>
 
-
 /*
 	Struttura di una IPC history
 */
@@ -16,4 +15,4 @@ history *createHistory(char * ipc, char * key,  char * creator, time_t creation,
 
 int countHistoryChars(history *h);
 
-void printHistorychar *filename, history *data);
+void printHistory(char *filename, history *data);

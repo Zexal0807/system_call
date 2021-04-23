@@ -64,6 +64,7 @@ void semOp (int semid, unsigned short sem_num, short sem_op) {
     };
     
     if (semop(semid, &sop, 1) == -1){
+        printf("ERR: %d, %d\n", sem_num, sem_op);
         ErrExit("semop failed");
     }
 }

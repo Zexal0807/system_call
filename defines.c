@@ -65,3 +65,14 @@ int openFile(char * filename){
     }
     return file;
 }
+
+char *time_t2string(time_t time){
+	char *s = (char*) malloc(sizeof(char) * 9);
+	struct tm *info = localtime(&time);
+
+	// Fix legal hour
+	info->tm_hour = (info->tm_hour + 1) % 24;
+
+	strftime(s, 9, "%H:%M:%S", info);
+	return s;
+}
