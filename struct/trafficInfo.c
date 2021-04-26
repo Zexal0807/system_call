@@ -37,9 +37,9 @@ int countTrafficInfoChars(trafficInfo *t){
 	// Length of the content
 	chars += strlen(t->message->content);
 	// Sender process is S#
-	chars += strlen(process2string(t->message->sender));
+	chars += 1;
 	// Receiver process is R#
-	chars += strlen(process2string(t->message->receiver));
+	chars += 1;
 	// time arrival is HH:MM:SS
 	chars += 8;
 	// time departure is HH:MM:SS
@@ -68,11 +68,11 @@ void printTrafficInfo(char *filename, trafficInfo *data){
 	// Print a line
 	int chars = countTrafficInfoChars(data);
 	char *buffer  = (char*) malloc(sizeof(char) * chars);
-	sprintf(buffer, "%d;%s;%s;%s;%s;%s\n", 
+	sprintf(buffer, "%d;%s;%d;%d;%s;%s\n", 
 		data->message->id, 
 		data->message->content, 
-		process2string(data->message->sender),
-		process2string(data->message->receiver),
+		data->message->sender->number,
+		data->message->receiver->number,
 		time_t2string(data->arrival),
 		time_t2string(data->departure)
 	);
