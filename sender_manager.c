@@ -53,10 +53,15 @@ int main(int argc, char * argv[]) {
 
 	printLog("SM", "Process start");
     
-    key_t key = generateKey(KEY_INIT_SEM);
+    key_t key;
+    char charKey[10];
+
+    key = generateKey(KEY_INIT_SEM);
+    printf("key1: %d\n", key);
+    sprintf(charKey, "%d", key);
     int initSemId = createSemaphore(key);
     time(&timeIPC);
-    SEM = createHistory("SEM", "-",  "SM", timeIPC, timeIPC);
+    SEM = createHistory("SEM", charKey,  "SM", timeIPC, timeIPC);
 
     setSemaphore(initSemId);
 
@@ -78,9 +83,11 @@ int main(int argc, char * argv[]) {
 
     // Create SH
     key = generateKey(KEY_SHARED_MEMORY);
+    printf("key1: %d\n", key);
+    sprintf(charKey, "%d", key);
     int shmid = createSharedMemory(key);
     time(&timeIPC);
-    SH = createHistory("SH", "-",  "SM", timeIPC, timeIPC);
+    SH = createHistory("SH", charKey,  "SM", timeIPC, timeIPC);
 
     // Create FIFO
     createFIFO();
@@ -89,9 +96,11 @@ int main(int argc, char * argv[]) {
 
     // Create MSGQueue
     key = generateKey(KEY_MESSAGE_QUEUE);
+    printf("key1: %d\n", key);
+    sprintf(charKey, "%d", key);
     int messageQueueId = getMessageQueue(key);
     time(&timeIPC);
-    MSGQUEUE = createHistory("MQ", "-",  "SM", timeIPC, timeIPC);
+    MSGQUEUE = createHistory("MQ", charKey,  "SM", timeIPC, timeIPC);
 
 	// Define the 3 struct process
 	child *S1 = NULL;
@@ -251,6 +260,8 @@ int main(int argc, char * argv[]) {
     closePipe(pipeS2S3[1]);
     printIPCHistory(initSemId, PIPES2S3);
     
+    removeFIFO();
+
     // Remove IPC
     deleteMessageQueue(messageQueueId);
     printIPCHistory(initSemId, MSGQUEUE);

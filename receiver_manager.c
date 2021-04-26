@@ -20,6 +20,24 @@ history * SEM;
 history * SH;
 history * MSGQUEUE;
 
+void printIPCHistory(int semId, history *h){
+    
+    time_t timeIPC;
+
+    // Set distruction time
+    time(&timeIPC);
+    h->distruction = timeIPC;
+
+    // Wait can write on file
+    semOp(semId, SEM_HISTORY_FILE, -1);
+
+    // Write
+    printHistory(IPC_HISTORY_FILENAME, h);
+
+    // Free file
+    semOp(semId, SEM_HISTORY_FILE, 1);
+}
+
 int main(int argc, char * argv[]) {
 
 	time_t timeIPC;
@@ -32,8 +50,16 @@ int main(int argc, char * argv[]) {
 
 	printLog("RM", "Process start");
 
-    key_t key = generateKey(KEY_INIT_SEM);
+    key_t key;
+    char charKey[10];
+
+    key = generateKey(KEY_INIT_SEM);
+    sprintf(charKey, "%x", key);
     int initSemId = createSemaphore(key);
+    time(&timeIPC);
+    SEM = createHistory("SEM", charKey,  "RM", timeIPC, timeIPC);
+
+
     semOp(initSemId, SEM_START, -1);
     
     // Wait all process open sem
@@ -52,15 +78,17 @@ int main(int argc, char * argv[]) {
 
     // Create SH
     key = generateKey(KEY_SHARED_MEMORY);
+    sprintf(charKey, "%x", key);
     int shmid = createSharedMemory(key);
     time(&timeIPC);
-    SH = createHistory("SH", "-",  "SM", timeIPC, timeIPC);
+    SH = createHistory("SH", charKey,  "RM", timeIPC, timeIPC);
 
     // Create MSGQueue
     key = generateKey(KEY_MESSAGE_QUEUE);
+    sprintf(charKey, "%x", key);
     int messageQueueId = getMessageQueue(key);
     time(&timeIPC);
-    MSGQUEUE = createHistory("MQ", "-",  "SM", timeIPC, timeIPC);
+    MSGQUEUE = createHistory("MQ", charKey,  "RM", timeIPC, timeIPC);
 
 	// Define the 3 struct process
 	child * R1 = NULL;

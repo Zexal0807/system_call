@@ -13,6 +13,7 @@
 #include "semaphore.h"
 #include "fifo.h"
 #include "pipe.h"
+#include "struct/history.h"
 
 int pidS1 = 0;
 int pidS2 = 0;
@@ -20,6 +21,24 @@ int pidS3 = 0;
 int pidR1 = 0;
 int pidR2 = 0;
 int pidR3 = 0;
+
+void printIPCHistory(int semId, history *h){
+    
+    time_t timeIPC;
+
+    // Set distruction time
+    time(&timeIPC);
+    h->distruction = timeIPC;
+
+    // Wait can write on file
+    semOp(semId, SEM_HISTORY_FILE, -1);
+
+    // Write
+    printHistory(IPC_HISTORY_FILENAME, h);
+
+    // Free file
+    semOp(semId, SEM_HISTORY_FILE, 1);
+}
 
 void string2pid(char *line){
     char *saveptr1;
