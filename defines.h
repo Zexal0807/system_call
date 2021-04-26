@@ -28,7 +28,10 @@
 #define HACKLER_FILENAME "OutputFiles/F7_out.csv"
 #define MAX_HACKLER_ACTION 20
 
-// TODO: set hackler action as const
+#define HK_ACTION_INCREASE_DELAY "IncreaseDelay"
+#define HK_ACTION_REMOVE_MSG "RemoveMSG"
+#define HK_ACTION_SEND_MSG "SendMSG"
+#define HK_ACTION_SHUT_DOWN "ShutDown"
 
 #define MAX_MESSAGE_LENGTH 150
 

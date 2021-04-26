@@ -155,13 +155,13 @@ void executeAction(hacklerAction *h){
 
         int sig = -1;
 
-        if(strcmp(h->action, "IncreaseDelay") == 0){
+        if(strcmp(h->action, HK_ACTION_INCREASE_DELAY) == 0){
             sig = SIGUSR1;
-        }else if(strcmp(h->action, "RemoveMSG") == 0){
+        }else if(strcmp(h->action, HK_ACTION_REMOVE_MSG) == 0){
             sig = SIGUSR2;
-        }else if(strcmp(h->action, "SendMSG") == 0){
+        }else if(strcmp(h->action, HK_ACTION_SEND_MSG) == 0){
             sig = SIGCONT;
-        }else if(strcmp(h->action, "ShutDown") == 0){
+        }else if(strcmp(h->action, HK_ACTION_SHUT_DOWN) == 0){
             sig = SIGTERM;
         }
 

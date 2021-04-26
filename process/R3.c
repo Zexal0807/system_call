@@ -24,6 +24,9 @@ int R2pid;
 int fifoId;
 
 void hacklerIncraseDelayHandle(int sig){
+    char log[50];
+    sprintf(log, "Receive signal %s", HK_ACTION_INCREASE_DELAY);
+    printLog("R3", log);
     // Increase delay of each message in list
     node *tmp = l;
     while(isSet(tmp)){
@@ -33,6 +36,9 @@ void hacklerIncraseDelayHandle(int sig){
 }
 
 void hacklerRemoveMsgHandle(int sig){
+    char log[50];
+    sprintf(log, "Receive signal %s", HK_ACTION_REMOVE_MSG);
+    printLog("R3", log);
     // Remove each message in list
     while(isSet(l)){
         l = rimuovi(l, l->trafficInfo);
@@ -41,6 +47,9 @@ void hacklerRemoveMsgHandle(int sig){
 }
 
 void hacklerSendMsgHandle(int sig){
+    char log[50];
+    sprintf(log, "Receive signal %s", HK_ACTION_SEND_MSG);
+    printLog("R3", log);
     // ciclo su tutti i messaggi setta a 0 i tempi d'attesa in modo che vengano inviati a fine sleep
     node *tmp = l;
     while(isSet(tmp)){
@@ -51,6 +60,9 @@ void hacklerSendMsgHandle(int sig){
 
 int shutDown = 0;
 void hacklerShutDownHandle(int sig){
+    char log[50];
+    sprintf(log, "Receive signal %s", HK_ACTION_SHUT_DOWN);
+    printLog("R2", log);
     shutDown = 1;
 }
 
