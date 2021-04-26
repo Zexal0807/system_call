@@ -13,6 +13,7 @@
 #include "../pipe.h"
 
 node *l;
+int size = 0;
 
 int initSemId;
 int sharedMemoryId;
@@ -40,6 +41,7 @@ void hacklerRemoveMsgHandle(int sig){
     // Remove each message in list
     while(isSet(l)){
         l = rimuovi(l, l->trafficInfo);
+		size--;
         l = getNext(l);
     }
 }
@@ -175,6 +177,7 @@ int tryReadFromFile(int convert){
         time(&arrival);
         trafficInfo *t = createTrafficInfo(m, arrival, arrival);
         l = inserisciInCoda(l, t);
+		size++;
     }
 
     if(cursor >= filesize){
@@ -220,10 +223,8 @@ int main(int argc, char * argv[]) {
     int eof = 1;
 
     while((eof || isSet(l)) && shutDown == 0){
-        // TODO: aggiungere un max message in list
-        
         // try to read from file
-        if(eof== 1){
+        if(eof== 1 && size <= 10){
             eof = tryReadFromFile(1);
         }
 
@@ -239,6 +240,7 @@ int main(int argc, char * argv[]) {
                 sendMessage(t->message);
                 tmp = getNext(tmp);
                 l = rimuovi(l, t);
+				size--;
             }else{
                 t->message->delayS1 -=1;
                 tmp = getNext(tmp);

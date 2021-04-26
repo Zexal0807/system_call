@@ -256,8 +256,9 @@ int main(int argc, char *argv[]) {
 	}
 	printLog("HK", "End action");
 
+	semOp(initSemId, SEM_HK_IS_RUNNING, -1);
+	printLog("HK", "Process end");
 	// Wait for 2 second befor end
 	sleep(2);
-	printLog("HK", "Process end");
 	return 0;
 }

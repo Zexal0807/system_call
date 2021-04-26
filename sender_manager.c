@@ -57,12 +57,10 @@ int main(int argc, char * argv[]) {
     char charKey[10];
 
     key = generateKey(KEY_INIT_SEM);
-    printf("key1: %d\n", key);
-    sprintf(charKey, "%d", key);
     int initSemId = createSemaphore(key);
+    sprintf(charKey, "%x", key);
     time(&timeIPC);
     SEM = createHistory("SEM", charKey,  "SM", timeIPC, timeIPC);
-
     setSemaphore(initSemId);
 
     semOp(initSemId, SEM_START, -1);
@@ -83,8 +81,7 @@ int main(int argc, char * argv[]) {
 
     // Create SH
     key = generateKey(KEY_SHARED_MEMORY);
-    printf("key1: %d\n", key);
-    sprintf(charKey, "%d", key);
+    sprintf(charKey, "%x", key);
     int shmid = createSharedMemory(key);
     time(&timeIPC);
     SH = createHistory("SH", charKey,  "SM", timeIPC, timeIPC);
@@ -96,8 +93,7 @@ int main(int argc, char * argv[]) {
 
     // Create MSGQueue
     key = generateKey(KEY_MESSAGE_QUEUE);
-    printf("key1: %d\n", key);
-    sprintf(charKey, "%d", key);
+    sprintf(charKey, "%x", key);
     int messageQueueId = getMessageQueue(key);
     time(&timeIPC);
     MSGQUEUE = createHistory("MQ", charKey,  "SM", timeIPC, timeIPC);
@@ -270,6 +266,8 @@ int main(int argc, char * argv[]) {
     printIPCHistory(initSemId, SH);
 
     // Print before write for use the same function
+	semOp(initSemId, SEM_RM_IS_RUNNING, 0);
+    semOp(initSemId, SEM_HK_IS_RUNNING, 0);
     printIPCHistory(initSemId, SEM);
     removeSemaphore(initSemId);
 
