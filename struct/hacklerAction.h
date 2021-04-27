@@ -29,6 +29,11 @@ char * openHackler(char * pathname);
 hacklerAction* line2hacklerAction(char * buffer);
 
 /*
+	Crea il file se non essite, troncalo se esite e stampa gli header
+*/
+void printHacklerActionHeader(char * filename);
+
+/*
 	Funzione per stampare un hacklerAction su file
 */
 void printHacklerAction(char * filename, hacklerAction * data);

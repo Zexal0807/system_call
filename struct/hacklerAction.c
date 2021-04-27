@@ -108,6 +108,19 @@ hacklerAction * line2hacklerAction(
 	return createHacklerAction(id, delay, target, action);
 }
 
+void printHacklerActionHeader(char * filename){
+	int file = open(filename, O_WRONLY | O_TRUNC | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
+	
+	if(file == -1)
+		ErrOpen(file);
+	
+	char headerBuffer[] = HACKLER_ACTION_FILE_HEADER;
+	write(file, headerBuffer, strlen(headerBuffer));
+
+	// Close file
+	close(file);
+}
+
 void printHacklerAction(char * filename, hacklerAction * data){
 	int file;
 	if(access(filename, F_OK) == 0){
@@ -116,10 +129,7 @@ void printHacklerAction(char * filename, hacklerAction * data){
 		ErrOpen(file);
 	}else{
 		// File not exist, create it, and print the header
-		file = open(filename, O_WRONLY | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
-		ErrOpen(file);
-		char headerBuffer[] = HACKLER_ACTION_FILE_HEADER;
-		write(file, headerBuffer, strlen(headerBuffer));
+		printHacklerActionHeader(filename)
 	}
 
 	// Print a line
