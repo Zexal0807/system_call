@@ -50,6 +50,19 @@ int countHistoryChars(history * h){
 	return chars;
 }
 
+void printHistoryHeader(char * filename){
+	int file = open(filename, O_WRONLY | O_TRUNC | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
+	
+	if(file == -1)
+		ErrOpen(file);
+	
+	char headerBuffer[] = IPC_HISTORY_FILE_HEADER;
+	write(file, headerBuffer, strlen(headerBuffer));
+
+	// Close file
+	close(file);
+}
+
 void printHistory(char * filename, history * data){
 	int file;
 	if(access(filename, F_OK) == 0){
@@ -58,10 +71,7 @@ void printHistory(char * filename, history * data){
 		ErrOpen(file);
 	}else{
 		// File not exist, create it, and print the header
-		file = open(filename, O_WRONLY | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
-		ErrOpen(file);
-		char headerBuffer[] = IPC_HISTORY_FILE_HEADER;
-		write(file, headerBuffer, strlen(headerBuffer));
+		printHistoryHeader(filename);
 	}
 
 	// Print a line

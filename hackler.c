@@ -197,6 +197,8 @@ int main(int argc, char * argv[]) {
 	
 	char * filename = argv[1];
 
+	printTrafficInfoHeader(HACKLER_FILENAME);
+
 	hacklerAction * data[MAX_HACKLER_ACTION];
 	int index = 0;
 

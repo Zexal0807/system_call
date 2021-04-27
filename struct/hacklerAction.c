@@ -129,7 +129,7 @@ void printHacklerAction(char * filename, hacklerAction * data){
 		ErrOpen(file);
 	}else{
 		// File not exist, create it, and print the header
-		printHacklerActionHeader(filename)
+		printHacklerActionHeader(filename);
 	}
 
 	// Print a line

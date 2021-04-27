@@ -15,4 +15,9 @@ history * createHistory(char * ipc, char * key,  char * creator, time_t creation
 
 int countHistoryChars(history * h);
 
+/*
+	Crea il file se non essite, troncalo se esite e stampa gli header
+*/
+void printHistoryHeader(char * filename);
+
 void printHistory(char *filename, history * data);
