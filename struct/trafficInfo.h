@@ -29,7 +29,7 @@ char * time_t2string(time_t time);
 /*
 	Crea il file se non essite, troncalo se esite e stampa gli header
 */
-void printHeader(char * filename);
+void printTrafficInfoHeader(char * filename);
 
 /*
 	Funzione per trafficInfo un child su file

@@ -108,7 +108,7 @@ void openResource(){
 	}
 
 	// Init the output file
-	printHeader(RECEIVER_2_FILENAME);
+	printTrafficInfoHeader(RECEIVER_2_FILENAME);
 }
 
 void closeResource(){
