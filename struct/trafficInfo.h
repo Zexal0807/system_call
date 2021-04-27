@@ -11,7 +11,7 @@ Struttura del traffico
 	 - departure : Tempo di partenza
 */
 typedef struct {
-	message* message;
+	message * message;
 	time_t arrival;
 	time_t departure;
 } trafficInfo;
@@ -19,14 +19,14 @@ typedef struct {
 /*
 	Funzione per creare un trafficInfo
 */
-trafficInfo *createTrafficInfo(message* message, time_t arrival, time_t departure);
+trafficInfo * createTrafficInfo(message * message, time_t arrival, time_t departure);
 
 /*
 	Funzione per convertire un time_t in stringa nel formato HH:MM:SS
 */
-char *time_t2string(time_t time);
+char * time_t2string(time_t time);
 
 /*
 	Funzione per trafficInfo un child su file
 */
-void printTrafficInfo(char *filename, trafficInfo *data);
+void printTrafficInfo(char * filename, trafficInfo * data);

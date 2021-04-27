@@ -12,9 +12,9 @@ typedef struct {
 	int pid;
 } child;
 
-child *createChild(process *p, int pid);
+child *createChild(process * p, int pid);
 
 /*
 	Funzione per stampare un child su file
 */
-void printChild(char *filename, child *data);
+void printChild(char * filename, child * data);

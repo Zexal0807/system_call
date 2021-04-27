@@ -10,15 +10,15 @@ typedef struct {
 	int number;
 } process;
 
-process *createProcess(char type, int number);
+process * createProcess(char type, int number);
 
-process *SENDER_1();
-process *SENDER_2();
-process *SENDER_3();
-process *RECEIVER_1();
-process *RECEIVER_2();
-process *RECEIVER_3();
+process * SENDER_1();
+process * SENDER_2();
+process * SENDER_3();
+process * RECEIVER_1();
+process * RECEIVER_2();
+process * RECEIVER_3();
 
-process *string2process(char *str);
+process * string2process(char * str);
 
-char *process2string(process *p);
+char * process2string(process * p);

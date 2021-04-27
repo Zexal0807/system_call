@@ -11,6 +11,6 @@ void detachSharedMemory(void *sharedMemory);
 
 void removeSharedMemory(int shmid);
 
-void SH_writeForR1(char *sharedMemory, message *m, int semid);
-void SH_writeForR2(char *sharedMemory, message *m, int semid);
-void SH_writeForR3(char *sharedMemory, message *m, int semid);
+void SH_writeForR1(char * sharedMemory, message * m, int semid);
+void SH_writeForR2(char * sharedMemory, message * m, int semid);
+void SH_writeForR3(char * sharedMemory, message * m, int semid);

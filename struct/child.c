@@ -13,11 +13,11 @@
 #define CHILD_FILE_HEADER "ID;PID\n"
 #endif
 
-child *createChild(
-	process *p,
+child * createChild(
+	process * p,
 	int pid
 ){
-	child *c = (child*) malloc(sizeof(child));
+	child * c = (child *) malloc(sizeof(child));
 
 	c->process = p;
 	c->pid = pid;
@@ -25,7 +25,7 @@ child *createChild(
 	return c;
 }
 
-int countChildChars(child *c){
+int countChildChars(child * c){
 	int chars = 0;
 
 	// Type of process
@@ -41,7 +41,7 @@ int countChildChars(child *c){
 	return chars;
 }
 
-void printChild(char *filename, child *data){
+void printChild(char * filename, child * data){
 	int file;
 	if(access(filename, F_OK) == 0){
 		// File exist, open in append mode
@@ -57,7 +57,7 @@ void printChild(char *filename, child *data){
 
 	// Print a line
 	int chars = countChildChars(data);
-	char *buffer  = (char*) malloc(sizeof(char) * chars);
+	char * buffer  = (char *) malloc(chars * sizeof(char));
 	sprintf(buffer, "%s;%d\n", 
 		process2string(data->process),
 		data->pid

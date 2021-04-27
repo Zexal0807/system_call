@@ -10,13 +10,13 @@
 
 #include "defines.h"
 
-void printLog(char *p, char *text){
-    // Print time HH:MM:II
-    time_t logtime;
-    time(&logtime);
-    printf("[%s] ", time_t2string(logtime)); 
+void printLog(char * p, char * text){
+	// Print time HH:MM:II
+	time_t logtime;
+	time(&logtime);
+	printf("[%s] ", time_t2string(logtime)); 
 
-    // Print colored process name
+	// Print colored process name
 	switch(p[0]){
 		case 'S':
 			if(p[1] == 'M'){
@@ -44,26 +44,26 @@ void printLog(char *p, char *text){
 	printf("%s", p);
 	printf("\033[0m");
 
-    // Print action
+	// Print action
 	printf(" : %s\n", text);
 }
 
 key_t generateKey(int idProject){
-    // Generate key using ftok
-    key_t key = ftok("key.dat", idProject);
-    if(key == -1){
-        ErrExit("Can't create key");
-    }
-    return key;
+	// Generate key using ftok
+	key_t key = ftok("key.dat", idProject);
+	if(key == -1){
+		ErrExit("Can't create key");
+	}
+	return key;
 }
 
 int openFile(char * filename){
-    // Open a file using open syscall
-    int file = open(filename, O_RDONLY);
-    if(file == -1){
-        ErrExit("Impossibile aprire il file");
-    }
-    return file;
+	// Open a file using open syscall
+	int file = open(filename, O_RDONLY);
+	if(file == -1){
+		ErrExit("Impossibile aprire il file");
+	}
+	return file;
 }
 
 char *time_t2string(time_t time){

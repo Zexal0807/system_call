@@ -13,22 +13,22 @@
 typedef struct {
 	int id;
 	int delay;
-	process* target;
-	char* action;
+	process * target;
+	char * action;
 } hacklerAction;
 
 /*
 	Funzione per creare un hacklet Action
 */
-hacklerAction *createHacklerAction(int id, int delay, process* target, char* action);
+hacklerAction * createHacklerAction(int id, int delay, process * target, char * action);
 
-char *openHackler(char *pathname);
+char * openHackler(char * pathname);
 /*
 	Funzione per creare un messaggio partendo da una stringa
 */
-hacklerAction* line2hacklerAction(char *buffer);
+hacklerAction* line2hacklerAction(char * buffer);
 
 /*
 	Funzione per stampare un hacklerAction su file
 */
-void printHacklerAction(char *filename, hacklerAction *data);
+void printHacklerAction(char * filename, hacklerAction * data);

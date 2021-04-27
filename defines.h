@@ -81,16 +81,16 @@
 /*
 	Procedura per stampare a console un log di quello che avviene
 */
-void printLog(char *p, char *text);
+void printLog(char * p, char * text);
 
 /*
-    Funzione per generare una chiave IPC
+	Funzione per generare una chiave IPC
 */
 key_t generateKey(int id);
 
 /*
-    Open a file like fopen
+	Open a file like fopen
 */
 int openFile(char * filename);
 
-char *time_t2string(time_t time);
+char * time_t2string(time_t time);

@@ -14,13 +14,13 @@
 #define TRAFFINC_INFO_FILE_HEADER "ID;Message;IDSender;IDReceiver;TimeArrival;TimeDeparture\n"
 #endif
 
-trafficInfo *createTrafficInfo(
-	message* message,
+trafficInfo * createTrafficInfo(
+	message * message,
 	time_t arrival,
 	time_t departure
 ){
 
-	trafficInfo *t = (trafficInfo*) malloc(sizeof(trafficInfo));
+	trafficInfo * t = (trafficInfo *) malloc(sizeof(trafficInfo));
 
 	t->message = message;
 	t->arrival = arrival;
@@ -29,7 +29,7 @@ trafficInfo *createTrafficInfo(
 	return t;
 }
 
-int countTrafficInfoChars(trafficInfo *t){
+int countTrafficInfoChars(trafficInfo * t){
 	int chars = 0;
 
 	// Number of digit of the id
@@ -51,7 +51,7 @@ int countTrafficInfoChars(trafficInfo *t){
 	return chars;
 }
 
-void printTrafficInfo(char *filename, trafficInfo *data){
+void printTrafficInfo(char * filename, trafficInfo * data){
 	int file;
 	if(access(filename, F_OK) == 0){
 		// File exist, open in append mode
@@ -67,10 +67,10 @@ void printTrafficInfo(char *filename, trafficInfo *data){
 
 	// Print a line
 	int chars = countTrafficInfoChars(data);
-	char *buffer  = (char*) malloc(sizeof(char) * chars);
-	sprintf(buffer, "%d;%s;%d;%d;%s;%s\n", 
-		data->message->id, 
-		data->message->content, 
+	char * buffer  = (char *) malloc(chars * sizeof(char));
+	sprintf(buffer, "%d;%s;%d;%d;%s;%s\n",
+		data->message->id,
+		data->message->content,
 		data->message->sender->number,
 		data->message->receiver->number,
 		time_t2string(data->arrival),

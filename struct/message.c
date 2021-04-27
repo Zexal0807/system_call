@@ -7,17 +7,18 @@
 #include "../defines.h"
 #include "../err_exit.h"
 
-message *createMessage(int id,
-	char* content,
-	process* sender,
-	process* receiver,
+message * createMessage(
+	int id,
+	char * content,
+	process * sender,
+	process * receiver,
 	int delay1,
 	int delay2,
 	int delay3,
-	char* comunication
+	char * comunication
 ) {
 
-	message *m = (message*) malloc(sizeof(message));
+	message * m = (message *) malloc(sizeof(message));
 
 	m->id = id;
 	m->content = strdup(content);
@@ -26,7 +27,7 @@ message *createMessage(int id,
 	m->delayS1 = delay1;
 	m->delayS2 = delay2;
 	m->delayS3 = delay3;
-    m->delayR1 = delay1;
+	m->delayR1 = delay1;
 	m->delayR2 = delay2;
 	m->delayR3 = delay3;
 	m->comunication = comunication;
@@ -34,19 +35,19 @@ message *createMessage(int id,
 	return m;
 }
 
-message* line2message(
-	char *buffer
+message * line2message(
+	char * buffer
 ){
 	int id;
-	char *content;
-	process *sender;
-	process *receiver; 
+	char * content;
+	process * sender;
+	process * receiver; 
 	int delay1, 
 		delay2,
 		delay3;
-	char *comunication;
+	char * comunication;
 	
-	char *field = strtok(buffer, ";");
+	char * field = strtok(buffer, ";");
 	
 	int counter = 0;
 
@@ -79,7 +80,6 @@ message* line2message(
 			default:
 				break;
 		}
-		
 		field = strtok(NULL, ";");
 		counter++;
 	}
@@ -88,20 +88,20 @@ message* line2message(
 	return createMessage(id, content, sender, receiver, delay1, delay2, delay3, comunication);
 }
 
-char* message2line(message *m){
-    char * message = (char*) malloc(sizeof(char) * MAX_MESSAGE_LENGTH);
-    strncpy(message, "", strlen(message));
-    sprintf(
-        message, 
-        "%d;%s;%s;%s;%d;%d;%d;%s",
-        m->id,
-        m->content,
-        process2string(m->sender),
-        process2string(m->receiver),
-        m->delayR1,
-        m->delayR2,
-        m->delayR3,
-        m->comunication
-    );
-    return message;
+char * message2line(message * m){
+	char * message = (char*) malloc(MAX_MESSAGE_LENGTH * sizeof(char));
+	strncpy(message, "", strlen(message));
+	sprintf(
+		message, 
+		"%d;%s;%s;%s;%d;%d;%d;%s",
+		m->id,
+		m->content,
+		process2string(m->sender),
+		process2string(m->receiver),
+		m->delayR1,
+		m->delayR2,
+		m->delayR3,
+		m->comunication
+	);
+	return message;
 }

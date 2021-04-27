@@ -13,14 +13,14 @@
 #define HACKLER_ACTION_FILE_HEADER "Id;Delay;Target;Action\n"
 #endif
 
-hacklerAction *createHacklerAction(
+hacklerAction * createHacklerAction(
 	int id,
 	int delay,
-	process* target,
-	char* action
+	process * target,
+	char * action
 ){
 
-	hacklerAction *a = (hacklerAction*) malloc(sizeof(hacklerAction));
+	hacklerAction * a = (hacklerAction *) malloc(sizeof(hacklerAction));
 
 	a->id = id;
 	a->delay = delay;
@@ -30,7 +30,7 @@ hacklerAction *createHacklerAction(
 	return a;
 }
 
-int countHacklerActionChars(hacklerAction *h){
+int countHacklerActionChars(hacklerAction * h){
 	int chars = 0;
 
 	// Number of digit of the id
@@ -48,9 +48,9 @@ int countHacklerActionChars(hacklerAction *h){
 	return chars;
 }
 
-char *openHackler(char *pathname){
+char * openHackler(char * pathname){
 	int file, dim, readed;
-	char *buffer;
+	char * buffer;
 
 	file = open(pathname, O_RDONLY);
 
@@ -59,7 +59,7 @@ char *openHackler(char *pathname){
 	dim = lseek(file, 0L, SEEK_END);
 	lseek(file, 0L, SEEK_SET);
 
-	buffer = (char *)malloc(sizeof(char)*dim);
+	buffer = (char *)malloc(dim * sizeof(char));
 
 	readed = read(file, buffer, dim);
 
@@ -71,21 +71,20 @@ char *openHackler(char *pathname){
 	return buffer;
 }
 
-hacklerAction* line2hacklerAction(
-	char *buffer
+hacklerAction * line2hacklerAction(
+	char * buffer
 ){
-	char *end_buffer;
+	char * end_buffer;
 
 	int id = 0;
 	int delay = 0;
-	process *target = SENDER_1();
-	char *action = "ShutDown";
+	process * target = SENDER_1();
+	char * action = "ShutDown";
 
 	int counter = 0;
 
-	char *field = strtok_r(buffer, ";", &end_buffer);
+	char * field = strtok_r(buffer, ";", &end_buffer);
 	while(field != NULL){
-
 		switch(counter){
 			case 0:
 				id = atoi(field);
@@ -103,14 +102,13 @@ hacklerAction* line2hacklerAction(
 				//Ignored
 				break;
 		}
-
 		field = strtok_r(NULL, ";", &end_buffer);
 		counter++;
 	}
 	return createHacklerAction(id, delay, target, action);
 }
 
-void printHacklerAction(char *filename, hacklerAction *data){
+void printHacklerAction(char * filename, hacklerAction * data){
 	int file;
 	if(access(filename, F_OK) == 0){
 		// File exist, open in append mode
@@ -126,7 +124,7 @@ void printHacklerAction(char *filename, hacklerAction *data){
 
 	// Print a line
 	int chars = countHacklerActionChars(data);
-	char *buffer  = (char*) malloc(sizeof(char) * chars);
+	char * buffer  = (char*) malloc(chars * sizeof(char));
 	sprintf(buffer, "%d;%d;%s;%s\n", 
 		data->id, 
 		data->delay, 

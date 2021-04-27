@@ -2,13 +2,14 @@ CFLAGS   = -Wall -std=gnu99
 INCLUDES = -I .
 OBJDIR   = obj
 PROCESSDIR = process
+OUTPUTDIR = OutputFiles
 
 all: $(OBJDIR) R1 R2 R3 receiver_manager S1 S2 S3 sender_manager hackler
 
 # Create object directory (with sub directory)
 $(OBJDIR):
 	@mkdir -p $(OBJDIR)
-	@mkdir -p OutputFiles
+	@mkdir -p $(OUTPUTDIR)
 	@mkdir -p $(OBJDIR)/process
 	@mkdir -p $(OBJDIR)/struct
 
@@ -117,7 +118,7 @@ clean:
 
 	@rm -vrf ${OBJDIR}
 
-	@rm -vf OutputFiles/*
+	@rm -vf $(OUTPUTDIR)/*
 	@echo "Removed object files and executables"
 
 	@ipcrm -a

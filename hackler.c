@@ -22,166 +22,164 @@ int pidR1 = 0;
 int pidR2 = 0;
 int pidR3 = 0;
 
-void printIPCHistory(int semId, history *h){
-    
-    time_t timeIPC;
+void printIPCHistory(int semId, history * h){
+	time_t timeIPC;
 
-    // Set distruction time
-    time(&timeIPC);
-    h->distruction = timeIPC;
+	// Set distruction time
+	time(&timeIPC);
+	h->distruction = timeIPC;
 
-    // Wait can write on file
-    semOp(semId, SEM_HISTORY_FILE, -1);
+	// Wait can write on file
+	semOp(semId, SEM_HISTORY_FILE, -1);
 
-    // Write
-    printHistory(IPC_HISTORY_FILENAME, h);
+	// Write
+	printHistory(IPC_HISTORY_FILENAME, h);
 
-    // Free file
-    semOp(semId, SEM_HISTORY_FILE, 1);
+	// Free file
+	semOp(semId, SEM_HISTORY_FILE, 1);
 }
 
-void string2pid(char *line){
-    char *saveptr1;
-    char *process = strtok_r(line, ";",&saveptr1);
-    char *pid = strtok_r(NULL, ";",&saveptr1);
+void string2pid(char * line){
+	char * saveptr1;
+	char * process = strtok_r(line, ";", &saveptr1);
+	char * pid = strtok_r(NULL, ";", &saveptr1);
 
-    if(strcmp(process,"S1") == 0){
-        pidS1=atoi(pid);
-    }else if(strcmp(process,"S2") == 0){
-        pidS2=atoi(pid);
-    }else if(strcmp(process,"S3") == 0){
-        pidS3=atoi(pid);
-    }else if(strcmp(process,"R1") == 0){
-        pidR1=atoi(pid);
-    }else if(strcmp(process,"R2") == 0){
-        pidR2=atoi(pid);
-    }else if(strcmp(process,"R3") == 0){
-        pidR3=atoi(pid);
-    }else{
-        ErrExit("Error in File");
-    }
+	if(strcmp(process, "S1") == 0){
+		pidS1 = atoi(pid);
+	}else if(strcmp(process, "S2") == 0){
+		pidS2 = atoi(pid);
+	}else if(strcmp(process, "S3") == 0){
+		pidS3 = atoi(pid);
+	}else if(strcmp(process, "R1") == 0){
+		pidR1 = atoi(pid);
+	}else if(strcmp(process, "R2") == 0){
+		pidR2 = atoi(pid);
+	}else if(strcmp(process, "R3") == 0){
+		pidR3 = atoi(pid);
+	}else{
+		ErrExit("Error in File");
+	}
 };
 
 void readFrom(char * filename){
-    int file = openFile(filename);
-    ErrOpen(file);
-    
-    int dim=lseek(file, 0L, SEEK_END);
-    lseek(file, 0L, SEEK_SET);
-    
-    char *buffer = (char*) malloc((dim)*sizeof(char));
+	int file = openFile(filename);
+	ErrOpen(file);
+	
+	int dim = lseek(file, 0L, SEEK_END);
+	lseek(file, 0L, SEEK_SET);
+	
+	char *buffer = (char *) malloc((dim) * sizeof(char));
 
-    read(file, buffer, dim);
+	read(file, buffer, dim);
 
-    char *saveptr;
-    char *token=strtok_r(buffer,"\n",&saveptr);
-    //salto la prima riga
-    token = strtok_r(NULL,"\n", &saveptr);
-    //analizzo il resto del testo
-    while(token != NULL){
-        string2pid(token);
-        token=strtok_r(NULL,"\n", &saveptr);
-    }
+	char * saveptr;
+	char * token=strtok_r(buffer, "\n", &saveptr);
+	//salto la prima riga
+	token = strtok_r(NULL, "\n", &saveptr);
+	//analizzo il resto del testo
+	while(token != NULL){
+		string2pid(token);
+		token = strtok_r(NULL, "\n", &saveptr);
+	}
 }
 
 void readPid(int initSemId){
-    char log[50];
-
-    // Wait sender init end 
-    semOp(initSemId, SEM_INIT_SENDER, 0);
-
-    // Read PID form sender file
-    readFrom(SENDER_FILENAME);
-    
-    sprintf(log, "Read pid: S1(%d), S2(%d), S3(%d)", pidS1, pidS2, pidS3);
-    printLog("HK", log);
-
-    // Wait receiver init end 
-    semOp(initSemId, SEM_INIT_RECEIVER, 0);
-
-    // Read PID form receiver file
-    readFrom(RECEIVER_FILENAME);
-
-    sprintf(log, "Read pid: R1(%d), R2(%d), R3(%d)", pidR1, pidR2, pidR3);
-    printLog("HK", log);
-	
-}
-
-void executeAction(hacklerAction *h){
 	char log[50];
 
-    process * target = h->target;
+	// Wait sender init end 
+	semOp(initSemId, SEM_INIT_SENDER, 0);
 
-    if(target->type == 'Z' && target->number == 0){
-        // All
-        h->target = SENDER_1();
-        executeAction(h);
-        h->target = SENDER_2();
-        executeAction(h);
-        h->target = SENDER_3();
-        executeAction(h);
-        h->target = RECEIVER_1();
-        executeAction(h);
-        h->target = RECEIVER_2();
-        executeAction(h);
-        h->target = RECEIVER_3();
-        executeAction(h);
+	// Read PID form sender file
+	readFrom(SENDER_FILENAME);
+	
+	sprintf(log, "Read pid: S1(%d), S2(%d), S3(%d)", pidS1, pidS2, pidS3);
+	printLog("HK", log);
 
-        sprintf(log, "Send action %d (%s) to ALL", 
-            h->id,
-            h->action
-        );
-        printLog("HK", log);
-    }else{
-        int targetPid = -1;
+	// Wait receiver init end 
+	semOp(initSemId, SEM_INIT_RECEIVER, 0);
 
-        if(target->type == 'S' && target->number == 1){
-            targetPid = pidS1;
-        }else if(target->type == 'S' && target->number == 2){
-            targetPid = pidS2;
-        }else if(target->type == 'S' && target->number == 3){
-            targetPid = pidS3;
-        }else if(target->type == 'R' && target->number == 1){
-            targetPid = pidR1;
-        }else if(target->type == 'R' && target->number == 2){
-            targetPid = pidR2;
-        }else if(target->type == 'R' && target->number == 3){
-            targetPid = pidR3;
-        }
+	// Read PID form receiver file
+	readFrom(RECEIVER_FILENAME);
 
-        if(targetPid <= 0){
-            ErrExit("Impossibile inviare action");
-        }
-
-        int sig = -1;
-
-        if(strcmp(h->action, HK_ACTION_INCREASE_DELAY) == 0){
-            sig = SIGUSR1;
-        }else if(strcmp(h->action, HK_ACTION_REMOVE_MSG) == 0){
-            sig = SIGUSR2;
-        }else if(strcmp(h->action, HK_ACTION_SEND_MSG) == 0){
-            sig = SIGCONT;
-        }else if(strcmp(h->action, HK_ACTION_SHUT_DOWN) == 0){
-            sig = SIGTERM;
-        }
-
-        if(sig < 0){
-            ErrExit("Impossibile inviare action");
-        }
-
-        kill(targetPid, sig);
-
-        sprintf(log, "Send action %d (%s) to %s (%d)", 
-            h->id,
-            h->action,
-            process2string(target), 
-            targetPid
-        );
-        printLog("HK", log);
-    }
+	sprintf(log, "Read pid: R1(%d), R2(%d), R3(%d)", pidR1, pidR2, pidR3);
+	printLog("HK", log);
 }
 
-int main(int argc, char *argv[]) {
+void executeAction(hacklerAction * h){
+	char log[50];
+
+	process * target = h->target;
+
+	if(target->type == 'Z' && target->number == 0){
+		// All
+		h->target = SENDER_1();
+		executeAction(h);
+		h->target = SENDER_2();
+		executeAction(h);
+		h->target = SENDER_3();
+		executeAction(h);
+		h->target = RECEIVER_1();
+		executeAction(h);
+		h->target = RECEIVER_2();
+		executeAction(h);
+		h->target = RECEIVER_3();
+		executeAction(h);
+
+		sprintf(log, "Send action %d (%s) to ALL", 
+			h->id,
+			h->action
+		);
+		printLog("HK", log);
+	}else{
+		int targetPid = -1;
+
+		if(target->type == 'S' && target->number == 1){
+			targetPid = pidS1;
+		}else if(target->type == 'S' && target->number == 2){
+			targetPid = pidS2;
+		}else if(target->type == 'S' && target->number == 3){
+			targetPid = pidS3;
+		}else if(target->type == 'R' && target->number == 1){
+			targetPid = pidR1;
+		}else if(target->type == 'R' && target->number == 2){
+			targetPid = pidR2;
+		}else if(target->type == 'R' && target->number == 3){
+			targetPid = pidR3;
+		}
+
+		if(targetPid <= 0){
+			ErrExit("Impossibile inviare action");
+		}
+
+		int sig = -1;
+
+		if(strcmp(h->action, HK_ACTION_INCREASE_DELAY) == 0){
+			sig = SIGUSR1;
+		}else if(strcmp(h->action, HK_ACTION_REMOVE_MSG) == 0){
+			sig = SIGUSR2;
+		}else if(strcmp(h->action, HK_ACTION_SEND_MSG) == 0){
+			sig = SIGCONT;
+		}else if(strcmp(h->action, HK_ACTION_SHUT_DOWN) == 0){
+			sig = SIGTERM;
+		}
+
+		if(sig < 0){
+			ErrExit("Impossibile inviare action");
+		}
+
+		kill(targetPid, sig);
+
+		sprintf(log, "Send action %d (%s) to %s (%d)", 
+			h->id,
+			h->action,
+			process2string(target), 
+			targetPid
+		);
+		printLog("HK", log);
+	}
+}
+
+int main(int argc, char * argv[]) {
 	if (argc != 2){
 		printf("Error invocation of Hackler, you must pass the input file");
 		return 1;
@@ -190,34 +188,34 @@ int main(int argc, char *argv[]) {
 	// Start process
 	printLog("HK", "Process start");
 
-    key_t key = generateKey(KEY_INIT_SEM);
-    int initSemId = createSemaphore(key);
-    semOp(initSemId, SEM_START, -1);
+	key_t key = generateKey(KEY_INIT_SEM);
+	int initSemId = createSemaphore(key);
+	semOp(initSemId, SEM_START, -1);
 
-    // Wait all process open sem
-    semOp(initSemId, SEM_START, 0);
-    
-	char *filename = argv[1];
+	// Wait all process open sem
+	semOp(initSemId, SEM_START, 0);
+	
+	char * filename = argv[1];
 
-	hacklerAction *data[MAX_HACKLER_ACTION];
+	hacklerAction * data[MAX_HACKLER_ACTION];
 	int index = 0;
 
-    // TODO : use dynamic read as S1
+	// TODO : use dynamic read as S1
 
-	char *buffer = openHackler(filename);
-	char *end_buffer;
+	char * buffer = openHackler(filename);
+	char * end_buffer;
 	char log[50];
 	// Divido la stringa al carattere \n
-	char *line = strtok_r(buffer, "\n", &end_buffer);
+	char * line = strtok_r(buffer, "\n", &end_buffer);
 	int firstLine = 1;
 	while(line != NULL){
 		if(firstLine != 1){
 			sprintf(log, "Analize line '%s'", line);
 			printLog("HK", log);
 
-            // TODO : attenzione se il file finisce con \n legge un ! che fa errore
+			// TODO : attenzione se il file finisce con \n legge un ! che fa errore
 
-			hacklerAction *h = line2hacklerAction(line);
+			hacklerAction * h = line2hacklerAction(line);
 
 			data[index] = h;
 			index++;
@@ -229,35 +227,36 @@ int main(int argc, char *argv[]) {
 	}
 	printLog("HK", "Read file");
 
-    readPid(initSemId);
+	readPid(initSemId);
 
-    // Set this process as end init     
-    semOp(initSemId, SEM_END_INIT, -1);
+	// Set this process as end init     
+	semOp(initSemId, SEM_END_INIT, -1);
 
-    // Wait all init end 
-    semOp(initSemId, SEM_END_INIT, 0);
+	// Wait all init end 
+	semOp(initSemId, SEM_END_INIT, 0);
 
-    printLog("HK", "End init start");
+	printLog("HK", "End init start");
 
 	//Esecuzione delle azioni
 	printLog("HK", "Start execution of the action");
-    
+	
 	for(int i = 0; i < index; i++){
-		hacklerAction *h = data[i];
+		hacklerAction * h = data[i];
 
-        //Wait delay
-        sleep(h->delay);
+		//Wait delay
+		sleep(h->delay);
 
-        // Exec action h
-        executeAction(h);
+		// Exec action h
+		executeAction(h);
 
-        // Print action
+		// Print action
 		printHacklerAction(HACKLER_FILENAME, h);
 	}
 	printLog("HK", "End action");
 
 	semOp(initSemId, SEM_HK_IS_RUNNING, -1);
 	printLog("HK", "Process end");
+	
 	// Wait for 2 second befor end
 	sleep(2);
 	return 0;
