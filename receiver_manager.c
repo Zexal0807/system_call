@@ -54,11 +54,10 @@ int main(int argc, char * argv[]) {
     char charKey[10];
 
     key = generateKey(KEY_INIT_SEM);
-    sprintf(charKey, "%x", key);
     int initSemId = createSemaphore(key);
+    sprintf(charKey, "%x", key);
     time(&timeIPC);
     SEM = createHistory("SEM", charKey,  "RM", timeIPC, timeIPC);
-
 
     semOp(initSemId, SEM_START, -1);
     
@@ -78,15 +77,15 @@ int main(int argc, char * argv[]) {
 
     // Create SH
     key = generateKey(KEY_SHARED_MEMORY);
-    sprintf(charKey, "%x", key);
     int shmid = createSharedMemory(key);
+    sprintf(charKey, "%x", key);
     time(&timeIPC);
     SH = createHistory("SH", charKey,  "RM", timeIPC, timeIPC);
 
     // Create MSGQueue
     key = generateKey(KEY_MESSAGE_QUEUE);
-    sprintf(charKey, "%x", key);
     int messageQueueId = getMessageQueue(key);
+    sprintf(charKey, "%x", key);
     time(&timeIPC);
     MSGQUEUE = createHistory("MQ", charKey,  "RM", timeIPC, timeIPC);
 
@@ -231,17 +230,21 @@ int main(int argc, char * argv[]) {
     // Close PIPEs
     closePipe(pipeR1R2[0]);
     closePipe(pipeR1R2[1]);
-    time(&timeIPC);
-    PIPER1R2->distruction = timeIPC;
+    printIPCHistory(initSemId, PIPER1R2);
 
     closePipe(pipeR2R3[0]);
     closePipe(pipeR2R3[1]);
-    time(&timeIPC);
-    PIPER2R3->distruction = timeIPC;
+    printIPCHistory(initSemId, PIPER2R3);
 
-    printHistory(IPC_HISTORY_FILENAME, PIPER1R2);
-    printHistory(IPC_HISTORY_FILENAME, PIPER2R3);
+    // Remove IPC
+    printIPCHistory(initSemId, MSGQUEUE);
 
+    printIPCHistory(initSemId, SH);
+
+    printIPCHistory(initSemId, SEM);
+	
+	// End process
+    semOp(initSemId, SEM_RM_IS_RUNNING, -1);
 	printLog("RM", "Process End");
 	return 0;
 }

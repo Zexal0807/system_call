@@ -33,6 +33,8 @@ void setSemaphore(int semid){
         1,      //R1 is running
         1,      //R2 is running
         1,      //R3 is running
+		1,		//RM is running
+		1,		//HK is running
         1,      // S1 have message to send by PIPE
         1,      // S2 have message to send by PIPE
         1,      // R2 have message to send by PIPE

@@ -22,7 +22,7 @@ history *createHistory(
 	history *h = (history*) malloc(sizeof(history));
 
 	h->ipc = ipc;
-    h->key = key;
+	h->key = strdup(key);
     h->creator = creator;
     h->creation = creation;
     h->distruction = distruction;
