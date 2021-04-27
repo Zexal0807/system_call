@@ -51,6 +51,19 @@ int countTrafficInfoChars(trafficInfo * t){
 	return chars;
 }
 
+void printHeader(char * filename){
+	int file = open(filename, O_WRONLY | O_TRUNC | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
+	
+	if(file == -1)
+		ErrOpen(file);
+	
+	char headerBuffer[] = TRAFFINC_INFO_FILE_HEADER;
+	write(file, headerBuffer, strlen(headerBuffer));
+
+	// Close file
+	close(file);
+}
+
 void printTrafficInfo(char * filename, trafficInfo * data){
 	int file;
 	if(access(filename, F_OK) == 0){

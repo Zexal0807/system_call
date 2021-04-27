@@ -41,28 +41,40 @@ void Q_writeForR3(int msqid, message *m){
 	Q_write(msqid, m, 3);
 }
 
-message * read(int msqid, long mtype){
-	queueMsg msg;
-	if (msgrcv(msqid, &msg, queueMsgSize, mtype, IPC_NOWAIT) == -1) {
-		if (errno != ENOMSG) {
-			ErrExit("msgrcv failed");
-		}
-	} else {
-		return line2message(msg.message);
-	}
-	return NULL;
-}
-
 message * readR1(int msqid){
-	return read(msqid, 1);
+    queueMsg msg;
+    if (msgrcv(msqid, &msg, queueMsgSize, 1, IPC_NOWAIT) == -1) {
+        if (errno != ENOMSG) {
+            ErrExit("msgrcv failed");
+        }
+    } else {
+        return line2message(msg.message);
+    }
+    return NULL;
 }
 
 message * readR2(int msqid){
-	return read(msqid, 2);
+    queueMsg msg;
+    if (msgrcv(msqid, &msg, queueMsgSize, 2, IPC_NOWAIT) == -1) {
+        if (errno != ENOMSG) {
+            ErrExit("msgrcv failed");
+        }
+    } else {
+        return line2message(msg.message);
+    }
+    return NULL;
 }
 
 message * readR3(int msqid){
-	return read(msqid, 3);
+    queueMsg msg;
+    if (msgrcv(msqid, &msg, queueMsgSize, 3, IPC_NOWAIT) == -1) {
+        if (errno != ENOMSG) {
+            ErrExit("msgrcv failed");
+        }
+    } else {
+        return line2message(msg.message);
+    }
+    return NULL;
 }
 
 void deleteMessageQueue(int id){

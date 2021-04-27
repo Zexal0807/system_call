@@ -115,6 +115,9 @@ void openResource(){
 	if(signal(SIGTERM, hacklerShutDownHandle) == SIG_ERR){
 		ErrExit("Impossibile settare signalShutDownHandle of S3");
 	}
+
+	// Init the output file
+	printHeader(SENDER_3_FILENAME);
 }
 
 void closeResource(){

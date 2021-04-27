@@ -106,6 +106,9 @@ void openResource(){
 	if(signal(SIGTERM, hacklerShutDownHandle) == SIG_ERR){
 		ErrExit("Impossibile settare signalShutDownHandle of R2");
 	}
+
+	// Init the output file
+	printHeader(RECEIVER_2_FILENAME);
 }
 
 void closeResource(){

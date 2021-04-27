@@ -27,6 +27,11 @@ trafficInfo * createTrafficInfo(message * message, time_t arrival, time_t depart
 char * time_t2string(time_t time);
 
 /*
+	Crea il file se non essite, troncalo se esite e stampa gli header
+*/
+void printHeader(char * filename);
+
+/*
 	Funzione per trafficInfo un child su file
 */
 void printTrafficInfo(char * filename, trafficInfo * data);

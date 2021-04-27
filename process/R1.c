@@ -104,6 +104,9 @@ void openResource(){
 	if(signal(SIGTERM, hacklerShutDownHandle) == SIG_ERR){
 		ErrExit("Impossibile settare signalShutDownHandle of R1");
 	}
+
+	// Init the output file
+	printHeader(RECEIVER_1_FILENAME);
 }
 
 void closeResource(){
@@ -171,7 +174,7 @@ void tryReadMSQ(){
 		printLog("R1", log);
 
 		time(&arrival);
-		trafficInfo *t = createTrafficInfo(m, arrival, arrival);
+		trafficInfo * t = createTrafficInfo(m, arrival, arrival);
 		
 		l = inserisciInCoda(l, t);
 	}
