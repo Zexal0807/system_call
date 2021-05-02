@@ -79,7 +79,7 @@ hacklerAction * line2hacklerAction(
 	int id = 0;
 	int delay = 0;
 	process * target = SENDER_1();
-	char * action = "ShutDown";
+	char * action = "";
 
 	int counter = 0;
 
