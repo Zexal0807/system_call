@@ -179,7 +179,10 @@ void executeAction(hacklerAction * h){
 	}
 }
 
-int main(int argc, char * argv[]) {
+int main(int argc, char * argv[]) 
+
+	time_t timeIPC;
+
 	if (argc != 2){
 		printf("Error invocation of Hackler, you must pass the input file");
 		return 1;
@@ -187,26 +190,27 @@ int main(int argc, char * argv[]) {
 	
 	// Start process
 	printLog("HK", "Process start");
-
+	
 	key_t key = generateKey(KEY_INIT_SEM);
-	int initSemId = createSemaphore(key);
+	char charKey[10];
+	sprintf(charKey, "%x", key);
+	time(&timeIPC);
+	history * SEM = createHistory("SEM", charKey,  "HK", timeIPC, timeIPC);
+
 	semOp(initSemId, SEM_START, -1);
 
 	// Wait all process open sem
 	semOp(initSemId, SEM_START, 0);
 	
+	char log[50];
 	char * filename = argv[1];
 
-	printTrafficInfoHeader(HACKLER_FILENAME);
+	char * buffer = openHackler(filename);
+	char * end_buffer;
 
 	hacklerAction * data[MAX_HACKLER_ACTION];
 	int index = 0;
 
-	// TODO : use dynamic read as S1
-
-	char * buffer = openHackler(filename);
-	char * end_buffer;
-	char log[50];
 	// Divido la stringa al carattere \n
 	char * line = strtok_r(buffer, "\n", &end_buffer);
 	int firstLine = 1;
@@ -239,22 +243,45 @@ int main(int argc, char * argv[]) {
 
 	printLog("HK", "End init start");
 
+	// stampo gli header del file di output
+	printHacklerActionHeader(HACKLER_FILENAME);
+
 	//Esecuzione delle azioni
 	printLog("HK", "Start execution of the action");
 	
-	for(int i = 0; i < index; i++){
+	// Si assume che le azioni siano già in ordine cronologico
+	int time = 0;
+	int endAction = 0;
+	int i = 0;
+
+	while(endAction == 0){
+		int mustSleep = 1;
+
 		hacklerAction * h = data[i];
+		if(h->delay <= time){
+			// Exec action h
+			executeAction(h);
 
-		//Wait delay
-		sleep(h->delay);
+			// Print action
+			printHacklerAction(HACKLER_FILENAME, h);
 
-		// Exec action h
-		executeAction(h);
+			// Avendo eseguito l'azione, incremento il numero dell'azione da analizzare, non dormo per controllare se anche essa va eseguita in questo stesso istante
+			i++;
+			mustSleep = 0;
 
-		// Print action
-		printHacklerAction(HACKLER_FILENAME, h);
+			// Se abbiamo finito le azioni abbiamo finito
+			if(i == index){
+				endAction = 1;
+			}
+		}
+
+		if(mustSleep == 1){
+			sleep(1);
+			time++;
+		}
 	}
-	printLog("HK", "End action");
+
+	printLog("HK", "End actions");
 
 	semOp(initSemId, SEM_HK_IS_RUNNING, -1);
 	printLog("HK", "Process end");
