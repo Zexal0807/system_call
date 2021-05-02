@@ -179,7 +179,7 @@ void executeAction(hacklerAction * h){
 	}
 }
 
-int main(int argc, char * argv[]) 
+int main(int argc, char * argv[]){
 
 	time_t timeIPC;
 
@@ -192,11 +192,12 @@ int main(int argc, char * argv[])
 	printLog("HK", "Process start");
 	
 	key_t key = generateKey(KEY_INIT_SEM);
+	int initSemId = createSemaphore(key);
 	char charKey[10];
 	sprintf(charKey, "%x", key);
 	time(&timeIPC);
 	history * SEM = createHistory("SEM", charKey,  "HK", timeIPC, timeIPC);
-
+	
 	semOp(initSemId, SEM_START, -1);
 
 	// Wait all process open sem
@@ -283,9 +284,11 @@ int main(int argc, char * argv[])
 
 	printLog("HK", "End actions");
 
+	printIPCHistory(initSemId, SEM);
+
 	semOp(initSemId, SEM_HK_IS_RUNNING, -1);
-	printLog("HK", "Process end");
-	
+	printLog("HK", "Process end");	
+
 	// Wait for 2 second befor end
 	sleep(2);
 	return 0;
