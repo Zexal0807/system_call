@@ -53,8 +53,7 @@ int countHistoryChars(history * h){
 void printHistoryHeader(char * filename){
 	int file = open(filename, O_WRONLY | O_TRUNC | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
 	
-	if(file == -1)
-		ErrOpen(file);
+	ErrOpen(file);
 	
 	char headerBuffer[] = IPC_HISTORY_FILE_HEADER;
 	write(file, headerBuffer, strlen(headerBuffer));
