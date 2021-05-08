@@ -83,3 +83,37 @@ void printList(node * lista){
 		printList(lista->next);
 	}
 }
+
+node* createTrafficInfoList(
+	char* filename
+){
+	node * list = NULL;
+	//apro il file    
+	int file = open(filename, O_RDONLY);
+	ErrOpen(file);
+	//creo il buffer per la lettura del file
+	int size = lseek(file, 0L, SEEK_END);   //dimensione file
+	char* buffer = (char*) malloc(sizeof(char) * size);
+	lseek(file, 0L, SEEK_SET); //riporto l'indicatore a inizio file
+	//leggo file
+	read(file, buffer, size);
+	char *end_buffer;
+	char *line = strtok_r(buffer, "\n", &end_buffer);
+
+	int firstline = 1;
+    time_t arrival;
+
+	while(line != NULL){
+		if(firstline != 1){
+			message *m = line2message(line);
+            time(&arrival);
+            trafficInfo *t = createTrafficInfo(m, arrival, arrival);
+
+			list = inserisciInCoda(list, t);
+		}
+		firstline = 0;
+		line = strtok_r(NULL, "\n", &end_buffer);
+	}
+	
+	return list;
+}

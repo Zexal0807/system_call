@@ -17,3 +17,5 @@ int isSet(node * n);
 
 node * rimuovi(node * n, trafficInfo * t);
 void printList(node * lista);
+
+node* createTrafficInfoList(char* filename);

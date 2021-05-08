@@ -156,40 +156,6 @@ void sendMessage(message * m){
 	printLog("S1", log);
 }
 
-int file;
-int cursor = 0L;
-int filesize = 0;
-
-int tryReadFromFile(int convert){
-	char log[50];
-	lseek(file, cursor, SEEK_SET);
-	char buffer[MAX_MESSAGE_LENGTH];
-	if(read(file, buffer, MAX_MESSAGE_LENGTH) == -1){
-		ErrExit("Impossibile leggere dal file");
-	}
-
-	char * line = strtok(buffer, "\n");
-	int length = strlen(line);
-	cursor += length + 1;
-
-	if(convert){
-		message * m = line2message(line);                
-		sprintf(log, "Read %d from file", m->id);
-		printLog("S1", log);
-		time_t arrival;
-		time(&arrival);
-		trafficInfo * t = createTrafficInfo(m, arrival, arrival);
-		l = inserisciInCoda(l, t);
-		size++;
-	}
-
-	if(cursor >= filesize){
-		return 0;
-	}
-
-	return 1;
-}
-
 int main(int argc, char * argv[]) {
 
 	printLog("S1", "Process start with exec");
@@ -206,10 +172,9 @@ int main(int argc, char * argv[]) {
 	char log[50];
 
 	openResource();
-
-	file = openFile(filename);
-	filesize = lseek(file, 0L, SEEK_END);
-	tryReadFromFile(0);
+	
+	// Read all messages from input file
+	l = createTrafficInfoList(filename);
 
 	// Set this process as end init
 	semOp(initSemId, SEM_INIT_SENDER, -1);
@@ -223,14 +188,7 @@ int main(int argc, char * argv[]) {
 	trafficInfo * t;
 	time_t departure;
 
-	int eof = 1;
-
-	while((eof || isSet(l)) && shutDown == 0){
-		// try to read from file
-		if(eof== 1 && size <= 10){
-			eof = tryReadFromFile(1);
-		}
-
+	while(isSet(l) && shutDown == 0){
 		tmp = l;
 		while(isSet(tmp)){
 			t = tmp->trafficInfo;
