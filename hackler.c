@@ -234,7 +234,7 @@ int main(int argc, char * argv[]){
 
 	readPid(initSemId);
 
-	// Set this process as end init     
+	// Set this process as end init
 	semOp(initSemId, SEM_END_INIT, -1);
 
 	// Wait all init end 

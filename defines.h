@@ -1,6 +1,6 @@
 /// @file defines.h
 /// @brief Contiene la definizioni di variabili
-///         e funzioni specifiche del progetto.
+///		e funzioni specifiche del progetto.
 
 #pragma once
 
@@ -37,9 +37,9 @@
 
 #define IPC_HISTORY_FILENAME "OutputFiles/F10.csv"
 
-#define KEY_INIT_SEM 01110011       // S
-#define KEY_SHARED_MEMORY 01101101  // M
-#define KEY_MESSAGE_QUEUE 01110001  // Q
+#define KEY_INIT_SEM 01110011		// S
+#define KEY_SHARED_MEMORY 01101101	// M
+#define KEY_MESSAGE_QUEUE 01110001	// Q
 #define KEY_FIFO "OutputFiles/my_fifo.txt"
 
 #define SEM_NUMBER 22

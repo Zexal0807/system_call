@@ -29,7 +29,7 @@ node * inserisciInTesta(node * n, trafficInfo * t){
 	if(tmp != NULL){
 		tmp->trafficInfo = t;
 		tmp->next = n;
-		n = tmp;    
+		n = tmp;
 	} else{
 		printf("Memoria esaurita!\n");
 	}
@@ -71,7 +71,7 @@ node * rimuovi(node * lista, trafficInfo * t){
 			free(canc);
 		}else{
 			prec = curr;
-			curr = curr->next;     
+			curr = curr->next;
 		}
 	}
 	return lista;
@@ -88,11 +88,11 @@ node* createTrafficInfoList(
 	char* filename
 ){
 	node * list = NULL;
-	//apro il file    
+	//apro il file
 	int file = open(filename, O_RDONLY);
 	ErrOpen(file);
 	//creo il buffer per la lettura del file
-	int size = lseek(file, 0L, SEEK_END);   //dimensione file
+	int size = lseek(file, 0L, SEEK_END);	//dimensione file
 	char* buffer = (char*) malloc(sizeof(char) * size);
 	lseek(file, 0L, SEEK_SET); //riporto l'indicatore a inizio file
 	//leggo file
@@ -101,14 +101,13 @@ node* createTrafficInfoList(
 	char *line = strtok_r(buffer, "\n", &end_buffer);
 
 	int firstline = 1;
-    time_t arrival;
+	time_t arrival;
 
 	while(line != NULL){
 		if(firstline != 1){
 			message *m = line2message(line);
-            time(&arrival);
-            trafficInfo *t = createTrafficInfo(m, arrival, arrival);
-
+			time(&arrival);
+			trafficInfo *t = createTrafficInfo(m, arrival, arrival);
 			list = inserisciInCoda(list, t);
 		}
 		firstline = 0;

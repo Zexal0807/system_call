@@ -214,7 +214,7 @@ int main(int argc, char * argv[]) {
 
 	printLog("RM", "End init of all child");
 
-	// Set this process as end init     
+	// Set this process as end init 
 	semOp(initSemId, SEM_END_INIT, -1);
 
 	printLog("RM", "End init start");

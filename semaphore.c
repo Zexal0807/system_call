@@ -23,28 +23,28 @@ int createSemaphore(key_t key){
 
 void setSemaphore(int semid){
 	unsigned short semInitVal[] = {
-		3,      // START
-		3,      // SM child
-		3,      // RM child
-		3,      // END INIT
-		1,      //S1 is running
-		1,      //S2 is running
-		1,      //S3 is running
-		1,      //R1 is running
-		1,      //R2 is running
-		1,      //R3 is running
+		3,		// START
+		3,		// SM child
+		3,		// RM child
+		3,		// END INIT
+		1,		//S1 is running
+		1,		//S2 is running
+		1,		//S3 is running
+		1,		//R1 is running
+		1,		//R2 is running
+		1,		//R3 is running
 		1,		//RM is running
 		1,		//HK is running
-		1,      // S1 have message to send by PIPE
-		1,      // S2 have message to send by PIPE
-		1,      // R2 have message to send by PIPE
-		1,      // R3 have message to send by PIPE
-		1,      // Can write on FIFO
-		0,      // R1 have message to read in SH
-		0,      // R2 have message to read in SH
-		0,      // R3 have message to read in SH
-		1,      // There is no message in SH
-		1       // Can use history file
+		1,		// S1 have message to send by PIPE
+		1,		// S2 have message to send by PIPE
+		1,		// R2 have message to send by PIPE
+		1,		// R3 have message to send by PIPE
+		1,		// Can write on FIFO
+		0,		// R1 have message to read in SH
+		0,		// R2 have message to read in SH
+		0,		// R3 have message to read in SH
+		1,		// There is no message in SH
+		1		// Can use history file
 	};
 	union semun arg;
 	arg.array = semInitVal;
