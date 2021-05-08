@@ -220,8 +220,6 @@ int main(int argc, char * argv[]){
 			sprintf(log, "Analize line '%s'", line);
 			printLog("HK", log);
 
-			// TODO : attenzione se il file finisce con \n legge un ! che fa errore
-
 			hacklerAction * h = line2hacklerAction(line);
 
 			data[index] = h;
