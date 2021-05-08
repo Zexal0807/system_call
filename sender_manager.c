@@ -71,13 +71,15 @@ int main(int argc, char * argv[]) {
 	// Create PIPEs
 	int pipeS1S2[2];
 	createPipe(pipeS1S2);
+	sprintf(charKey, "%d/%d", pipeS1S2[0], pipeS1S2[1]);
 	time(&timeIPC);
-	PIPES1S2 = createHistory("PIPES1S2", "-",  "SM", timeIPC, timeIPC);
+	PIPES1S2 = createHistory("PIPES1S2", charKey,  "SM", timeIPC, timeIPC);
 	
 	int pipeS2S3[2];
 	createPipe(pipeS2S3);
+	sprintf(charKey, "%d/%d", pipeS2S3[0], pipeS2S3[1]);
 	time(&timeIPC);
-	PIPES2S3 = createHistory("PIPES2S3", "-",  "SM", timeIPC, timeIPC);
+	PIPES2S3 = createHistory("PIPES2S3", charKey,  "SM", timeIPC, timeIPC);
 
 	// Create SH
 	key = generateKey(KEY_SHARED_MEMORY);
