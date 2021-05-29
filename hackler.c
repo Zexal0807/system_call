@@ -125,9 +125,12 @@ void executeAction(hacklerAction * h){
 		h->target = RECEIVER_3();
 		executeAction(h);
 
+		char action [50] = "";
+		strncpy(action, h->action, strlen(h->action) - 1);
+
 		sprintf(log, "Send action %d (%s) to ALL", 
 			h->id,
-			h->action
+			action
 		);
 		printLog("HK", log);
 	}else{
@@ -146,32 +149,34 @@ void executeAction(hacklerAction * h){
 		}else if(target->type == 'R' && target->number == 3){
 			targetPid = pidR3;
 		}
-
+		
 		if(targetPid <= 0){
-			ErrExit("Impossibile inviare action");
+			ErrExit("Impossibile inviare action (target not found)");
 		}
 
 		int sig = -1;
+		char action[50] = "";
 
-		if(strcmp(h->action, HK_ACTION_INCREASE_DELAY) == 0){
+		if(strncmp(h->action, HK_ACTION_INCREASE_DELAY, strlen(HK_ACTION_INCREASE_DELAY)) == 0){
 			sig = SIGUSR1;
-		}else if(strcmp(h->action, HK_ACTION_REMOVE_MSG) == 0){
+		}else if(strncmp(h->action, HK_ACTION_REMOVE_MSG, strlen(HK_ACTION_REMOVE_MSG)) == 0){
 			sig = SIGUSR2;
-		}else if(strcmp(h->action, HK_ACTION_SEND_MSG) == 0){
+		}else if(strncmp(h->action, HK_ACTION_SEND_MSG, strlen(HK_ACTION_SEND_MSG)) == 0){
 			sig = SIGCONT;
-		}else if(strcmp(h->action, HK_ACTION_SHUT_DOWN) == 0){
+		}else if(strncmp(h->action, HK_ACTION_SHUT_DOWN, strlen(HK_ACTION_SHUT_DOWN)) == 0){
 			sig = SIGTERM;
 		}
 
+		strncpy(action, h->action, strlen(h->action) - 1);
 		if(sig < 0){
-			ErrExit("Impossibile inviare action");
+			ErrExit("Impossibile inviare action (signal undefined)");
 		}
 
 		kill(targetPid, sig);
 
 		sprintf(log, "Send action %d (%s) to %s (%d)", 
 			h->id,
-			h->action,
+			action,
 			process2string(target), 
 			targetPid
 		);
