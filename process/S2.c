@@ -35,7 +35,7 @@ void readFromPipeHandle(int sig){
 		time_t arrival;
 		message * m = line2message(msg);
 
-		char log[50];
+		char log[50] = "";
 		sprintf(log, "Receive %d from PIPE S1S2", m->id);
 		printLog("S2", log);
 
@@ -47,7 +47,7 @@ void readFromPipeHandle(int sig){
 }
 
 void hacklerIncraseDelayHandle(int sig){
-	char log[50];
+	char log[50] = "";
 	sprintf(log, "Receive signal %s", HK_ACTION_INCREASE_DELAY);
 	printLog("S2", log);
 	// Increase delay of each message in list
@@ -59,7 +59,7 @@ void hacklerIncraseDelayHandle(int sig){
 }
 
 void hacklerRemoveMsgHandle(int sig){
-	char log[50];
+	char log[50] = "";
 	sprintf(log, "Receive signal %s", HK_ACTION_REMOVE_MSG);
 	printLog("S2", log);
 	// Remove each message in list
@@ -70,7 +70,7 @@ void hacklerRemoveMsgHandle(int sig){
 }
 
 void hacklerSendMsgHandle(int sig){
-	char log[50];
+	char log[50] = "";
 	sprintf(log, "Receive signal %s", HK_ACTION_SEND_MSG);
 	printLog("S2", log);
 	// ciclo su tutti i messaggi setta a 0 i tempi d'attesa in modo che vengano inviati a fine sleep
@@ -83,7 +83,7 @@ void hacklerSendMsgHandle(int sig){
 
 int shutDown = 0;
 void hacklerShutDownHandle(int sig){
-	char log[50];
+	char log[50] = "";
 	sprintf(log, "Receive signal %s", HK_ACTION_SHUT_DOWN);
 	printLog("S2", log);
 	shutDown = 1;
@@ -138,9 +138,9 @@ void closeResource(){
 }
 
 void sendMessage(message * m){
-	char log[50];
+	char log[50] = "";
 	if(m->sender->number == 2){
-		if (strcmp(m->comunication, "Q") == 0) {
+		if (m->comunication[0] == 'Q') {
 			switch(m->receiver->number){
 				case 1:
 					Q_writeForR1(messageQueueId, m);
@@ -155,7 +155,7 @@ void sendMessage(message * m){
 					ErrExit("receiver not exist");
 			}
 			sprintf(log, "Message %d send by MessageQueue", m->id);
-		}else if (strcmp(m->comunication, "SH") == 0) {
+		}else if (m->comunication[0] == 'S' && m->comunication[1] == 'H') {
 			switch(m->receiver->number){
 				case 1:
 					SH_writeForR1(sharedMemoryData, m, initSemId);
@@ -210,7 +210,7 @@ int main(int argc, char * argv[]) {
 	time_t departure;
 	node * tmp;
 	trafficInfo * t;
-	char log[50];
+	char log[50] = "";
 
 	while((thereIsMessage || isSet(l)) && shutDown == 0){
 		tmp = l;

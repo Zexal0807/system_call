@@ -29,7 +29,7 @@ void readFromPipeHandle(int sig){
 	time_t arrival;
 	message * m = line2message(msg);
 
-	char log[50];
+	char log[50] = "";
 	sprintf(log, "Receive %d from PIPE R1R2", m->id);
 	printLog("R1", log);
 	time(&arrival);
@@ -39,7 +39,7 @@ void readFromPipeHandle(int sig){
 }
 
 void hacklerIncraseDelayHandle(int sig){
-	char log[50];
+	char log[50] = "";
 	sprintf(log, "Receive signal %s", HK_ACTION_INCREASE_DELAY);
 	printLog("R1", log);
 	// Increase delay of each message in list
@@ -51,7 +51,7 @@ void hacklerIncraseDelayHandle(int sig){
 }
 
 void hacklerRemoveMsgHandle(int sig){
-	char log[50];
+	char log[50] = "";
 	sprintf(log, "Receive signal %s", HK_ACTION_REMOVE_MSG);
 	printLog("R1", log);
 	// Remove each message in list
@@ -62,7 +62,7 @@ void hacklerRemoveMsgHandle(int sig){
 }
 
 void hacklerSendMsgHandle(int sig){
-	char log[50];
+	char log[50] = "";
 	sprintf(log, "Receive signal %s", HK_ACTION_SEND_MSG);
 	printLog("R1", log);
 	// ciclo su tutti i messaggi setta a 0 i tempi d'attesa in modo che vengano inviati a fine sleep
@@ -75,7 +75,7 @@ void hacklerSendMsgHandle(int sig){
 
 int shutDown = 0;
 void hacklerShutDownHandle(int sig){
-	char log[50];
+	char log[50] = "";
 	sprintf(log, "Receive signal %s", HK_ACTION_SHUT_DOWN);
 	printLog("R1", log);
 	shutDown = 1;
@@ -127,7 +127,7 @@ void closeResource(){
 }
 
 void sendMessage(message * m){
-	char log[50];
+	char log[50] = "";
 	sprintf(log, "Message %d arrive", m->id);
 	printLog("R1", log);
 }
@@ -153,7 +153,7 @@ void tryReadSH(){
 		semOp(initSemId, SEM_SH, 1);
 		time_t arrival;
 
-		char log[50];
+		char log[50] = "";
 		sprintf(log, "Receive %d from Shared Memory", m->id);
 		printLog("R1", log);
 
@@ -169,7 +169,7 @@ void tryReadMSQ(){
 	if(m != NULL){
 		time_t arrival;
 
-		char log[50];
+		char log[50] = "";
 		sprintf(log, "Receive %d from MessageQueue", m->id);
 		printLog("R1", log);
 

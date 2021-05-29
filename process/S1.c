@@ -23,7 +23,7 @@ int pipeId;
 int S2pid;
 
 void hacklerIncraseDelayHandle(int sig){
-	char log[50];
+	char log[50] = "";
 	sprintf(log, "Receive signal %s", HK_ACTION_INCREASE_DELAY);
 	printLog("S1", log);
 	// Increase delay of each message in list
@@ -35,7 +35,7 @@ void hacklerIncraseDelayHandle(int sig){
 }
 
 void hacklerRemoveMsgHandle(int sig){
-	char log[50];
+	char log[50] = "";
 	sprintf(log, "Receive signal %s", HK_ACTION_REMOVE_MSG);
 	printLog("S1", log);
 	// Remove each message in list
@@ -47,7 +47,7 @@ void hacklerRemoveMsgHandle(int sig){
 }
 
 void hacklerSendMsgHandle(int sig){
-	char log[50];
+	char log[50] = "";
 	sprintf(log, "Receive signal %s", HK_ACTION_SEND_MSG);
 	printLog("S1", log);
 	// ciclo su tutti i messaggi setta a 0 i tempi d'attesa in modo che vengano inviati a fine sleep
@@ -60,7 +60,7 @@ void hacklerSendMsgHandle(int sig){
 
 int shutDown = 0;
 void hacklerShutDownHandle(int sig){
-	char log[50];
+	char log[50] = "";
 	sprintf(log, "Receive signal %s", HK_ACTION_SHUT_DOWN);
 	printLog("S1", log);
 	shutDown = 1;
@@ -109,9 +109,9 @@ void closeResource(){
 }
 
 void sendMessage(message * m){
-	char log[50];
+	char log[50] = "";
 	if(m->sender->number == 1){
-		if (strcmp(m->comunication, "Q") == 0) {
+		if (m->comunication[0] == 'Q') {
 			switch(m->receiver->number){
 				case 1:
 					Q_writeForR1(messageQueueId, m);
@@ -126,7 +126,7 @@ void sendMessage(message * m){
 					ErrExit("receiver not exist");
 			}
 			sprintf(log, "Message %d send by MessageQueue", m->id);
-		}else if (strcmp(m->comunication, "SH") == 0) {
+		}else if (m->comunication[0] == 'S' && m->comunication[1] == 'H') {
 			switch(m->receiver->number){
 				case 1:
 					SH_writeForR1(sharedMemoryData, m, initSemId);
@@ -169,7 +169,7 @@ int main(int argc, char * argv[]) {
 	messageQueueId = atoi(argv[4]);
 	char *filename = argv[5];
 
-	char log[50];
+	char log[50] = "";
 
 	openResource();
 	

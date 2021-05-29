@@ -84,7 +84,7 @@ void readFrom(char * filename){
 }
 
 void readPid(int initSemId){
-	char log[50];
+	char log[50] = "";
 
 	// Wait sender init end 
 	semOp(initSemId, SEM_INIT_SENDER, 0);
@@ -106,7 +106,7 @@ void readPid(int initSemId){
 }
 
 void executeAction(hacklerAction * h){
-	char log[50];
+	char log[50] = "";
 
 	process * target = h->target;
 
@@ -203,7 +203,7 @@ int main(int argc, char * argv[]){
 	// Wait all process open sem
 	semOp(initSemId, SEM_START, 0);
 	
-	char log[50];
+	char log[50] = "";
 	char * filename = argv[1];
 
 	char * buffer = openHackler(filename);
