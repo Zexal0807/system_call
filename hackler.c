@@ -217,7 +217,7 @@ int main(int argc, char * argv[]){
 	int firstLine = 1;
 	while(line != NULL){
 		if(firstLine != 1){
-			sprintf(log, "Analize line '%s'", line);
+			sprintf(log, "Analize line %s", line);
 			printLog("HK", log);
 
 			hacklerAction * h = line2hacklerAction(line);
