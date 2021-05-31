@@ -241,7 +241,6 @@ int main(int argc, char * argv[]) {
 	// Remove IPC
 	printIPCHistory(initSemId, MSGQUEUE);
 
-	removeSharedMemory(shmid);
 	printIPCHistory(initSemId, SH);
 
 	printIPCHistory(initSemId, SEM);
