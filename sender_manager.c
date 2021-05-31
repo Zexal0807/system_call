@@ -112,19 +112,19 @@ int main(int argc, char * argv[]) {
 	if (pid == -1) {
 		ErrExit("Receiver Manager not fork S3");
 	} else if (pid == 0) {
-		char string_initSemId[5];
+		char string_initSemId[15];
 		sprintf(string_initSemId, "%d", initSemId);
 
-		char string_pipes2s3[5];
+		char string_pipes2s3[15];
 		sprintf(string_pipes2s3, "%d", pipeS2S3[0]);
 		closePipe(pipeS1S2[0]);
 		closePipe(pipeS1S2[1]);
 		closePipe(pipeS2S3[1]);
 
-		char string_shmId[5];
+		char string_shmId[15];
 		sprintf(string_shmId, "%d", shmid);
 
-		char string_messageQueueId[5];
+		char string_messageQueueId[15];
 		sprintf(string_messageQueueId, "%d", messageQueueId);
 
 		char * argv[] = {
@@ -148,21 +148,21 @@ int main(int argc, char * argv[]) {
 	if (pid == -1) {
 		ErrExit("Receiver Manager not fork S2");
 	} else if (pid == 0) {
-		char string_initSemId[5];
+		char string_initSemId[15];
 		sprintf(string_initSemId, "%d", initSemId);
 
-		char string_pipes1s2[5];
+		char string_pipes1s2[15];
 		sprintf(string_pipes1s2, "%d", pipeS1S2[0]);
 		closePipe(pipeS1S2[1]);
 
-		char string_pipes2s3[5];
+		char string_pipes2s3[15];
 		sprintf(string_pipes2s3, "%d", pipeS2S3[1]);
 		closePipe(pipeS2S3[0]);
 		
-		char string_shmId[5];
+		char string_shmId[15];
 		sprintf(string_shmId, "%d", shmid);
 
-		char string_messageQueueId[5];
+		char string_messageQueueId[15];
 		sprintf(string_messageQueueId, "%d", messageQueueId);
 
 		char * argv[] = {
@@ -188,19 +188,19 @@ int main(int argc, char * argv[]) {
 	if (pid == -1) {
 		ErrExit("Receiver Manager not fork S1");
 	} else if (pid == 0) {
-		char string_initSemId[5];
+		char string_initSemId[15];
 		sprintf(string_initSemId, "%d", initSemId);
 
-		char string_pipes1s2[5];
+		char string_pipes1s2[15];
 		sprintf(string_pipes1s2, "%d", pipeS1S2[1]);
 		closePipe(pipeS1S2[0]);
 		closePipe(pipeS2S3[0]);
 		closePipe(pipeS2S3[1]);
 
-		char string_shmId[5];
+		char string_shmId[15];
 		sprintf(string_shmId, "%d", shmid);
 		
-		char string_messageQueueId[5];
+		char string_messageQueueId[15];
 		sprintf(string_messageQueueId, "%d", messageQueueId);
 
 		char string_inputFile[50];
